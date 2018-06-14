@@ -12,5 +12,5 @@ data class Training(
         @ColumnInfo(name = "used") val isUsed: Int,
         @ColumnInfo(name = "custom") val isCustom: Int,
         val customName: String,
-        @ColumnInfo(name = "delete") val isDeleted: Int
+        @ColumnInfo(name = "delete_flg") val isDeleted: Int
 )
