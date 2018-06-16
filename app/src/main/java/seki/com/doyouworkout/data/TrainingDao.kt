@@ -6,7 +6,7 @@ import android.arch.persistence.room.*
 interface TrainingDao {
 
     @Query("SELECT * FROM training")
-    fun loadAll()
+    fun loadAll(): List<Training>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     fun insert(training: Training)

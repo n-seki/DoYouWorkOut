@@ -6,7 +6,7 @@ import android.arch.persistence.room.*
 interface WorkoutDao {
 
     @Query("SELECT * FROM workout LIMIT :limit")
-    fun load(limit: Int = 100)
+    fun load(limit: Int = 100): List<Workout>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     fun intert(workout: Workout)
