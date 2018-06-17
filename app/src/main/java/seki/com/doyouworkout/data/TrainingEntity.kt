@@ -6,7 +6,7 @@ import android.arch.persistence.room.PrimaryKey
 import android.support.annotation.StringRes
 
 @Entity(tableName = "training")
-data class Training(
+data class TrainingEntity(
         @PrimaryKey val id: Int,
         @ColumnInfo(name = "training_name_id") @StringRes val trainingNameId: Int,
         private val used: Int,

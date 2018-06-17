@@ -6,7 +6,7 @@ import android.arch.persistence.room.PrimaryKey
 import java.util.*
 
 @Entity(tableName = "workout")
-data class Workout(
+data class WorkoutEntity(
         @PrimaryKey val date: Date,
         @PrimaryKey @ColumnInfo(name = "training_id") val trainingId: Int,
         val count: Int

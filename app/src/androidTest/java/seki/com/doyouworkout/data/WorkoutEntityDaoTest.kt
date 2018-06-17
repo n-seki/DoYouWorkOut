@@ -13,7 +13,7 @@ import org.junit.runner.RunWith
 import java.util.*
 
 @RunWith(AndroidJUnit4::class) @SmallTest
-class WorkoutDaoTest {
+class WorkoutEntityDaoTest {
 
     lateinit var db: AppDataBase
     lateinit var dao: WorkoutDao
@@ -32,10 +32,10 @@ class WorkoutDaoTest {
 
     @Test
     fun `workoutがインサートできることのテスト`() {
-        val workout = Workout(Date(), 1, 1)
-        dao.intert(workout)
+        val workout = WorkoutEntity(Date(), 1, 1)
+        dao.insert(workout)
 
-        val actual: List<Workout> = dao.load()
+        val actual: List<WorkoutEntity> = dao.load()
         assertThat(actual[0].trainingId, `is`(workout.trainingId))
     }
 }
