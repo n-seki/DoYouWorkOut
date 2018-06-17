@@ -12,5 +12,5 @@ interface TrainingDao {
     fun insert(trainingEntity: TrainingEntity)
 
     @Update
-    fun unuse(trainingEntity: TrainingEntity)
+    fun update(trainingEntity: TrainingEntity)
 }
