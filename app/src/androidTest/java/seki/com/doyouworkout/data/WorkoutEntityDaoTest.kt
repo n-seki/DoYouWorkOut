@@ -5,6 +5,7 @@ import android.support.test.InstrumentationRegistry
 import android.support.test.filters.SmallTest
 import android.support.test.runner.AndroidJUnit4
 import org.hamcrest.Matchers.`is`
+import org.hamcrest.Matchers.empty
 import org.junit.After
 import org.junit.Assert.assertThat
 import org.junit.Before
@@ -31,11 +32,36 @@ class WorkoutEntityDaoTest {
     }
 
     @Test
-    fun `workoutがインサートできることのテスト`() {
+    fun `workoutがインサート後にロードできることのテスト`() {
         val workout = WorkoutEntity(Date(), 1, 1)
         dao.insert(workout)
 
         val actual: List<WorkoutEntity> = dao.load()
         assertThat(actual[0].trainingId, `is`(workout.trainingId))
+    }
+
+    @Test
+    fun `workoutをインサート後にdeleteできることのテスト`() {
+        val workout = WorkoutEntity(Date(), 1, 1)
+        dao.insert(workout)
+
+        dao.delete(workout)
+
+        val actual: List<WorkoutEntity> = dao.load()
+        assertThat(actual, `is`(empty<WorkoutEntity>()))
+    }
+
+    @Test
+    fun `workoutがupdateできることのテスト`() {
+        val workout = WorkoutEntity(Date(), 1, 1)
+        dao.insert(workout)
+
+        val newWorkout = workout.copy(trainingId = 2)
+        dao.update(newWorkout)
+
+        val actual: List<WorkoutEntity> = dao.load()
+
+        assertThat(actual.size, `is`(1))
+        assertThat(actual[0].trainingId, `is`(2))
     }
 }
