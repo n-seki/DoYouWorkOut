@@ -14,7 +14,7 @@ import org.junit.runner.RunWith
 import java.util.*
 
 @RunWith(AndroidJUnit4::class) @SmallTest
-class WorkoutEntityDaoTest {
+class WorkoutDaoTest {
 
     lateinit var db: AppDataBase
     lateinit var dao: WorkoutDao
