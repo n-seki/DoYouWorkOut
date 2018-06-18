@@ -3,6 +3,7 @@ package seki.com.doyouworkout.data
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.assertThat
 import org.junit.Test
+import seki.com.doyouworkout.data.db.TrainingEntity
 
 class TrainingEntityTest {
 

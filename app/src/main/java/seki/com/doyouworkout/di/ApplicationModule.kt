@@ -4,7 +4,7 @@ import android.arch.persistence.room.Room
 import android.content.Context
 import dagger.Module
 import dagger.Provides
-import seki.com.doyouworkout.data.AppDataBase
+import seki.com.doyouworkout.data.db.AppDataBase
 import javax.inject.Singleton
 
 @Module

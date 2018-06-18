@@ -1,4 +1,4 @@
-package seki.com.doyouworkout.data
+package seki.com.doyouworkout.data.db
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase

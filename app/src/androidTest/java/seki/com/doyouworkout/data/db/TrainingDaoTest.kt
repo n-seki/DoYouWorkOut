@@ -1,4 +1,4 @@
-package seki.com.doyouworkout.data
+package seki.com.doyouworkout.data.db
 
 import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
@@ -31,7 +31,7 @@ class TrainingDaoTest {
 
     @Test
     fun `trainingがインサート後にロードできることのテスト`() {
-        val training = TrainingEntity(1, 1,1)
+        val training = TrainingEntity(1, 1, 1)
         dao.insert(training)
 
         val actual = dao.loadAll()
@@ -41,7 +41,7 @@ class TrainingDaoTest {
     }
 
     fun `trainingがupdateできることのテスト`() {
-        val training = TrainingEntity(1,1,1)
+        val training = TrainingEntity(1, 1, 1)
         dao.insert(training)
 
         val newTraining = training.copy(
