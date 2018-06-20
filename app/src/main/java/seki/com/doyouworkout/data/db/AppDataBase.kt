@@ -5,7 +5,7 @@ import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
 
 @Database(entities = [TrainingEntity::class, WorkoutEntity::class], version = 1)
-@TypeConverters(value = [TypeConverters::class])
+@TypeConverters(value = [DateStringConverter::class])
 abstract class AppDataBase: RoomDatabase() {
     abstract fun trainingDao(): TrainingDao
     abstract fun workoutDao(): WorkoutDao

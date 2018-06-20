@@ -4,7 +4,7 @@ import android.arch.persistence.room.TypeConverter
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TypeConverters {
+class DateStringConverter {
 
     companion object {
         const val DATE_FORMAT: String = "yyyyMMDD"
