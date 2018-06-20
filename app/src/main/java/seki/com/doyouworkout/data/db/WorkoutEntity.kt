@@ -5,9 +5,9 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import java.util.*
 
-@Entity(tableName = "workout")
+@Entity(tableName = "workout", primaryKeys = ["date", "training_id"])
 data class WorkoutEntity(
-        @PrimaryKey val date: Date,
-        @PrimaryKey @ColumnInfo(name = "training_id") val trainingId: Int,
+        val date: Date,
+        @ColumnInfo(name = "training_id") val trainingId: Int,
         val count: Int
 )

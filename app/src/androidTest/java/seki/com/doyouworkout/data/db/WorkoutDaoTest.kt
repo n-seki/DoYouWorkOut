@@ -4,6 +4,7 @@ import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
 import android.support.test.filters.SmallTest
 import android.support.test.runner.AndroidJUnit4
+import android.util.Log
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.empty
 import org.junit.After
@@ -16,8 +17,8 @@ import java.util.*
 @RunWith(AndroidJUnit4::class) @SmallTest
 class WorkoutDaoTest {
 
-    lateinit var db: AppDataBase
-    lateinit var dao: WorkoutDao
+    private lateinit var db: AppDataBase
+    private lateinit var dao: WorkoutDao
 
     @Before
     fun createDb() {
@@ -36,7 +37,7 @@ class WorkoutDaoTest {
         val workout = WorkoutEntity(Date(), 1, 1)
         dao.insert(workout)
 
-        val actual: List<WorkoutEntity> = dao.load()
+        val actual: List<WorkoutEntity> = dao.load(Date())
         assertThat(actual[0].trainingId, `is`(workout.trainingId))
     }
 
@@ -47,7 +48,7 @@ class WorkoutDaoTest {
 
         dao.delete(workout)
 
-        val actual: List<WorkoutEntity> = dao.load()
+        val actual: List<WorkoutEntity> = dao.load(Date())
         assertThat(actual, `is`(empty<WorkoutEntity>()))
     }
 
@@ -56,12 +57,12 @@ class WorkoutDaoTest {
         val workout = WorkoutEntity(Date(), 1, 1)
         dao.insert(workout)
 
-        val newWorkout = workout.copy(trainingId = 2)
+        val newWorkout = workout.copy(count = 4)
         dao.update(newWorkout)
 
-        val actual: List<WorkoutEntity> = dao.load()
+        val actual: List<WorkoutEntity> = dao.load(Date())
 
         assertThat(actual.size, `is`(1))
-        assertThat(actual[0].trainingId, `is`(2))
+        assertThat(actual[0].count, `is`(4))
     }
 }

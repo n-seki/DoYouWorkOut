@@ -40,6 +40,7 @@ class TrainingDaoTest {
         assertThat(actual[0], `is`(training))
     }
 
+    @Test
     fun `trainingがupdateできることのテスト`() {
         val training = TrainingEntity(1, 1, 1)
         dao.insert(training)
