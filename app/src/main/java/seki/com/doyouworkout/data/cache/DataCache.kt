@@ -9,9 +9,17 @@ class DataCache {
     private val trainings: MutableMap<Int, TrainingEntity> = mutableMapOf()
 
     fun hasWorkoutAt(date: Date) = workouts.containsKey(date)
+
     fun hasTraining(id: Int) = trainings.containsKey(id)
 
     fun getWorkoutAt(date: Date) = workouts[date]
+
+    fun getWorkoutFrom(maxDate: Date, limit: Int = 100) =
+        workouts.filter { entry -> entry.key <= maxDate }
+                .asIterable()
+                .sortedByDescending { entry -> entry.key }
+                .take(limit)
+
     fun getTraining(id: Int) = trainings[id]
 
     fun putWorkout(workoutEntity: WorkoutEntity) {
