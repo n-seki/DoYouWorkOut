@@ -22,7 +22,7 @@ class WorkoutMapper @Inject constructor(private val context: Context) {
                     if (trainingEntity.isCustom) trainingEntity.customName
                     else context.getString(trainingEntity.trainingNameId)
 
-            val training = Training(trainingName, workoutEntity.count)
+            val training = Training(trainingEntity.id, trainingName, workoutEntity.count)
             trainingList += training
         }
 
