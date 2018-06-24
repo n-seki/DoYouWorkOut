@@ -30,7 +30,7 @@ class TrainingDaoTest {
     }
 
     @Test
-    fun `trainingがインサート後にロードできることのテスト`() {
+    fun `インサートしたtrainingがselectできること`() {
         val training = TrainingEntity(1, 1, 1)
         dao.insert(training)
 
@@ -41,7 +41,7 @@ class TrainingDaoTest {
     }
 
     @Test
-    fun `trainingがupdateできることのテスト`() {
+    fun `trainingをupdateできること`() {
         val training = TrainingEntity(1, 1, 1)
         dao.insert(training)
 
