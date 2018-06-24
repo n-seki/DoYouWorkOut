@@ -4,14 +4,17 @@ import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
 import android.support.test.filters.SmallTest
 import android.support.test.runner.AndroidJUnit4
+import android.text.format.DateFormat
 import android.util.Log
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.empty
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.text.SimpleDateFormat
 import java.util.*
 
 @RunWith(AndroidJUnit4::class) @SmallTest
@@ -33,7 +36,7 @@ class WorkoutDaoTest {
     }
 
     @Test
-    fun `workoutがインサート後にロードできることのテスト`() {
+    fun `insertしたworkoutがselectできること`() {
         val workout = WorkoutEntity(Date(), 1, 1)
         dao.insert(workout)
 
@@ -42,7 +45,7 @@ class WorkoutDaoTest {
     }
 
     @Test
-    fun `workoutをインサート後にdeleteできることのテスト`() {
+    fun `insertしたworkoutをdeleteできること`() {
         val workout = WorkoutEntity(Date(), 1, 1)
         dao.insert(workout)
 
@@ -53,7 +56,7 @@ class WorkoutDaoTest {
     }
 
     @Test
-    fun `workoutがupdateできることのテスト`() {
+    fun `insertしたworkoutをupdateできること`() {
         val workout = WorkoutEntity(Date(), 1, 1)
         dao.insert(workout)
 
@@ -64,5 +67,23 @@ class WorkoutDaoTest {
 
         assertThat(actual.size, `is`(1))
         assertThat(actual[0].count, `is`(4))
+    }
+
+    @Test
+    fun `指定日よりも前のworkoutがselectできること`() {
+        val format = SimpleDateFormat("yyyyMMDD")
+        val today = format.parse("20180624")
+
+        val yesterdayWorkout = WorkoutEntity(format.parse("20180623"), 1, 1)
+        val todayWorkout = WorkoutEntity(today, 2, 2)
+        val tomorrowWorkout = WorkoutEntity(format.parse("20180625"), 3, 3)
+
+        dao.insert(yesterdayWorkout, todayWorkout, tomorrowWorkout)
+
+        val actual: List<WorkoutEntity> = dao.load(today)
+
+        assertThat(actual.size, `is`(2))
+        assertThat(actual[0], `is`(yesterdayWorkout))
+        assertThat(actual[1], `is`(todayWorkout))
     }
 }

@@ -10,7 +10,7 @@ interface WorkoutDao {
     fun load(maxDate: Date, limit: Int = 100): List<WorkoutEntity>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    fun insert(workoutEntity: WorkoutEntity)
+    fun insert(vararg workoutEntity: WorkoutEntity)
 
     @Delete
     fun delete(workoutEntity: WorkoutEntity)
