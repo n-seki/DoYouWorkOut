@@ -4,7 +4,7 @@ import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert.assertThat
 import org.junit.Test
 
-class TrainingEntityTest {
+class WorkoutEntityTest {
 
     @Test
     fun `used = 1の場合にisUsedがtrueとなること`() {

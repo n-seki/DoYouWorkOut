@@ -4,86 +4,58 @@ import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
 import android.support.test.filters.SmallTest
 import android.support.test.runner.AndroidJUnit4
-import android.text.format.DateFormat
-import android.util.Log
 import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.empty
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.text.SimpleDateFormat
-import java.util.*
 
 @RunWith(AndroidJUnit4::class) @SmallTest
 class WorkoutDaoTest {
 
-    private lateinit var db: AppDataBase
-    private lateinit var dao: WorkoutDao
+    lateinit var db: AppDataBase
+    lateinit var dao: TrainingDao
 
     @Before
     fun createDb() {
         val context = InstrumentationRegistry.getTargetContext()
         db = Room.inMemoryDatabaseBuilder(context, AppDataBase::class.java).build()
-        dao = db.workoutDao()
+        dao = db.trainingDao()
     }
 
     @After
-    fun closeDb() {
+    fun deleteDb() {
         db.close()
     }
 
     @Test
-    fun `insertしたworkoutがselectできること`() {
-        val workout = WorkoutEntity(Date(), 1, 1)
-        dao.insert(workout)
+    fun `インサートしたtrainingがselectできること`() {
+        val training = TrainingEntity(1, 1, 1)
+        dao.insert(training)
 
-        val actual: List<WorkoutEntity> = dao.load(Date())
-        assertThat(actual[0].trainingId, `is`(workout.trainingId))
-    }
-
-    @Test
-    fun `insertしたworkoutをdeleteできること`() {
-        val workout = WorkoutEntity(Date(), 1, 1)
-        dao.insert(workout)
-
-        dao.delete(workout)
-
-        val actual: List<WorkoutEntity> = dao.load(Date())
-        assertThat(actual, `is`(empty<WorkoutEntity>()))
-    }
-
-    @Test
-    fun `insertしたworkoutをupdateできること`() {
-        val workout = WorkoutEntity(Date(), 1, 1)
-        dao.insert(workout)
-
-        val newWorkout = workout.copy(count = 4)
-        dao.update(newWorkout)
-
-        val actual: List<WorkoutEntity> = dao.load(Date())
+        val actual = dao.loadAll()
 
         assertThat(actual.size, `is`(1))
-        assertThat(actual[0].count, `is`(4))
+        assertThat(actual[0], `is`(training))
     }
 
     @Test
-    fun `指定日よりも前のworkoutがselectできること`() {
-        val format = SimpleDateFormat("yyyyMMDD")
-        val today = format.parse("20180624")
+    fun `trainingをupdateできること`() {
+        val training = TrainingEntity(1, 1, 1)
+        dao.insert(training)
 
-        val yesterdayWorkout = WorkoutEntity(format.parse("20180623"), 1, 1)
-        val todayWorkout = WorkoutEntity(today, 2, 2)
-        val tomorrowWorkout = WorkoutEntity(format.parse("20180625"), 3, 3)
+        val newTraining = training.copy(
+                trainingNameId = 2,
+                used = 0,
+                custom = 1,
+                customName = "test",
+                delete = 1)
 
-        dao.insert(yesterdayWorkout, todayWorkout, tomorrowWorkout)
+        dao.update(newTraining)
 
-        val actual: List<WorkoutEntity> = dao.load(today)
-
-        assertThat(actual.size, `is`(2))
-        assertThat(actual[0], `is`(yesterdayWorkout))
-        assertThat(actual[1], `is`(todayWorkout))
+        val actual = dao.loadAll()
+        assertThat(actual.size, `is`(1))
+        assertThat(actual[0], `is`(newTraining))
     }
 }

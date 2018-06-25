@@ -22,6 +22,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -35,13 +39,21 @@ dependencies {
     implementation "com.android.support:design:$support_library_version"
     implementation "com.android.support.constraint:constraint-layout:$constraint_version"
 
+    // lifecycle
+    implementation "android.arch.lifecycle:extensions:$lifecycle_version"
+    implementation "android.arch.lifecycle:viewmodel:$lifecycle_version"
+
     // room
     implementation "android.arch.persistence.room:runtime:$room_version"
     kapt "android.arch.persistence.room:compiler:$room_version"
 
+    // data binding
+    kapt "com.android.databinding:compiler:$dataBinding_version"
+
     // dagger2
     implementation "com.google.dagger:dagger:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
     // unit test
     testImplementation 'junit:junit:4.12'
