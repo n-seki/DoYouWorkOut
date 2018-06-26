@@ -8,6 +8,7 @@ import seki.com.doyouworkout.data.cache.DataCache
 import seki.com.doyouworkout.data.db.AppDataBase
 import seki.com.doyouworkout.data.db.mapper.WorkoutMapper
 import seki.com.doyouworkout.data.repository.WorkoutRepository
+import seki.com.doyouworkout.domain.TrainingDomain
 import javax.inject.Singleton
 
 @Module
@@ -32,4 +33,9 @@ class ApplicationModule(private val applicationContext: Context) {
     @Provides
     fun provideRepository(db: AppDataBase, mapper: WorkoutMapper, cache: DataCache) =
             WorkoutRepository(db, mapper, cache)
+
+    @Singleton
+    @Provides
+    fun provideTrainingDomain(repository: WorkoutRepository, mapper: WorkoutMapper) =
+            TrainingDomain(repository, mapper)
 }

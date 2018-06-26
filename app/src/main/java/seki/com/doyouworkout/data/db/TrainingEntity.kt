@@ -9,12 +9,8 @@ import android.support.annotation.StringRes
 data class TrainingEntity(
         @PrimaryKey val id: Int,
         @ColumnInfo(name = "training_name_id") @StringRes val trainingNameId: Int = 0,
-        val used: Int = 1,
-        val custom: Int = 0,
+        val used: Boolean = true,
+        val custom: Boolean = false,
         val customName: String = "",
-        val delete: Int = 0
-) {
-    val isUsed: Boolean get() = used != 0
-    val isCustom: Boolean get() = custom != 0
-    val isDeleted: Boolean get() = delete !=0
-}
+        val delete: Boolean = false
+)

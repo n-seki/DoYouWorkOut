@@ -5,6 +5,7 @@ import seki.com.doyouworkout.data.db.TrainingEntity
 import seki.com.doyouworkout.data.db.WorkoutEntity
 import seki.com.doyouworkout.ui.Workout
 import seki.com.doyouworkout.ui.OneDayWorkout
+import seki.com.doyouworkout.ui.Training
 import javax.inject.Inject
 
 class WorkoutMapper @Inject constructor(private val context: Context) {
@@ -19,7 +20,7 @@ class WorkoutMapper @Inject constructor(private val context: Context) {
                     trainingEntityMap[workoutEntity.trainingId] ?: continue
 
             val trainingName: String =
-                    if (trainingEntity.isCustom) trainingEntity.customName
+                    if (trainingEntity.used) trainingEntity.customName
                     else context.getString(trainingEntity.trainingNameId)
 
             val training = Workout(trainingEntity.id, trainingName, workoutEntity.count)
@@ -28,4 +29,17 @@ class WorkoutMapper @Inject constructor(private val context: Context) {
 
         return OneDayWorkout(workoutEntities[0].date, workoutList)
     }
+
+    fun toTraining(entity: TrainingEntity) = entity.toData()
+
+    private fun TrainingEntity.toData() =
+            Training(
+                    id = id,
+                    trainingNameId = trainingNameId,
+                    name = if (custom) "" else context.getString(trainingNameId),
+                    isUsed = used,
+                    isDeleted = delete,
+                    isCustom = custom,
+                    customName = customName)
 }
+

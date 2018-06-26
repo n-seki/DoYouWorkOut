@@ -1,18 +1,19 @@
 package seki.com.doyouworkout.ui.setting
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
-import seki.com.doyouworkout.data.repository.WorkoutRepository
+import android.arch.lifecycle.*
+import seki.com.doyouworkout.domain.TrainingDomain
 import seki.com.doyouworkout.ui.Training
-import seki.com.doyouworkout.ui.Workout
 import javax.inject.Inject
 
-class SettingViewModel @Inject constructor(private val repo: WorkoutRepository): ViewModel() {
+class SettingViewModel @Inject constructor(private val domain: TrainingDomain): ViewModel() {
 
     fun loadTraining(): LiveData<List<Training>> {
         val liveData = MutableLiveData<List<Training>>()
-        liveData.postValue(repo.getDummyTraining())
+        liveData.postValue(domain.getAllTraining())
         return liveData
+    }
+
+    fun registSetting(trainingList: List<Training>) {
+        domain.updateTraining(trainingList)
     }
 }

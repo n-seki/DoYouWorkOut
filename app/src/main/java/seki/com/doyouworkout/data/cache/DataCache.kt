@@ -2,6 +2,7 @@ package seki.com.doyouworkout.data.cache
 
 import seki.com.doyouworkout.data.db.TrainingEntity
 import seki.com.doyouworkout.data.db.WorkoutEntity
+import seki.com.doyouworkout.ui.Training
 import java.util.*
 
 class DataCache {
@@ -10,7 +11,7 @@ class DataCache {
 
     fun hasWorkoutAt(date: Date) = workouts.containsKey(date)
 
-    fun hasTraining(id: Int) = trainings.containsKey(id)
+    fun hasTraining() = trainings.isNotEmpty()
 
     fun getWorkoutAt(date: Date) = workouts[date]
 
@@ -20,7 +21,9 @@ class DataCache {
                 .sortedByDescending { entry -> entry.key }
                 .take(limit)
 
-    fun getTraining(id: Int) = trainings[id]
+    fun getTraining(id: Int) = trainings[id]?.copy()
+
+    fun getAllTraining() = trainings.values.map { it.copy() }
 
     fun putWorkout(workoutEntity: WorkoutEntity) {
         if (workouts.containsKey(workoutEntity.date)) {
@@ -28,6 +31,12 @@ class DataCache {
             return
         }
         workouts += workoutEntity.date to mutableListOf(workoutEntity)
+    }
+
+    fun updateTraining(trainingList: List<TrainingEntity>) {
+        for (training in trainingList) {
+            trainings[training.id] = training
+        }
     }
 
     fun putTraining(trainingEntity: TrainingEntity) {
