@@ -6,6 +6,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import seki.com.doyouworkout.ui.WorkoutViewModelFactory
+import seki.com.doyouworkout.ui.mainlist.MainListViewModel
 import seki.com.doyouworkout.ui.setting.SettingViewModel
 
 @Module
@@ -15,6 +16,11 @@ abstract class WorkoutViewModelModule {
     @IntoMap
     @WorkoutViewModelKey(SettingViewModel::class)
     abstract fun bindSettingViewModel(viewModel: SettingViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @WorkoutViewModelKey(MainListViewModel::class)
+    abstract fun bindMainListViewModel(viewModel: MainListViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: WorkoutViewModelFactory): ViewModelProvider.Factory

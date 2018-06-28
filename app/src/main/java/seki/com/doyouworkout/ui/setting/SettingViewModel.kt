@@ -1,19 +1,33 @@
 package seki.com.doyouworkout.ui.setting
 
-import android.arch.lifecycle.*
-import seki.com.doyouworkout.domain.TrainingDomain
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Transformations
+import android.arch.lifecycle.ViewModel
 import seki.com.doyouworkout.ui.Training
+import seki.com.doyouworkout.ui.toLiveData
+import seki.com.doyouworkout.usecase.TrainingUseCase
 import javax.inject.Inject
 
-class SettingViewModel @Inject constructor(private val domain: TrainingDomain): ViewModel() {
+class SettingViewModel @Inject constructor(private val useCase: TrainingUseCase): ViewModel() {
 
-    fun loadTraining(): LiveData<List<Training>> {
-        val liveData = MutableLiveData<List<Training>>()
-        liveData.postValue(domain.getAllTraining())
-        return liveData
+    val trainingList: LiveData<List<Training>> =
+            useCase.fetchTrainingList().toLiveData()
+
+    val snackBarStatus: LiveData<Boolean>
+    private val _updateList: MutableLiveData<List<Training>> = MutableLiveData()
+
+    init {
+        snackBarStatus = Transformations.switchMap(_updateList) {
+            updateSetting(it)
+        }
     }
 
-    fun registSetting(trainingList: List<Training>) {
-        domain.updateTraining(trainingList)
+    fun update(trainingList: List<Training>) {
+        _updateList.postValue(trainingList)
     }
+
+    private fun updateSetting(trainingList: List<Training>) =
+            useCase.updateTraining(trainingList)
+                    .toLiveData()
 }

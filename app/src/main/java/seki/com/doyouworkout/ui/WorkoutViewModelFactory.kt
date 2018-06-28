@@ -25,7 +25,7 @@ class WorkoutViewModelFactory @Inject constructor(
         try {
             return creator.get() as T
         } catch (e: Exception) {
-            throw IllegalStateException("failure in cast ViewModel to $modelClass")
+            throw IllegalStateException("failure in cast ${creator.get()} to $modelClass")
         }
     }
 

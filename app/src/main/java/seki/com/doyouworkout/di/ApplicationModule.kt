@@ -2,13 +2,14 @@ package seki.com.doyouworkout.di
 
 import android.arch.persistence.room.Room
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import dagger.Module
 import dagger.Provides
 import seki.com.doyouworkout.data.cache.DataCache
 import seki.com.doyouworkout.data.db.AppDataBase
 import seki.com.doyouworkout.data.db.mapper.WorkoutMapper
 import seki.com.doyouworkout.data.repository.WorkoutRepository
-import seki.com.doyouworkout.domain.TrainingDomain
+import seki.com.doyouworkout.usecase.TrainingUseCase
 import javax.inject.Singleton
 
 @Module
@@ -36,6 +37,11 @@ class ApplicationModule(private val applicationContext: Context) {
 
     @Singleton
     @Provides
-    fun provideTrainingDomain(repository: WorkoutRepository, mapper: WorkoutMapper) =
-            TrainingDomain(repository, mapper)
+    fun provideTrainingUseCase(repository: WorkoutRepository, mapper: WorkoutMapper) =
+            TrainingUseCase(repository, mapper)
+
+    @Singleton
+    @Provides
+    fun provideSharedPreference() =
+            applicationContext.getSharedPreferences("workout", MODE_PRIVATE)
 }

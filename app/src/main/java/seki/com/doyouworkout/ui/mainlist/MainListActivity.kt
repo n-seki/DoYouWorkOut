@@ -1,20 +1,30 @@
 package seki.com.doyouworkout.ui.mainlist
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main_list.*
+import seki.com.doyouworkout.App
 import seki.com.doyouworkout.R
+import seki.com.doyouworkout.ui.WorkoutViewModelFactory
 import seki.com.doyouworkout.ui.edit.EditWorkoutActivity
 import seki.com.doyouworkout.ui.setting.SettingActivity
+import javax.inject.Inject
 
 class MainListActivity : AppCompatActivity() {
+
+    @Inject lateinit var viewModelFactory: WorkoutViewModelFactory
+    private val viewModel: MainListViewModel by lazy {
+        ViewModelProviders.of(this, viewModelFactory).get(MainListViewModel::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_list)
         setSupportActionBar(toolbar)
+
+        (applicationContext as App).appComponent.inject(this)
 
         fab.setOnClickListener { showEditWorkoutScreen() }
     }
@@ -35,8 +45,15 @@ class MainListActivity : AppCompatActivity() {
         }
     }
 
-    private fun showSettingScreen() {
-        val intent = SettingActivity.getInstant(this)
+    private fun checkSettingState(settingComplete: Boolean?) {
+        settingComplete ?: return
+        if (!settingComplete) {
+            showSettingScreen(false)
+        }
+    }
+
+    private fun showSettingScreen(settingComplete: Boolean = true) {
+        val intent = SettingActivity.getInstance(this, settingComplete)
         startActivity(intent)
     }
 

@@ -13,7 +13,7 @@ import seki.com.doyouworkout.ui.Training
 
 class SettingFragment: Fragment() {
 
-    lateinit var viewModel: SettingViewModel
+    private lateinit var viewModel: SettingViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -23,18 +23,32 @@ class SettingFragment: Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        regist_setting.setOnClickListener({
-            val stateChangeTrainingList = training_check_boxes.fetchCheckedData()
-            viewModel.registSetting(stateChangeTrainingList)
-        })
+        initFab()
 
         viewModel = (context as SettingActivity).viewModel
-        viewModel.loadTraining().observe(this, Observer { showTrainingList(it) })
+        viewModel.trainingList.observe(this, Observer { showTrainingList(it) })
+        viewModel.snackBarStatus.observe(this, Observer { showSnackBar(it) })
+    }
+
+    private fun initFab() {
+        regist_setting.setOnClickListener({
+            val stateChangeTrainingList = training_check_boxes.fetchCheckedData()
+            viewModel.update(stateChangeTrainingList)
+        })
     }
 
     private fun showTrainingList(trainingList: List<Training>?) {
         trainingList?.let {
+            training_check_boxes.clear()
             training_check_boxes.init(it)
+        }
+    }
+
+    private fun showSnackBar(boolean: Boolean?) {
+        boolean?.let {
+            if (it) {
+                Snackbar.make(view!!, "Complete update!", Snackbar.LENGTH_SHORT).show()
+            }
         }
     }
 }

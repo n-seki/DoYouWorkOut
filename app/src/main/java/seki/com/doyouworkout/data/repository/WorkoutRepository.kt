@@ -1,14 +1,16 @@
 package seki.com.doyouworkout.data.repository
 
+import android.util.Log
 import io.reactivex.Completable
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
+import kotlinx.android.synthetic.main.fragment_setting.view.*
+import seki.com.doyouworkout.R
 import seki.com.doyouworkout.data.cache.DataCache
 import seki.com.doyouworkout.data.db.AppDataBase
 import seki.com.doyouworkout.data.db.TrainingEntity
 import seki.com.doyouworkout.data.db.mapper.WorkoutMapper
 import seki.com.doyouworkout.ui.Training
-import seki.com.doyouworkout.ui.Workout
 import javax.inject.Inject
 
 class WorkoutRepository
@@ -16,22 +18,19 @@ class WorkoutRepository
 
     private val trainingDao = db.trainingDao()
 
-    fun getDummyTraining(): List<TrainingEntity> {
+    fun getAllTrainingList(): Single<List<TrainingEntity>> {
         if (cache.hasTraining()) {
             return cache.getAllTraining()
         }
 
-        return listOf(
-//                Training(id = 1, name =  "腕立て", isUsed = true, isDeleted = false),
-//                Training(id = 1, name =  "腹筋", isUsed = true, isDeleted = false),
-//                Training(id = 1, name =  "背筋", isUsed = true, isDeleted = false),
-//                Training(id = 1, name =  "スクワット", isUsed = true, isDeleted = false)
-        )
+        return trainingDao.loadAll().doOnSuccess {
+            cache.putTraining(it)
+        }
     }
 
-    fun updateTraining(trainingList: List<Training>) {
-        val trainingEntityList = trainingList.map { it.toEntity() }
-        cache.updateTraining(trainingEntityList)
+    fun updateTraining(trainingList: List<TrainingEntity>): Completable = Completable.fromAction {
+        trainingDao.update(trainingList)
+        cache.updateTraining(trainingList)
     }
 }
 

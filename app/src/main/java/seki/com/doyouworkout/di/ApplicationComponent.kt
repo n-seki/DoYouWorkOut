@@ -2,6 +2,7 @@ package seki.com.doyouworkout.di
 
 import dagger.Component
 import seki.com.doyouworkout.App
+import seki.com.doyouworkout.ui.mainlist.MainListActivity
 import seki.com.doyouworkout.ui.setting.SettingActivity
 import javax.inject.Singleton
 
@@ -10,4 +11,5 @@ import javax.inject.Singleton
 interface ApplicationComponent {
     fun inject(application: App)
     fun inject(settingActivity: SettingActivity)
+    fun inject(mainListActivity: MainListActivity)
 }

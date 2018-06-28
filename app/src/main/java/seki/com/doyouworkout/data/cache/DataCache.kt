@@ -1,50 +1,51 @@
 package seki.com.doyouworkout.data.cache
 
+import io.reactivex.Single
 import seki.com.doyouworkout.data.db.TrainingEntity
 import seki.com.doyouworkout.data.db.WorkoutEntity
-import seki.com.doyouworkout.ui.Training
 import java.util.*
 
 class DataCache {
-    private val workouts: MutableMap<Date, MutableList<WorkoutEntity>> = mutableMapOf()
-    private val trainings: MutableMap<Int, TrainingEntity> = mutableMapOf()
+    private val _workouts: MutableMap<Date, MutableList<WorkoutEntity>> = mutableMapOf()
+    private val _trainings: MutableMap<Int, TrainingEntity> = mutableMapOf()
 
-    fun hasWorkoutAt(date: Date) = workouts.containsKey(date)
+    fun hasWorkoutAt(date: Date) = _workouts.containsKey(date)
 
-    fun hasTraining() = trainings.isNotEmpty()
+    fun hasTraining() = _trainings.isNotEmpty()
 
-    fun getWorkoutAt(date: Date) = workouts[date]
+    fun getWorkoutAt(date: Date) = _workouts[date]
 
     fun getWorkoutFrom(maxDate: Date, limit: Int = 100) =
-        workouts.filter { entry -> entry.key <= maxDate }
+        _workouts.filter { entry -> entry.key <= maxDate }
                 .asIterable()
                 .sortedByDescending { entry -> entry.key }
                 .take(limit)
 
-    fun getTraining(id: Int) = trainings[id]?.copy()
+    fun getTraining(id: Int) = _trainings[id]?.copy()
 
-    fun getAllTraining() = trainings.values.map { it.copy() }
+    fun getAllTraining(): Single<List<TrainingEntity>> =
+            Single.just(_trainings.values.asSequence().map { it.copy() }.toList())
 
     fun putWorkout(workoutEntity: WorkoutEntity) {
-        if (workouts.containsKey(workoutEntity.date)) {
-            (workouts[workoutEntity.date] as MutableList) += workoutEntity
+        if (_workouts.containsKey(workoutEntity.date)) {
+            (_workouts[workoutEntity.date] as MutableList) += workoutEntity
             return
         }
-        workouts += workoutEntity.date to mutableListOf(workoutEntity)
+        _workouts += workoutEntity.date to mutableListOf(workoutEntity)
     }
 
     fun updateTraining(trainingList: List<TrainingEntity>) {
         for (training in trainingList) {
-            trainings[training.id] = training
+            _trainings[training.id] = training
         }
     }
 
-    fun putTraining(trainingEntity: TrainingEntity) {
-        trainings += trainingEntity.id to trainingEntity
+    fun putTraining(trainings: List<TrainingEntity>) {
+        _trainings.putAll(trainings.associateBy { it.id })
     }
 
     fun clear() {
-        workouts.clear()
-        trainings.clear()
+        _workouts.clear()
+        _trainings.clear()
     }
 }

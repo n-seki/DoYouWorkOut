@@ -46,4 +46,11 @@ class SettingCheckBoxGroup @JvmOverloads constructor(
         return trainingList
     }
 
+    fun clear() {
+        for (position in 0..childCount) {
+            val view = getChildAt(position) as? CheckBox ?: continue
+            removeView(view)
+        }
+    }
+
 }

@@ -18,7 +18,11 @@ class SettingActivity: AppCompatActivity() {
         ViewModelProviders.of(this, viewModelFactory).get(SettingViewModel::class.java) }
 
     companion object {
-        fun getInstant(context: Context) = Intent(context, SettingActivity::class.java)
+        const val SETTING_COMPLETE = "setting_complete"
+        fun getInstance(context: Context, settingComplete: Boolean) =
+                Intent(context, SettingActivity::class.java).apply {
+                    putExtra(SETTING_COMPLETE, settingComplete)
+                }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
