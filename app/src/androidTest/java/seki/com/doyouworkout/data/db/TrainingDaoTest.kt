@@ -4,9 +4,11 @@ import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
 import android.support.test.filters.SmallTest
 import android.support.test.runner.AndroidJUnit4
-import org.hamcrest.Matchers.`is`
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.After
-import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -14,8 +16,8 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class) @SmallTest
 class TrainingDaoTest {
 
-    lateinit var db: AppDataBase
-    lateinit var dao: TrainingDao
+    private lateinit var db: AppDataBase
+    private lateinit var dao: TrainingDao
 
     @Before
     fun createDb() {
@@ -31,31 +33,36 @@ class TrainingDaoTest {
 
     @Test
     fun `インサートしたtrainingがselectできること`() {
-        val training = TrainingEntity(1, 1, true)
+        val training = listOf(TrainingEntity(1, 1, true))
         dao.insert(training)
 
-        val actual = dao.loadAll()
-
-        assertThat(actual.size, `is`(1))
-        assertThat(actual[0], `is`(training))
+        dao.loadAll()
+                .subscribeOn(Schedulers.trampoline())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { assertThat(it, `is`(training)) }
+                .dispose()
     }
 
     @Test
     fun `trainingをupdateできること`() {
-        val training = TrainingEntity(1, 1, true)
+        val training = listOf(TrainingEntity(1, 1, true))
         dao.insert(training)
 
-        val newTraining = training.copy(
-                trainingNameId = 2,
-                used = false,
-                custom = true,
-                customName = "test",
-                delete = true)
+        val newTraining = listOf(
+                training[0].copy(
+                        trainingNameId = 2,
+                        used = false,
+                        custom = true,
+                        customName = "test",
+                        delete = true)
+        )
 
-        dao.update(listOf(newTraining))
+        dao.update(newTraining)
 
-        val actual = dao.loadAll()
-        assertThat(actual.size, `is`(1))
-        assertThat(actual[0], `is`(newTraining))
+        dao.loadAll()
+                .subscribeOn(Schedulers.trampoline())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { assertThat(it, `is`(newTraining)) }
+                .dispose()
     }
 }

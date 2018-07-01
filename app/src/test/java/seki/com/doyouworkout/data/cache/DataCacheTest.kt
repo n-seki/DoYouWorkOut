@@ -33,15 +33,15 @@ class DataCacheTest {
 
     @Test
     fun `Trainingを追加していないときにhasTrainingがfalseであること`() {
-        assertThat(dataCache.hasTraining(1), `is`(false))
+        assertThat(dataCache.hasTraining(), `is`(false))
     }
 
     @Test
     fun `Trainingを追加したときにhasTrainingがtrueであること`() {
-        val trainingEntity = TrainingEntity(id = 1)
+        val trainingEntity = listOf(TrainingEntity(id = 1))
         dataCache.putTraining(trainingEntity)
 
-        assertThat(dataCache.hasTraining(1), `is`(true))
+        assertThat(dataCache.hasTraining(), `is`(true))
     }
 
     @Test
@@ -67,10 +67,10 @@ class DataCacheTest {
 
     @Test
     fun `Trainingを追加したときにgetTrainingでTrainingが通知されること`() {
-        val trainingEntity = TrainingEntity(id = 1)
+        val trainingEntity = listOf(TrainingEntity(id = 1))
         dataCache.putTraining(trainingEntity)
 
         assertThat(dataCache.getTraining(1), `is`(notNullValue()))
-        assertThat(dataCache.getTraining(1), `is`(trainingEntity))
+        assertThat(dataCache.getTraining(1), `is`(trainingEntity[0]))
     }
 }
