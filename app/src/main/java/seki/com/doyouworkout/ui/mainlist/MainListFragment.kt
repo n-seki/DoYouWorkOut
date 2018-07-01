@@ -10,7 +10,7 @@ import seki.com.doyouworkout.R
 /**
  * A placeholder fragment containing a simple view.
  */
-class MainListActivityFragment : Fragment() {
+class MainListFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

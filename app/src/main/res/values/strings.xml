@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">DoYouWorkOut</string>
     <string name="action_settings">Settings</string>
+
+    <string name="hukkin">腹筋</string>
+    <string name="udetate"> 腕立て伏せ</string>
+    <string name="haikin">背筋</string>
+    <string name="squat">スクワット</string>
 </resources>

@@ -1,13 +1,14 @@
 package seki.com.doyouworkout.data.db
 
 import android.arch.persistence.room.*
+import io.reactivex.Flowable
 import io.reactivex.Single
 
 @Dao
 interface TrainingDao {
 
     @Query("SELECT * FROM training")
-    fun loadAll(): Single<List<TrainingEntity>>
+    fun loadAll(): Flowable<List<TrainingEntity>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     fun insert(list: List<TrainingEntity>)

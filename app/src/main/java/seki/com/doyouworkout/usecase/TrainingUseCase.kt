@@ -14,10 +14,10 @@ class TrainingUseCase @Inject constructor(
 
     fun fetchTrainingList(): Flowable<List<Training>> =
             repository.getAllTrainingList()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map { list -> list.map { workoutMapper.toTraining(it) } }
-                .toFlowable()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doAfterNext { repository.putTrainingCache(it) }
+                    .map { list -> list.map { workoutMapper.toTraining(it) } }
 
     fun updateTraining(list: List<Training>): Flowable<Boolean> =
             repository.updateTraining(list.map { it.toEntity() })
@@ -26,4 +26,17 @@ class TrainingUseCase @Inject constructor(
                     .toSingleDefault(true)
                     .onErrorReturnItem(false)
                     .toFlowable()
+
+    fun isCompleteInitApp(): Flowable<Boolean> =
+            repository.isInitApp()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .toFlowable()
+
+    fun initApp() {
+        repository.putDefaultTraining()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+    }
 }

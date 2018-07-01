@@ -1,5 +1,6 @@
 package seki.com.doyouworkout.data.cache
 
+import io.reactivex.Flowable
 import io.reactivex.Single
 import seki.com.doyouworkout.data.db.TrainingEntity
 import seki.com.doyouworkout.data.db.WorkoutEntity
@@ -23,8 +24,8 @@ class DataCache {
 
     fun getTraining(id: Int) = _trainings[id]?.copy()
 
-    fun getAllTraining(): Single<List<TrainingEntity>> =
-            Single.just(_trainings.values.asSequence().map { it.copy() }.toList())
+    fun getAllTraining(): Flowable<List<TrainingEntity>> =
+            Flowable.just(_trainings.values.asSequence().map { it.copy() }.toList())
 
     fun putWorkout(workoutEntity: WorkoutEntity) {
         if (_workouts.containsKey(workoutEntity.date)) {

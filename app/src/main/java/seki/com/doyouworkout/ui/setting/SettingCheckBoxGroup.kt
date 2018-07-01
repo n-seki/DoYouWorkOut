@@ -13,6 +13,7 @@ class SettingCheckBoxGroup @JvmOverloads constructor(
     private lateinit var data: Map<Int, Training>
 
     fun init(trainingList: List<Training>) {
+        clear()
         data = trainingList.associateBy { it.id }
 
         for ((_, training) in data) {
@@ -22,8 +23,8 @@ class SettingCheckBoxGroup @JvmOverloads constructor(
 
     private fun createCheckBox(training: Training): CheckBox {
         return CheckBox(context).apply {
-            text = training.name
-            isChecked = true
+            text = if (training.isCustom) training.customName else training.name
+            isChecked = training.isUsed
             textSize = 30F
             setPadding(8,16,8,8)
             tag = training.id
@@ -46,11 +47,8 @@ class SettingCheckBoxGroup @JvmOverloads constructor(
         return trainingList
     }
 
-    fun clear() {
-        for (position in 0..childCount) {
-            val view = getChildAt(position) as? CheckBox ?: continue
-            removeView(view)
-        }
+    private fun clear() {
+        removeAllViews()
     }
 
 }

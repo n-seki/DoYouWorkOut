@@ -9,5 +9,8 @@ import javax.inject.Inject
 class MainListViewModel @Inject constructor(
         private val trainingUseCase: TrainingUseCase): ViewModel() {
 
+    val initAppStatus: LiveData<Boolean> =
+            trainingUseCase.isCompleteInitApp().toLiveData()
+
 
 }

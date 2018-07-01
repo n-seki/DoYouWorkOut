@@ -1,5 +1,6 @@
 package seki.com.doyouworkout.ui.mainlist
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -24,9 +25,11 @@ class MainListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main_list)
         setSupportActionBar(toolbar)
 
+        fab.setOnClickListener { showEditWorkoutScreen() }
+
         (applicationContext as App).appComponent.inject(this)
 
-        fab.setOnClickListener { showEditWorkoutScreen() }
+        viewModel.initAppStatus.observe(this, Observer { checkSettingState(it) })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

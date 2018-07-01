@@ -3,6 +3,7 @@ package seki.com.doyouworkout.di
 import android.arch.persistence.room.Room
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
 import seki.com.doyouworkout.data.cache.DataCache
@@ -32,8 +33,8 @@ class ApplicationModule(private val applicationContext: Context) {
 
     @Singleton
     @Provides
-    fun provideRepository(db: AppDataBase, mapper: WorkoutMapper, cache: DataCache) =
-            WorkoutRepository(db, mapper, cache)
+    fun provideRepository(db: AppDataBase, sharedPreferences: SharedPreferences, cache: DataCache) =
+            WorkoutRepository(db, sharedPreferences, cache)
 
     @Singleton
     @Provides

@@ -23,11 +23,14 @@ class SettingViewModel @Inject constructor(private val useCase: TrainingUseCase)
         }
     }
 
+    fun initSetting() {
+        useCase.initApp()
+    }
+
     fun update(trainingList: List<Training>) {
         _updateList.postValue(trainingList)
     }
 
     private fun updateSetting(trainingList: List<Training>) =
-            useCase.updateTraining(trainingList)
-                    .toLiveData()
+            useCase.updateTraining(trainingList).toLiveData()
 }

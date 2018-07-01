@@ -39,7 +39,6 @@ class SettingFragment: Fragment() {
 
     private fun showTrainingList(trainingList: List<Training>?) {
         trainingList?.let {
-            training_check_boxes.clear()
             training_check_boxes.init(it)
         }
     }
