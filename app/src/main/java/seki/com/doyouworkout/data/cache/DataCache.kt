@@ -14,7 +14,7 @@ class DataCache {
 
     fun hasTraining() = _trainings.isNotEmpty()
 
-    fun getWorkoutAt(date: Date) = _workouts[date]
+    fun getWorkoutAt(date: Date): Single<List<WorkoutEntity>> = Single.just(_workouts[date])
 
     fun getWorkoutFrom(maxDate: Date, limit: Int = 100) =
         _workouts.filter { entry -> entry.key <= maxDate }

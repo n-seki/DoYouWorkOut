@@ -11,6 +11,7 @@ import seki.com.doyouworkout.data.db.AppDataBase
 import seki.com.doyouworkout.data.db.mapper.WorkoutMapper
 import seki.com.doyouworkout.data.repository.WorkoutRepository
 import seki.com.doyouworkout.usecase.TrainingUseCase
+import seki.com.doyouworkout.usecase.WorkoutUseCase
 import javax.inject.Singleton
 
 @Module
@@ -43,6 +44,11 @@ class ApplicationModule(private val applicationContext: Context) {
 
     @Singleton
     @Provides
-    fun provideSharedPreference() =
+    fun provideWorkoutUseCase(repository: WorkoutRepository, mapper: WorkoutMapper) =
+            WorkoutUseCase(repository, mapper)
+
+    @Singleton
+    @Provides
+    fun provideSharedPreference(): SharedPreferences =
             applicationContext.getSharedPreferences("workout", MODE_PRIVATE)
 }

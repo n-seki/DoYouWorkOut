@@ -9,13 +9,17 @@ import seki.com.doyouworkout.R
 import seki.com.doyouworkout.data.cache.DataCache
 import seki.com.doyouworkout.data.db.AppDataBase
 import seki.com.doyouworkout.data.db.TrainingEntity
+import seki.com.doyouworkout.data.db.WorkoutEntity
+import seki.com.doyouworkout.ui.OneDayWorkout
 import seki.com.doyouworkout.ui.Training
+import java.util.*
 import javax.inject.Inject
 
 class WorkoutRepository
 @Inject constructor(db: AppDataBase, private val sharedPref: SharedPreferences, private val cache: DataCache) {
 
     private val trainingDao = db.trainingDao()
+    private val workoutDao = db.workoutDao()
 
     companion object {
         const val KEY_INIT_APP = "key_init_app"
@@ -27,6 +31,8 @@ class WorkoutRepository
                         TrainingEntity(id=2, trainingNameId = R.string.haikin),
                         TrainingEntity(id=3, trainingNameId = R.string.squat)
                 )
+
+        private val TEST_WORKOUT = WorkoutEntity(Date(), 1, 13)
     }
 
     fun isInitApp(): Single<Boolean> {
@@ -43,6 +49,7 @@ class WorkoutRepository
         return Completable.fromAction {
             if (sharedPref.getInt(KEY_INIT_APP, 0) == 0) {
                 trainingDao.insert(DEFAULT_TRAINING)
+                workoutDao.insert(TEST_WORKOUT)
                 sharedPref.edit().putInt(KEY_INIT_APP, 1).apply()
             }
         }
@@ -65,6 +72,14 @@ class WorkoutRepository
             trainingDao.update(trainingList)
             cache.updateTraining(trainingList)
         }
+    }
+
+    fun getWorkout(date: Date): Single<List<WorkoutEntity>> {
+        if (cache.hasWorkoutAt(date)) {
+            return cache.getWorkoutAt(date)
+        }
+
+        return workoutDao.select(date)
     }
 }
 
