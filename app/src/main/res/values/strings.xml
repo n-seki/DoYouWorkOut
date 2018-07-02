@@ -6,4 +6,7 @@
     <string name="udetate"> 腕立て伏せ</string>
     <string name="haikin">背筋</string>
     <string name="squat">スクワット</string>
+
+    <string name="commit">Commit</string>
+    <string name="cancel">Cancel</string>
 </resources>
