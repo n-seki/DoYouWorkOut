@@ -32,7 +32,7 @@ class EditWorkoutFragment: Fragment() {
         workout ?: return
 
         date.text =
-                SimpleDateFormat("yyyy/MM/DD", Locale.US)
+                SimpleDateFormat("yyyy/MM/dd", Locale.US)
                         .format(workout.trainingDate)
     }
 
