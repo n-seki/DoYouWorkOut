@@ -62,7 +62,7 @@ dependencies {
     implementation 'android.arch.persistence.room:rxjava2:1.1.1'
 
     // ktx
-    implementation "androidx.core:core-ktx:1.0.0-alpha1"
+    implementation "androidx.core:core-ktx:1.0.0-alpha3"
 
     // unit test
     testImplementation 'junit:junit:4.12'
