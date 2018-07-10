@@ -28,10 +28,6 @@ android {
     }
 }
 
-repositories {
-    google()
-}
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
