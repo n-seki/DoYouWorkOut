@@ -57,9 +57,9 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
     // rxjava
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.14'
-    implementation 'android.arch.persistence.room:rxjava2:1.1.1'
+    implementation "io.reactivex.rxjava2:rxandroid:$rx_android_version"
+    implementation "io.reactivex.rxjava2:rxjava:$rx_java_version"
+    implementation "android.arch.persistence.room:rxjava2:$room_version"
 
     // ktx
     implementation "androidx.core:core-ktx:$ktx_version"
