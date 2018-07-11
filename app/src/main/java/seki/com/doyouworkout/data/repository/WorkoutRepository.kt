@@ -2,6 +2,7 @@ package seki.com.doyouworkout.data.repository
 
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.core.content.edit
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -50,7 +51,9 @@ class WorkoutRepository
             if (sharedPref.getInt(KEY_INIT_APP, 0) == 0) {
                 trainingDao.insert(DEFAULT_TRAINING)
                 workoutDao.insert(TEST_WORKOUT)
-                sharedPref.edit().putInt(KEY_INIT_APP, 1).apply()
+                sharedPref.edit {
+                    putInt(KEY_INIT_APP, 1)
+                }
             }
         }
     }
