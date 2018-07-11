@@ -11,6 +11,9 @@ buildscript {
     ext.ktx_version = '0.3'
     ext.rx_java_version='2.1.14'
     ext.rx_android_version='2.0.2'
+    ext.junit_version='4.12'
+    ext.test_runner_version='1.0.2'
+    ext.espresso_version='3.0.2'
 
     repositories {
         google()
