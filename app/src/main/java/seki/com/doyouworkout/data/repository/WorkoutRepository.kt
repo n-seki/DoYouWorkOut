@@ -33,7 +33,12 @@ class WorkoutRepository
                         TrainingEntity(id=3, trainingNameId = R.string.squat)
                 )
 
-        private val TEST_WORKOUT = WorkoutEntity(Date(), 1, 13)
+        private val TEST_WORKOUT =
+                listOf(
+                        WorkoutEntity(date = Date(), trainingId = 0, count = 4),
+                        WorkoutEntity(date = Date(), trainingId = 1, count = 13),
+                        WorkoutEntity(date = Date(), trainingId = 2, count = 99)
+                )
     }
 
     fun isInitApp(): Single<Boolean> {

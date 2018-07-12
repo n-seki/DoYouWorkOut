@@ -20,8 +20,12 @@ class WorkoutMapper @Inject constructor(private val context: Context) {
                     trainingEntityMap[workoutEntity.trainingId] ?: continue
 
             val trainingName: String =
-                    if (trainingEntity.used) trainingEntity.customName
-                    else context.getString(trainingEntity.trainingNameId)
+                    if (trainingEntity.custom) {
+                        trainingEntity.customName
+                    }
+                    else {
+                        context.getString(trainingEntity.trainingNameId)
+                    }
 
             val training = Workout(trainingEntity.id, trainingName, workoutEntity.count)
             workoutList += training

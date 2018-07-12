@@ -3,6 +3,8 @@ package seki.com.doyouworkout.ui.edit
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,11 +31,17 @@ class EditWorkoutFragment: Fragment() {
     }
 
     private fun showWorkout(workout: OneDayWorkout?) {
-        workout ?: return
+        workout?.let {
 
-        date.text =
-                SimpleDateFormat("yyyy/MM/dd", Locale.US)
-                        .format(workout.trainingDate)
+            date.text =
+                    SimpleDateFormat("yyyy/MM/dd", Locale.US)
+                            .format(workout.trainingDate)
+
+            val adapter = EditWorkoutListAdapter(workout.workout)
+            edit_workout_list.layoutManager =
+                    LinearLayoutManager(context,LinearLayoutManager.VERTICAL, false)
+            edit_workout_list.adapter = adapter
+        }
     }
 
 }

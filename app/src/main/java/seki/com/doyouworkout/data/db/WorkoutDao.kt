@@ -14,7 +14,7 @@ interface WorkoutDao {
     fun select(date: Date): Single<List<WorkoutEntity>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    fun insert(vararg workoutEntity: WorkoutEntity)
+    fun insert(workoutEntity: List<WorkoutEntity>)
 
     @Delete
     fun delete(workoutEntity: WorkoutEntity)
