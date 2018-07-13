@@ -23,9 +23,9 @@ class EditWorkoutActivity: AppCompatActivity() {
     companion object {
         private const val DATE = "date"
 
-        fun getIntent(context: Context, date: Date?) =
+        fun getIntent(context: Context, date: Date? = null) =
                 Intent(context, EditWorkoutActivity::class.java).apply {
-                    putExtra(DATE, date)
+                    date.let { putExtra(DATE, it) }
                 }
     }
 

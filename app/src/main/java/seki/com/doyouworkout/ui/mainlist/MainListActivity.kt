@@ -62,7 +62,7 @@ class MainListActivity : AppCompatActivity() {
     }
 
     private fun showEditWorkoutScreen() {
-        val intent = EditWorkoutActivity.getIntent(this, Date())
+        val intent = EditWorkoutActivity.getIntent(this)
         startActivity(intent)
     }
 }
