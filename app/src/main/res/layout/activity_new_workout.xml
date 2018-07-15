@@ -20,6 +20,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_edit_workout" />
+    <include layout="@layout/content_new_workout" />
 
 </android.support.constraint.ConstraintLayout>

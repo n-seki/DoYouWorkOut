@@ -11,10 +11,13 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_edit_workout.*
 import seki.com.doyouworkout.R
 import seki.com.doyouworkout.ui.OneDayWorkout
+import seki.com.doyouworkout.ui.PutTrainingCountDialog
+import seki.com.doyouworkout.ui.Training
+import seki.com.doyouworkout.ui.Workout
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EditWorkoutFragment: Fragment() {
+class EditWorkoutFragment: Fragment(), PutTrainingCountDialog.OnCompleteInputListener {
 
     private lateinit var viewModel: EditWorkoutViewModel
 
@@ -32,16 +35,31 @@ class EditWorkoutFragment: Fragment() {
 
     private fun showWorkout(workout: OneDayWorkout?) {
         workout?.let {
-
             date.text =
                     SimpleDateFormat("yyyy/MM/dd", Locale.US)
                             .format(workout.trainingDate)
 
-            val adapter = EditWorkoutListAdapter(workout.workout)
+            val listener =  object : EditWorkoutListAdapter.TrainingClickListener {
+                override fun onClickTrainingCount(workout: Workout) {
+                    showPutCountDialog(workout)
+                }
+            }
+
+            val adapter = EditWorkoutListAdapter(workout.workout, listener)
             edit_workout_list.layoutManager =
                     LinearLayoutManager(context,LinearLayoutManager.VERTICAL, false)
             edit_workout_list.adapter = adapter
         }
+    }
+
+    private fun showPutCountDialog(workout: Workout) {
+        PutTrainingCountDialog
+                .newInstance(workout)
+                .show(childFragmentManager, "put_count")
+    }
+
+    override fun onCompleteInputCount() {
+        edit_workout_list.adapter.notifyDataSetChanged()
     }
 
 }

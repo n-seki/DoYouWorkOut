@@ -1,7 +1,6 @@
 package seki.com.doyouworkout.data.repository
 
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.core.content.edit
 import io.reactivex.Completable
 import io.reactivex.Flowable
@@ -11,7 +10,6 @@ import seki.com.doyouworkout.data.cache.DataCache
 import seki.com.doyouworkout.data.db.AppDataBase
 import seki.com.doyouworkout.data.db.TrainingEntity
 import seki.com.doyouworkout.data.db.WorkoutEntity
-import seki.com.doyouworkout.ui.OneDayWorkout
 import seki.com.doyouworkout.ui.Training
 import java.util.*
 import javax.inject.Inject

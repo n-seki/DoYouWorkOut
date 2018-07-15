@@ -7,7 +7,7 @@ import io.reactivex.Single
 @Dao
 interface TrainingDao {
 
-    @Query("SELECT * FROM training")
+    @Query("SELECT * FROM training ORDER BY id")
     fun loadAll(): Flowable<List<TrainingEntity>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)

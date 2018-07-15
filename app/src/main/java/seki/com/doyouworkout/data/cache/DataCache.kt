@@ -22,10 +22,10 @@ class DataCache {
                 .sortedByDescending { entry -> entry.key }
                 .take(limit)
 
-    fun getTraining(id: Int) = _trainings[id]?.copy()
+    fun getTraining(id: Int) = _trainings[id]
 
     fun getAllTraining(): Flowable<List<TrainingEntity>> =
-            Flowable.just(_trainings.values.asSequence().map { it.copy() }.toList())
+            Flowable.just(_trainings.values.asSequence().sortedBy { it.id }.toList())
 
     fun putWorkout(workoutEntity: WorkoutEntity) {
         if (_workouts.containsKey(workoutEntity.date)) {

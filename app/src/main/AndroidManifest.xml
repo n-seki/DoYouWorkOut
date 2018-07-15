@@ -26,6 +26,7 @@
         <activity
             android:name=".ui.setting.SettingActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.newWorkout.NewWorkoutActivity" />
     </application>
 
 </manifest>
