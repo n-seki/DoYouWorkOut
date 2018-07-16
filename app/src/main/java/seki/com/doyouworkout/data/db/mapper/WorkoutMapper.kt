@@ -34,6 +34,19 @@ class WorkoutMapper @Inject constructor(private val context: Context) {
         return OneDayWorkout(workoutEntities[0].date, workoutList)
     }
 
+    fun toWorkoutList(trainingEntities: List<TrainingEntity>): List<Workout> {
+        fun TrainingEntity.toWorkout(): Workout {
+            return Workout(
+                    id = this.id,
+                    name = if (this.custom) "" else context.getString(this.trainingNameId),
+                    count = 0,
+                    isUsed = this.used
+            )
+        }
+
+        return trainingEntities.map { it.toWorkout() }
+    }
+
     fun toTraining(entity: TrainingEntity) = entity.toData()
 
     private fun TrainingEntity.toData() =

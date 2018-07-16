@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_new_workout.*
 import seki.com.doyouworkout.R
-import seki.com.doyouworkout.ui.Training
+import seki.com.doyouworkout.ui.Workout
 
 class NewWorkoutFragment: Fragment() {
 
@@ -25,7 +25,7 @@ class NewWorkoutFragment: Fragment() {
         viewModel.trainingList.observe(this, Observer { showList(it) })
     }
 
-    private fun showList(list: List<Training>?) {
+    private fun showList(list: List<Workout>?) {
         list?.let {
             val adapter = NewWorkoutListAdapter(it)
             training_list.layoutManager = LinearLayoutManager(
