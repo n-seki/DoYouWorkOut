@@ -10,9 +10,8 @@ import kotlinx.android.synthetic.main.activity_main_list.*
 import seki.com.doyouworkout.App
 import seki.com.doyouworkout.R
 import seki.com.doyouworkout.ui.WorkoutViewModelFactory
-import seki.com.doyouworkout.ui.edit.EditWorkoutActivity
+import seki.com.doyouworkout.ui.newWorkout.NewWorkoutActivity
 import seki.com.doyouworkout.ui.setting.SettingActivity
-import java.util.*
 import javax.inject.Inject
 
 class MainListActivity : AppCompatActivity() {
@@ -62,7 +61,7 @@ class MainListActivity : AppCompatActivity() {
     }
 
     private fun showEditWorkoutScreen() {
-        val intent = EditWorkoutActivity.getIntent(this)
+        val intent = NewWorkoutActivity.getIntent(this)
         startActivity(intent)
     }
 }

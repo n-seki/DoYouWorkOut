@@ -15,7 +15,7 @@ class NewWorkoutFragment: Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_new_workout, container!!, false)
+        return inflater.inflate(R.layout.fragment_new_workout, null, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -29,7 +29,7 @@ class NewWorkoutFragment: Fragment() {
         list?.let {
             val adapter = NewWorkoutListAdapter(it)
             training_list.layoutManager = LinearLayoutManager(
-                    context,LinearLayoutManager.INVALID_OFFSET, false)
+                    context,LinearLayoutManager.VERTICAL, false)
             training_list.adapter = adapter
         }
     }
