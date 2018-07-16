@@ -5,6 +5,9 @@
 /.idea/modules.xml
 /.idea/workspace.xml
 /.idea/vcs.xml
+/.idea/caches/build_file_checksums.ser
+/.idea/kotlinc.xml
+/.idea/misc.xml
 .DS_Store
 /build
 /captures
