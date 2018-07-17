@@ -23,7 +23,7 @@ class NewWorkoutListAdapter(
 
     override fun onBindViewHolder(holder: NewWorkoutViewHolder, position: Int) {
         holder.binder.workout = trainingList[position]
-        holder.binder.trainingCount.setOnClickListener {
+        holder.binder.root.setOnClickListener {
             listener.onClickWorkoutCount(trainingList[position])
         }
     }
