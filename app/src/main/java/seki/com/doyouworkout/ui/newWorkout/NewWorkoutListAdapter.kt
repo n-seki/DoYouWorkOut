@@ -6,7 +6,12 @@ import android.view.ViewGroup
 import seki.com.doyouworkout.R
 import seki.com.doyouworkout.ui.Workout
 
-class NewWorkoutListAdapter(private val trainingList: List<Workout>): RecyclerView.Adapter<NewWorkoutViewHolder>() {
+class NewWorkoutListAdapter(
+        private val trainingList: List<Workout>, private val listener: WorkoutClickListener): RecyclerView.Adapter<NewWorkoutViewHolder>() {
+
+    interface WorkoutClickListener {
+        fun onClickWorkoutCount(workout: Workout)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewWorkoutViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -18,6 +23,15 @@ class NewWorkoutListAdapter(private val trainingList: List<Workout>): RecyclerVi
 
     override fun onBindViewHolder(holder: NewWorkoutViewHolder, position: Int) {
         holder.binder.workout = trainingList[position]
+        holder.binder.trainingCount.setOnClickListener {
+            listener.onClickWorkoutCount(trainingList[position])
+        }
+    }
+
+    fun getItemWithPositionByWorkoutId(id: Int): Pair<Int, Workout> {
+        return trainingList.withIndex().first { it.value.id == id }.let {
+            it.index to it.value
+        }
     }
 
 }

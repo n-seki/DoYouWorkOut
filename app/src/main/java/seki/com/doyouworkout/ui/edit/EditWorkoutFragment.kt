@@ -54,11 +54,11 @@ class EditWorkoutFragment: Fragment(), PutTrainingCountDialog.OnCompleteInputLis
 
     private fun showPutCountDialog(workout: Workout) {
         PutTrainingCountDialog
-                .newInstance(workout)
+                .newInstance(workout.id, workout.name)
                 .show(childFragmentManager, "put_count")
     }
 
-    override fun onCompleteInputCount() {
+    override fun onCompleteInputCount(id: Int, count: Int) {
         edit_workout_list.adapter.notifyDataSetChanged()
     }
 

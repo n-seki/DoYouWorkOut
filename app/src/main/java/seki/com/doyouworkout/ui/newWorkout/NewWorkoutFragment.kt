@@ -9,9 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_new_workout.*
 import seki.com.doyouworkout.R
+import seki.com.doyouworkout.ui.PutTrainingCountDialog
 import seki.com.doyouworkout.ui.Workout
 
-class NewWorkoutFragment: Fragment() {
+class NewWorkoutFragment: Fragment(), PutTrainingCountDialog.OnCompleteInputListener {
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -27,10 +28,29 @@ class NewWorkoutFragment: Fragment() {
 
     private fun showList(list: List<Workout>?) {
         list?.let {
-            val adapter = NewWorkoutListAdapter(it)
+            val listener = object : NewWorkoutListAdapter.WorkoutClickListener {
+                override fun onClickWorkoutCount(workout: Workout) {
+                    showPutCountDialog(workout)
+                }
+
+            }
+            val adapter = NewWorkoutListAdapter(it, listener)
             training_list.layoutManager = LinearLayoutManager(
-                    context,LinearLayoutManager.VERTICAL, false)
+                    context, LinearLayoutManager.VERTICAL, false)
             training_list.adapter = adapter
         }
+    }
+
+    private fun showPutCountDialog(workout: Workout) {
+        PutTrainingCountDialog
+                .newInstance(workout.id, workout.name)
+                .show(childFragmentManager, "put_count")
+    }
+
+    override fun onCompleteInputCount(id: Int, count: Int) {
+        val adapter = training_list.adapter as NewWorkoutListAdapter
+        val (position, item) = adapter.getItemWithPositionByWorkoutId(id)
+        item.count = count
+        adapter.notifyItemChanged(position, item)
     }
 }

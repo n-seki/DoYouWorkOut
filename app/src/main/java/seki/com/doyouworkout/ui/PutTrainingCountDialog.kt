@@ -1,9 +1,9 @@
 package seki.com.doyouworkout.ui
 
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
@@ -13,21 +13,22 @@ import seki.com.doyouworkout.R
 class PutTrainingCountDialog: DialogFragment() {
 
     private lateinit var listener: OnCompleteInputListener
-    private lateinit var workout: Workout
 
     companion object {
-        const val WORKOUT = "workout"
-        fun newInstance(workout: Workout): DialogFragment {
+        const val WORKOUT_ID = "workout_id"
+        const val WORKOUT_NAME = "workout_name"
+        fun newInstance(id: Int, name: String): DialogFragment {
             return PutTrainingCountDialog().apply {
                 arguments = Bundle().apply {
-                    putSerializable(WORKOUT, workout)
+                    putInt(WORKOUT_ID, id)
+                    putString(WORKOUT_NAME, name)
                 }
             }
         }
     }
 
     interface OnCompleteInputListener {
-        fun onCompleteInputCount()
+        fun onCompleteInputCount(id: Int, count: Int)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -38,21 +39,21 @@ class PutTrainingCountDialog: DialogFragment() {
 
         initView(layout)
 
-        builder.setView(view)
+        builder.setView(layout)
         return builder.create()
     }
 
-    override fun onAttachFragment(childFragment: Fragment?) {
-        super.onAttachFragment(childFragment)
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
 
-        if (childFragment is OnCompleteInputListener) {
-            listener = childFragment
-        }
-        workout = arguments?.getSerializable(WORKOUT) as Workout
+        listener = parentFragment as OnCompleteInputListener
     }
 
     private fun initView(layout: View) {
-        layout.title.text = workout.name
+        val workoutId = arguments?.getInt(WORKOUT_ID) ?: throw IllegalStateException()
+        val workoutName = arguments?.getString(WORKOUT_NAME) ?: throw IllegalStateException()
+
+        layout.title.text = workoutName
 
         layout.training_count_picker.run {
             maxValue = 99
@@ -60,7 +61,8 @@ class PutTrainingCountDialog: DialogFragment() {
         }
 
         layout.commit_button.setOnClickListener {
-            listener.onCompleteInputCount()
+            listener.onCompleteInputCount(workoutId, layout.training_count_picker.value)
+            dismiss()
         }
     }
 }
