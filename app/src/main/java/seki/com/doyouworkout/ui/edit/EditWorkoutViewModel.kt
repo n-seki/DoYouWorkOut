@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
 import seki.com.doyouworkout.ui.OneDayWorkout
+import seki.com.doyouworkout.ui.Workout
 import seki.com.doyouworkout.ui.toLiveData
 import seki.com.doyouworkout.usecase.WorkoutUseCase
 import java.util.*
@@ -14,7 +15,8 @@ class EditWorkoutViewModel
 @Inject constructor(private val useCase: WorkoutUseCase): ViewModel() {
 
     private val _date: MutableLiveData<Date> = MutableLiveData()
-    val showData: LiveData<OneDayWorkout>
+    val date: LiveData<Date> = _date
+    val showData: LiveData<List<Workout>>
 
     init {
         showData = Transformations.switchMap(_date) {

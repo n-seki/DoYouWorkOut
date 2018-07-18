@@ -3,14 +3,13 @@ package seki.com.doyouworkout.data.db.mapper
 import android.content.Context
 import seki.com.doyouworkout.data.db.TrainingEntity
 import seki.com.doyouworkout.data.db.WorkoutEntity
-import seki.com.doyouworkout.ui.Workout
-import seki.com.doyouworkout.ui.OneDayWorkout
 import seki.com.doyouworkout.ui.Training
+import seki.com.doyouworkout.ui.Workout
 import javax.inject.Inject
 
 class WorkoutMapper @Inject constructor(private val context: Context) {
 
-    fun toWorkout(workoutEntities: List<WorkoutEntity>, trainingEntities: List<TrainingEntity>): OneDayWorkout {
+    fun toWorkout(workoutEntities: List<WorkoutEntity>, trainingEntities: List<TrainingEntity>): List<Workout> {
         val trainingEntityMap: Map<Int, TrainingEntity> = trainingEntities.associateBy { it.id }
 
         val workoutList: MutableList<Workout> = mutableListOf()
@@ -31,7 +30,7 @@ class WorkoutMapper @Inject constructor(private val context: Context) {
             workoutList += training
         }
 
-        return OneDayWorkout(workoutEntities[0].date, workoutList)
+        return workoutList
     }
 
     fun toWorkoutList(trainingEntities: List<TrainingEntity>): List<Workout> {
