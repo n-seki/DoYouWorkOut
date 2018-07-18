@@ -54,7 +54,7 @@ class EditWorkoutFragment: Fragment(), PutTrainingCountDialog.OnCompleteInputLis
 
     private fun showPutCountDialog(workout: Workout) {
         PutTrainingCountDialog
-                .newInstance(workout.id, workout.name)
+                .newInstance(workout.id, workout.name, workout.count)
                 .show(childFragmentManager, "put_count")
     }
 

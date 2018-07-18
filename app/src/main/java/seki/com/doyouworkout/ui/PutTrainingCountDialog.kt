@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import kotlinx.android.synthetic.main.dialog_put_training_count.view.*
@@ -17,11 +18,13 @@ class PutTrainingCountDialog: DialogFragment() {
     companion object {
         const val WORKOUT_ID = "workout_id"
         const val WORKOUT_NAME = "workout_name"
-        fun newInstance(id: Int, name: String): DialogFragment {
+        const val WORKOUT_COUNT = "workout_count"
+        fun newInstance(id: Int, name: String, currentCount: Int): DialogFragment {
             return PutTrainingCountDialog().apply {
                 arguments = Bundle().apply {
                     putInt(WORKOUT_ID, id)
                     putString(WORKOUT_NAME, name)
+                    putInt(WORKOUT_COUNT, currentCount)
                 }
             }
         }
@@ -32,15 +35,22 @@ class PutTrainingCountDialog: DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = AlertDialog.Builder(context!!)
 
         val layout = LayoutInflater.from(context)
                 .inflate(R.layout.dialog_put_training_count, null)
 
         initView(layout)
 
-        builder.setView(layout)
-        return builder.create()
+        val workoutId = arguments?.getInt(WORKOUT_ID) ?: throw IllegalStateException()
+
+        return AlertDialog.Builder(context!!)
+                .setView(layout)
+                .setPositiveButton(R.string.commit) {_, _ ->
+                    listener.onCompleteInputCount(workoutId, layout.training_count_picker.value)
+                    dismiss()}
+                .setNegativeButton(R.string.cancel) {_, _ -> dismiss()}
+                .create()
+
     }
 
     override fun onAttach(context: Context?) {
@@ -50,19 +60,15 @@ class PutTrainingCountDialog: DialogFragment() {
     }
 
     private fun initView(layout: View) {
-        val workoutId = arguments?.getInt(WORKOUT_ID) ?: throw IllegalStateException()
         val workoutName = arguments?.getString(WORKOUT_NAME) ?: throw IllegalStateException()
+        val workoutCount = arguments?.getInt(WORKOUT_COUNT) ?: throw IllegalStateException()
 
         layout.title.text = workoutName
 
         layout.training_count_picker.run {
             maxValue = 99
             minValue = 0
-        }
-
-        layout.commit_button.setOnClickListener {
-            listener.onCompleteInputCount(workoutId, layout.training_count_picker.value)
-            dismiss()
+            value = workoutCount
         }
     }
 }
