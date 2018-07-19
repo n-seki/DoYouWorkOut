@@ -3,6 +3,7 @@ package seki.com.doyouworkout.ui.newWorkout
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -32,11 +33,12 @@ class NewWorkoutFragment: Fragment(), PutTrainingCountDialog.OnCompleteInputList
                 override fun onClickWorkoutCount(workout: Workout) {
                     showPutCountDialog(workout)
                 }
-
             }
             val adapter = NewWorkoutListAdapter(it, listener)
             training_list.layoutManager = LinearLayoutManager(
                     context, LinearLayoutManager.VERTICAL, false)
+            val divider = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+            training_list.addItemDecoration(divider)
             training_list.adapter = adapter
         }
     }
