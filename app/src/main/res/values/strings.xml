@@ -10,5 +10,5 @@
     <string name="commit">Commit</string>
     <string name="cancel">Cancel</string>
 
-    <string name="input_today_workout">Please Input today"'s Workout!</string>
+    <string name="input_today_workout"><u>Please Input today"'s Workout!</u></string>
 </resources>
