@@ -32,7 +32,7 @@ class EditWorkoutFragment: Fragment(), PutTrainingCountDialog.OnCompleteInputLis
 
     private fun showWorkout(workout: List<Workout>?) {
         workout?.let {
-            tetextSize.text =
+            message.text =
                     SimpleDateFormat("yyyy/MM/dd", Locale.US).format(viewModel.date.value)
 
             val listener =  object : EditWorkoutListAdapter.TrainingClickListener {
