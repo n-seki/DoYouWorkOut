@@ -2,6 +2,8 @@ package seki.com.doyouworkout.ui
 
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
@@ -41,15 +43,11 @@ class PutTrainingCountDialog: DialogFragment() {
 
         initView(layout)
 
-        val workoutId = arguments?.getInt(WORKOUT_ID) ?: throw IllegalStateException()
-
         return AlertDialog.Builder(context!!)
                 .setView(layout)
-                .setPositiveButton(R.string.commit) {_, _ ->
-                    listener.onCompleteInputCount(workoutId, layout.training_count_picker.value)
-                    dismiss()}
-                .setNegativeButton(R.string.cancel) {_, _ -> dismiss()}
-                .create()
+                .create().apply {
+                    window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                }
 
     }
 
@@ -60,6 +58,7 @@ class PutTrainingCountDialog: DialogFragment() {
     }
 
     private fun initView(layout: View) {
+        val workoutId = arguments?.getInt(WORKOUT_ID) ?: throw IllegalStateException()
         val workoutName = arguments?.getString(WORKOUT_NAME) ?: throw IllegalStateException()
         val workoutCount = arguments?.getInt(WORKOUT_COUNT) ?: throw IllegalStateException()
 
@@ -69,6 +68,15 @@ class PutTrainingCountDialog: DialogFragment() {
             maxValue = 99
             minValue = 0
             value = workoutCount
+        }
+
+        layout.commit_button.setOnClickListener {
+            listener.onCompleteInputCount(workoutId, layout.training_count_picker.value)
+            dismiss()
+        }
+
+        layout.cancel_button.setOnClickListener {
+            dismiss()
         }
     }
 }
