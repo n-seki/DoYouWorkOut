@@ -10,35 +10,43 @@
             type="seki.com.doyouworkout.ui.Workout"/>
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/click_ripple">
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp">
 
-        <TextView
-            android:id="@+id/training_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="@{workout.name}"
-            android:textSize="24sp"
-            tools:text="スクワット"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/click_ripple">
 
-        <TextView
-            android:id="@+id/training_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="@{String.valueOf(workout.count)}"
-            android:textSize="18sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/training_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="99" />
+            <TextView
+                android:id="@+id/training_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@{workout.name}"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="スクワット" />
 
-    </android.support.constraint.ConstraintLayout>
+            <TextView
+                android:id="@+id/training_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@{String.valueOf(workout.count)}"
+                android:textSize="18sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/training_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="99" />
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
 </layout>
