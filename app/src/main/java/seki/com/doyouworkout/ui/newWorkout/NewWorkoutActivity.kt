@@ -12,7 +12,7 @@ import seki.com.doyouworkout.R
 import seki.com.doyouworkout.ui.WorkoutViewModelFactory
 import javax.inject.Inject
 
-class NewWorkoutActivity: AppCompatActivity() {
+class NewWorkoutActivity: AppCompatActivity(), NewWorkoutFragment.FragmentClickListener {
 
     companion object {
         fun getIntent(context: Context) =
@@ -45,5 +45,9 @@ class NewWorkoutActivity: AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onClickCancel() {
+        finish()
     }
 }

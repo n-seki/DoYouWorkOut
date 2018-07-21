@@ -1,15 +1,14 @@
 package seki.com.doyouworkout.ui.newWorkout
 
 import android.arch.lifecycle.Observer
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.InsetDrawable
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import kotlinx.android.synthetic.main.fragment_new_workout.*
 import seki.com.doyouworkout.R
 import seki.com.doyouworkout.ui.PutTrainingCountDialog
@@ -17,9 +16,19 @@ import seki.com.doyouworkout.ui.Workout
 
 class NewWorkoutFragment: Fragment(), PutTrainingCountDialog.OnCompleteInputListener {
 
+    lateinit var listener: FragmentClickListener
+
+    interface FragmentClickListener {
+        fun onClickCancel()
+    }
+
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_new_workout, null, false)
+        val view = inflater.inflate(R.layout.fragment_new_workout, null, false)
+        view.findViewById<Button>(R.id.cancel_button).setOnClickListener {
+            listener.onClickCancel()
+        }
+        return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -27,6 +36,12 @@ class NewWorkoutFragment: Fragment(), PutTrainingCountDialog.OnCompleteInputList
 
         val viewModel = (activity as NewWorkoutActivity).viewModel
         viewModel.trainingList.observe(this, Observer { showList(it) })
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+
+        listener = (context as FragmentClickListener)
     }
 
     private fun showList(list: List<Workout>?) {
