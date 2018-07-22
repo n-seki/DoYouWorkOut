@@ -3,6 +3,7 @@ package seki.com.doyouworkout.usecase
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import seki.com.doyouworkout.data.db.WorkoutEntity
 import seki.com.doyouworkout.data.db.mapper.WorkoutMapper
 import seki.com.doyouworkout.data.repository.WorkoutRepository
 import seki.com.doyouworkout.ui.Workout
@@ -29,5 +30,25 @@ class WorkoutUseCase
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map { mapper.toWorkoutList(it) }
+    }
+
+    fun updateWorkout(date: Date, workoutList: List<Workout>): Flowable<Boolean> {
+        return repository.updateWorkout(workoutList.toTrainingEntity(date))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .toSingleDefault(true)
+                .onErrorReturnItem(false)
+                .toFlowable()
+    }
+
+
+    fun List<Workout>.toTrainingEntity(date: Date): List<WorkoutEntity> {
+        return this.map {
+            WorkoutEntity(
+                    date = date,
+                    trainingId = it.id,
+                    count = it.count
+            )
+        }
     }
 }

@@ -16,6 +16,7 @@ import seki.com.doyouworkout.ui.Workout
 
 class NewWorkoutFragment: Fragment(), PutTrainingCountDialog.OnCompleteInputListener {
 
+    lateinit var viewModel: NewWorkoutViewModel
     lateinit var listener: FragmentClickListener
 
     interface FragmentClickListener {
@@ -28,13 +29,16 @@ class NewWorkoutFragment: Fragment(), PutTrainingCountDialog.OnCompleteInputList
         view.findViewById<Button>(R.id.cancel_button).setOnClickListener {
             listener.onClickCancel()
         }
+        view.findViewById<Button>(R.id.commit_button).setOnClickListener {
+            updateWorkout()
+        }
         return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val viewModel = (activity as NewWorkoutActivity).viewModel
+        viewModel = (activity as NewWorkoutActivity).viewModel
         viewModel.trainingList.observe(this, Observer { showList(it) })
     }
 
@@ -56,6 +60,11 @@ class NewWorkoutFragment: Fragment(), PutTrainingCountDialog.OnCompleteInputList
                     context, LinearLayoutManager.VERTICAL, false)
             training_list.adapter = adapter
         }
+    }
+
+    private fun updateWorkout() {
+        val adapter = training_list.adapter as NewWorkoutListAdapter
+        viewModel.update(adapter.trainingList)
     }
 
     private fun showPutCountDialog(workout: Workout) {

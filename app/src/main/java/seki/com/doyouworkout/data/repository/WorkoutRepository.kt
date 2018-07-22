@@ -10,6 +10,7 @@ import seki.com.doyouworkout.data.cache.DataCache
 import seki.com.doyouworkout.data.db.AppDataBase
 import seki.com.doyouworkout.data.db.TrainingEntity
 import seki.com.doyouworkout.data.db.WorkoutEntity
+import seki.com.doyouworkout.ui.OneDayWorkout
 import seki.com.doyouworkout.ui.Training
 import java.util.*
 import javax.inject.Inject
@@ -86,6 +87,13 @@ class WorkoutRepository
         }
 
         return workoutDao.select(date)
+    }
+
+    fun updateWorkout(workoutEntities: List<WorkoutEntity>): Completable {
+        return Completable.fromAction {
+            workoutDao.insert(workoutEntities)
+            cache.putWorkout(workoutEntities)
+        }
     }
 }
 

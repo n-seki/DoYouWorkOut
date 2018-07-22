@@ -13,7 +13,7 @@ interface WorkoutDao {
     @Query("SELECT * FROM workout WHERE date = :date")
     fun select(date: Date): Single<List<WorkoutEntity>>
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(workoutEntity: List<WorkoutEntity>)
 
     @Delete

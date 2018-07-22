@@ -8,6 +8,7 @@
 /.idea/caches/build_file_checksums.ser
 /.idea/kotlinc.xml
 /.idea/misc.xml
+/.idea/encodings.xml
 .DS_Store
 /build
 /captures

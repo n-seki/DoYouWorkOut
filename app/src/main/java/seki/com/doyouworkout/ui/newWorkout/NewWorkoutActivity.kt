@@ -1,11 +1,13 @@
 package seki.com.doyouworkout.ui.newWorkout
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main_list.*
 import seki.com.doyouworkout.App
 import seki.com.doyouworkout.R
@@ -34,6 +36,8 @@ class NewWorkoutActivity: AppCompatActivity(), NewWorkoutFragment.FragmentClickL
         }
 
         (application as App).appComponent.inject(this)
+
+        viewModel.updateStatus.observe(this, Observer { onUpdateFinish(it) })
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -44,6 +48,15 @@ class NewWorkoutActivity: AppCompatActivity(), NewWorkoutFragment.FragmentClickL
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun onUpdateFinish(updateStatus: Boolean?) {
+        updateStatus?.let {
+            if (it) {
+                Toast.makeText(this, "Commit!", Toast.LENGTH_SHORT).show()
+                finish()
+            }
         }
     }
 

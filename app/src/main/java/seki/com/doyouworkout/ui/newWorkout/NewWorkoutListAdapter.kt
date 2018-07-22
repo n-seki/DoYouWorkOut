@@ -7,7 +7,7 @@ import seki.com.doyouworkout.R
 import seki.com.doyouworkout.ui.Workout
 
 class NewWorkoutListAdapter(
-        private val trainingList: List<Workout>, private val listener: WorkoutClickListener): RecyclerView.Adapter<NewWorkoutViewHolder>() {
+        val trainingList: List<Workout>, private val listener: WorkoutClickListener): RecyclerView.Adapter<NewWorkoutViewHolder>() {
 
     interface WorkoutClickListener {
         fun onClickWorkoutCount(workout: Workout)
