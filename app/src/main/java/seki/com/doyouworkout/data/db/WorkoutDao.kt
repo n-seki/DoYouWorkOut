@@ -8,7 +8,7 @@ import java.util.*
 interface WorkoutDao {
 
     @Query("SELECT * FROM workout WHERE date <= :maxDate LIMIT :limit")
-    fun load(maxDate: Date, limit: Int = 100): List<WorkoutEntity>
+    fun load(maxDate: Date, limit: Int = 100): Single<List<WorkoutEntity>>
 
     @Query("SELECT * FROM workout WHERE date = :date")
     fun select(date: Date): Single<List<WorkoutEntity>>

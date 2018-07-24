@@ -95,6 +95,10 @@ class WorkoutRepository
             cache.putWorkout(workoutEntities)
         }
     }
+
+    fun getWorkoutList(): Single<List<WorkoutEntity>> {
+        return workoutDao.load(Date())
+    }
 }
 
 fun Training.toEntity() =
