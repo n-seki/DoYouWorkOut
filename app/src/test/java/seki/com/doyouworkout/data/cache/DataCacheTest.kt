@@ -1,5 +1,6 @@
 package seki.com.doyouworkout.data.cache
 
+import io.reactivex.Single
 import org.hamcrest.CoreMatchers.*
 import org.junit.After
 import org.junit.Assert.assertThat
@@ -25,7 +26,7 @@ class DataCacheTest {
     @Test
     fun `Workoutを追加したときに該当日のhasWorkoutAtがtrueであること`() {
         val date = Date()
-        val workoutEntity = WorkoutEntity(date = date, trainingId = 1, count = 1)
+        val workoutEntity = listOf(WorkoutEntity(date = date, trainingId = 1, count = 1))
         dataCache.putWorkout(workoutEntity)
 
         assertThat(dataCache.hasWorkoutAt(date), `is`(true))
@@ -52,12 +53,11 @@ class DataCacheTest {
     @Test
     fun `Workoutを追加したときに該当日のgetWorkoutAtでWorkoutリストが通知されること`() {
         val date = Date()
-        val workoutEntity = WorkoutEntity(date = date, trainingId = 1, count = 1)
+        val workoutEntity = listOf(WorkoutEntity(date = date, trainingId = 1, count = 1))
         dataCache.putWorkout(workoutEntity)
 
         assertThat(dataCache.getWorkoutAt(date), `is`(notNullValue()))
-        assertThat(dataCache.getWorkoutAt(date)?.size, `is`(1))
-        assertThat(dataCache.getWorkoutAt(date)?.get(0), `is`(workoutEntity))
+        assertThat(dataCache.getWorkoutAt(date), `is`(Single.just(workoutEntity)))
     }
 
     @Test

@@ -17,7 +17,7 @@ import javax.inject.Inject
 class MainListActivity : AppCompatActivity() {
 
     @Inject lateinit var viewModelFactory: WorkoutViewModelFactory
-    private val viewModel: MainListViewModel by lazy {
+    val viewModel: MainListViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(MainListViewModel::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -31,13 +31,6 @@ class WorkoutRepository
                         TrainingEntity(id=2, trainingNameId = R.string.haikin),
                         TrainingEntity(id=3, trainingNameId = R.string.squat)
                 )
-
-        private val TEST_WORKOUT =
-                listOf(
-                        WorkoutEntity(date = Date(), trainingId = 0, count = 4),
-                        WorkoutEntity(date = Date(), trainingId = 1, count = 13),
-                        WorkoutEntity(date = Date(), trainingId = 2, count = 99)
-                )
     }
 
     fun isInitApp(): Single<Boolean> {
@@ -54,7 +47,6 @@ class WorkoutRepository
         return Completable.fromAction {
             if (sharedPref.getInt(KEY_INIT_APP, 0) == 0) {
                 trainingDao.insert(DEFAULT_TRAINING)
-                workoutDao.insert(TEST_WORKOUT)
                 sharedPref.edit {
                     putInt(KEY_INIT_APP, 1)
                 }
