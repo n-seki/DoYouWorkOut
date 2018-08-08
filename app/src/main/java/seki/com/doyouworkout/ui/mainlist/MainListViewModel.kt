@@ -17,6 +17,4 @@ class MainListViewModel @Inject constructor(
             trainingUseCase.isCompleteInitApp().toLiveData()
 
     val workoutList: LiveData<List<OneDayWorkout>> = workoutUseCase.fetchOneDayWorkoutList().toLiveData()
-
-
 }

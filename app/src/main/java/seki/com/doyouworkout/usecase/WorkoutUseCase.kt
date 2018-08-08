@@ -27,7 +27,7 @@ class WorkoutUseCase
     }
 
     fun fetchEmptyWorkout(): Flowable<List<Workout>> {
-        return repository.getAllTrainingList()
+        return repository.getUsedTrainingList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map { mapper.toWorkoutList(it) }

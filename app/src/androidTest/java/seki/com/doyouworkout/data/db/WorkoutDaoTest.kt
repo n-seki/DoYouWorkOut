@@ -37,7 +37,10 @@ class WorkoutDaoTest {
 
     @Test
     fun `insertしたworkoutがselectできること`() {
-        val workout = WorkoutEntity(Date(), 1, 1)
+        val workout = listOf(
+                WorkoutEntity(Date(), 1, 1)
+        )
+
         dao.insert(workout)
 
         val actual: List<WorkoutEntity> = dao.load(Date())
@@ -46,10 +49,13 @@ class WorkoutDaoTest {
 
     @Test
     fun `insertしたworkoutをdeleteできること`() {
-        val workout = WorkoutEntity(Date(), 1, 1)
+        val workout = listOf(
+                WorkoutEntity(Date(), 1, 1)
+        )
+
         dao.insert(workout)
 
-        dao.delete(workout)
+        dao.delete(workout[0])
 
         val actual: List<WorkoutEntity> = dao.load(Date())
         assertThat(actual, `is`(empty<WorkoutEntity>()))
@@ -57,10 +63,13 @@ class WorkoutDaoTest {
 
     @Test
     fun `insertしたworkoutをupdateできること`() {
-        val workout = WorkoutEntity(Date(), 1, 1)
+        val workout = listOf(
+                WorkoutEntity(Date(), 1, 1)
+        )
+
         dao.insert(workout)
 
-        val newWorkout = workout.copy(count = 4)
+        val newWorkout = workout[0].copy(count = 4)
         dao.update(newWorkout)
 
         val actual: List<WorkoutEntity> = dao.load(Date())

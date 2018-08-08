@@ -62,6 +62,12 @@ class WorkoutRepository
         return trainingDao.loadAll()
     }
 
+    fun getUsedTrainingList(): Flowable<List<TrainingEntity>> {
+        return getAllTrainingList().map { list ->
+            list.filter { it.used }
+        }
+    }
+
     fun putTrainingCache(trainingList: List<TrainingEntity>) {
         cache.updateTraining(trainingList)
     }
