@@ -19,13 +19,6 @@ class TrainingUseCase @Inject constructor(
                     .doAfterNext { repository.putTrainingCache(it) }
                     .map { list -> list.map { workoutMapper.toTraining(it) } }
 
-    fun fetchUsedTrainingList(): Flowable<List<Training>> =
-            repository.getAllTrainingList()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .map { list -> list.filter { it.used } }
-                    .map { list -> list.map { workoutMapper.toTraining(it) } }
-
     fun updateTraining(list: List<Training>): Flowable<Boolean> =
             repository.updateTraining(list.map { it.toEntity() })
                     .subscribeOn(Schedulers.io())

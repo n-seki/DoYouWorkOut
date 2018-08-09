@@ -21,9 +21,6 @@
         </activity>
 
         <activity
-            android:name=".ui.edit.EditWorkoutActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity
             android:name=".ui.setting.SettingActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity

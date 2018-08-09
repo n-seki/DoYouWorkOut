@@ -1,8 +1,8 @@
 package seki.com.doyouworkout.ui.mainlist
 
 import android.arch.lifecycle.Observer
-import android.support.v4.app.Fragment
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -13,7 +13,7 @@ import androidx.core.view.isVisible
 import kotlinx.android.synthetic.main.fragment_main_list.*
 import seki.com.doyouworkout.R
 import seki.com.doyouworkout.ui.OneDayWorkout
-import seki.com.doyouworkout.ui.edit.EditWorkoutActivity
+import seki.com.doyouworkout.ui.newWorkout.NewWorkoutActivity
 
 /**
  * A placeholder fragment containing a simple view.
@@ -57,7 +57,7 @@ class MainListFragment : Fragment() {
     }
 
     private fun showEditWorkoutScreen(oneDayWorkout: OneDayWorkout) {
-        val intent = EditWorkoutActivity.getIntent(context!!, oneDayWorkout.trainingDate)
+        val intent = NewWorkoutActivity.getIntent(context!!, oneDayWorkout.trainingDate)
         activity?.run {
             startActivity(intent)
         }

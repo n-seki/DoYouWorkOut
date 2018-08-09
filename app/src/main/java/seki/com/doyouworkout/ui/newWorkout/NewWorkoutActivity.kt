@@ -12,13 +12,18 @@ import kotlinx.android.synthetic.main.activity_main_list.*
 import seki.com.doyouworkout.App
 import seki.com.doyouworkout.R
 import seki.com.doyouworkout.ui.WorkoutViewModelFactory
+import java.util.*
 import javax.inject.Inject
 
 class NewWorkoutActivity: AppCompatActivity(), NewWorkoutFragment.FragmentClickListener {
 
     companion object {
-        fun getIntent(context: Context) =
-                Intent(context, NewWorkoutActivity::class.java)
+        private const val DATE = "date"
+
+        fun getIntent(context: Context, date: Date? = null) =
+                Intent(context, NewWorkoutActivity::class.java).apply {
+                    date.let { putExtra(DATE, it) }
+                }
     }
 
     @Inject lateinit var viewModelFactory: WorkoutViewModelFactory
@@ -38,6 +43,9 @@ class NewWorkoutActivity: AppCompatActivity(), NewWorkoutFragment.FragmentClickL
         (application as App).appComponent.inject(this)
 
         viewModel.updateStatus.observe(this, Observer { onUpdateFinish(it) })
+
+        val trainingDate = intent.getSerializableExtra(DATE) as? Date
+        viewModel.showWorkoutAt(trainingDate)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
