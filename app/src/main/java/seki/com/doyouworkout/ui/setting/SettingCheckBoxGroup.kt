@@ -23,7 +23,7 @@ class SettingCheckBoxGroup @JvmOverloads constructor(
 
     private fun createCheckBox(training: Training): CheckBox {
         return CheckBox(context).apply {
-            text = if (training.isCustom) training.customName else training.name
+            text = training.name
             isChecked = training.isUsed
             textSize = 30F
             setPadding(8,16,8,8)

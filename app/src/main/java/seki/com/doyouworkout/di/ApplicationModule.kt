@@ -6,6 +6,7 @@ import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
+import seki.com.doyouworkout.data.ResourceSupplier
 import seki.com.doyouworkout.data.cache.DataCache
 import seki.com.doyouworkout.data.db.AppDataBase
 import seki.com.doyouworkout.data.db.mapper.WorkoutMapper
@@ -34,8 +35,8 @@ class ApplicationModule(private val applicationContext: Context) {
 
     @Singleton
     @Provides
-    fun provideRepository(db: AppDataBase, sharedPreferences: SharedPreferences, cache: DataCache) =
-            WorkoutRepository(db, sharedPreferences, cache)
+    fun provideRepository(db: AppDataBase, sharedPreferences: SharedPreferences, cache: DataCache, resourceSupplier: ResourceSupplier) =
+            WorkoutRepository(db, sharedPreferences, cache, resourceSupplier)
 
     @Singleton
     @Provides
@@ -51,4 +52,9 @@ class ApplicationModule(private val applicationContext: Context) {
     @Provides
     fun provideSharedPreference(): SharedPreferences =
             applicationContext.getSharedPreferences("workout", MODE_PRIVATE)
+
+    @Singleton
+    @Provides
+    fun provideResourceSupplier(): ResourceSupplier =
+            ResourceSupplier(applicationContext)
 }

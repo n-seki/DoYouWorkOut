@@ -20,13 +20,7 @@ class WorkoutMapper @Inject constructor(private val context: Context) {
             val trainingEntity: TrainingEntity =
                     trainingEntityMap[workoutEntity.trainingId] ?: continue
 
-            val trainingName: String =
-                    if (trainingEntity.custom) {
-                        trainingEntity.customName
-                    }
-                    else {
-                        context.getString(trainingEntity.trainingNameId)
-                    }
+            val trainingName: String = trainingEntity.name
 
             val training = Workout(trainingEntity.id, trainingName, workoutEntity.count)
             workoutList += training
@@ -48,12 +42,7 @@ class WorkoutMapper @Inject constructor(private val context: Context) {
                 val trainingEntity: TrainingEntity =
                         trainingEntityMap[workout.trainingId] ?: continue
 
-                val trainingName: String =
-                        if (trainingEntity.custom) {
-                            trainingEntity.customName
-                        } else {
-                            context.getString(trainingEntity.trainingNameId)
-                        }
+                val trainingName: String = trainingEntity.name
 
                 trainingList += Workout(trainingEntity.id, trainingName, workout.count)
             }
@@ -70,7 +59,7 @@ class WorkoutMapper @Inject constructor(private val context: Context) {
         fun TrainingEntity.toWorkout(): Workout {
             return Workout(
                     id = this.id,
-                    name = if (this.custom) "" else context.getString(this.trainingNameId),
+                    name = this.name,
                     count = 0,
                     isUsed = this.used
             )
@@ -84,11 +73,10 @@ class WorkoutMapper @Inject constructor(private val context: Context) {
     private fun TrainingEntity.toData() =
             Training(
                     id = id,
-                    trainingNameId = trainingNameId,
-                    name = if (custom) "" else context.getString(trainingNameId),
+                    name = name,
                     isUsed = used,
                     isDeleted = delete,
-                    isCustom = custom,
-                    customName = customName)
+                    isCustom = custom
+            )
 }
 

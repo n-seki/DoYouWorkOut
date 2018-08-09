@@ -6,6 +6,7 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
 import seki.com.doyouworkout.R
+import seki.com.doyouworkout.data.ResourceSupplier
 import seki.com.doyouworkout.data.cache.DataCache
 import seki.com.doyouworkout.data.db.AppDataBase
 import seki.com.doyouworkout.data.db.TrainingEntity
@@ -15,21 +16,25 @@ import java.util.*
 import javax.inject.Inject
 
 class WorkoutRepository
-@Inject constructor(db: AppDataBase, private val sharedPref: SharedPreferences, private val cache: DataCache) {
+@Inject constructor(
+        db: AppDataBase,
+        private val sharedPref: SharedPreferences,
+        private val cache: DataCache,
+        resourceSupplier: ResourceSupplier) {
 
     private val trainingDao = db.trainingDao()
     private val workoutDao = db.workoutDao()
 
+    private val defaultTraining =
+            listOf(
+                    TrainingEntity(id=0, name = resourceSupplier.getString(R.string.hukkin)),
+                    TrainingEntity(id=1, name = resourceSupplier.getString(R.string.udetate)),
+                    TrainingEntity(id=2, name = resourceSupplier.getString(R.string.haikin)),
+                    TrainingEntity(id=3, name = resourceSupplier.getString(R.string.squat))
+            )
+
     companion object {
         const val KEY_INIT_APP = "key_init_app"
-
-        private val DEFAULT_TRAINING =
-                listOf(
-                        TrainingEntity(id=0, trainingNameId = R.string.hukkin),
-                        TrainingEntity(id=1, trainingNameId = R.string.udetate),
-                        TrainingEntity(id=2, trainingNameId = R.string.haikin),
-                        TrainingEntity(id=3, trainingNameId = R.string.squat)
-                )
     }
 
     fun isInitApp(): Single<Boolean> {
@@ -45,7 +50,7 @@ class WorkoutRepository
     fun putDefaultTraining(): Completable {
         return Completable.fromAction {
             if (sharedPref.getInt(KEY_INIT_APP, 0) == 0) {
-                trainingDao.insert(DEFAULT_TRAINING)
+                trainingDao.insert(defaultTraining)
                 sharedPref.edit {
                     putInt(KEY_INIT_APP, 1)
                 }
@@ -101,8 +106,7 @@ class WorkoutRepository
 fun Training.toEntity() =
         TrainingEntity(
                 id = id,
-                trainingNameId = trainingNameId,
                 used = isUsed,
                 custom = isCustom,
-                customName = customName,
+                name = name,
                 delete = isDeleted)
