@@ -1,7 +1,6 @@
 package seki.com.doyouworkout.ui.mainlist
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
 import seki.com.doyouworkout.ui.OneDayWorkout
 import seki.com.doyouworkout.ui.toLiveData

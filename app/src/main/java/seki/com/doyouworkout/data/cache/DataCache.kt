@@ -16,12 +16,6 @@ class DataCache {
 
     fun getWorkoutAt(date: Date): Single<List<WorkoutEntity>> = Single.just(_workouts[date])
 
-    fun getWorkoutFrom(maxDate: Date, limit: Int = 100) =
-        _workouts.filter { entry -> entry.key <= maxDate }
-                .asIterable()
-                .sortedByDescending { entry -> entry.key }
-                .take(limit)
-
     fun getTraining(id: Int) = _trainings[id]
 
     fun getAllTraining(): Flowable<List<TrainingEntity>> =

@@ -4,12 +4,9 @@ import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
 import android.support.test.filters.SmallTest
 import android.support.test.runner.AndroidJUnit4
-import android.text.format.DateFormat
-import android.util.Log
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.empty
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test

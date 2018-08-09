@@ -16,8 +16,8 @@ import seki.com.doyouworkout.ui.Workout
 
 class NewWorkoutFragment: Fragment(), PutTrainingCountDialog.OnCompleteInputListener {
 
-    lateinit var viewModel: NewWorkoutViewModel
-    lateinit var listener: FragmentClickListener
+    private lateinit var viewModel: NewWorkoutViewModel
+    private lateinit var listener: FragmentClickListener
 
     interface FragmentClickListener {
         fun onClickCancel()
@@ -25,7 +25,7 @@ class NewWorkoutFragment: Fragment(), PutTrainingCountDialog.OnCompleteInputList
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val view = inflater.inflate(R.layout.fragment_new_workout, null, false)
+        val view = inflater.inflate(R.layout.fragment_new_workout, null)
         view.findViewById<Button>(R.id.cancel_button).setOnClickListener {
             listener.onClickCancel()
         }

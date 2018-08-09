@@ -11,7 +11,7 @@
         android:id="@+id/list_empty_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="+ボタンを押してトレーニング実勢を入力してください"
+        android:text="@string/please_input_workout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

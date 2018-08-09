@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import seki.com.doyouworkout.R
 import seki.com.doyouworkout.ui.OneDayWorkout
 
-class MainWorkoutListAdapter(val listener: MainWorkoutListAdapter.OnClickListener): RecyclerView.Adapter<MainWorkoutViewHolder>() {
+class MainWorkoutListAdapter(private val listener: MainWorkoutListAdapter.OnClickListener): RecyclerView.Adapter<MainWorkoutViewHolder>() {
 
     interface OnClickListener {
         fun onClickItem(oneDayWorkout: OneDayWorkout)

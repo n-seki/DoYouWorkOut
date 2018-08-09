@@ -20,7 +20,7 @@ import seki.com.doyouworkout.ui.newWorkout.NewWorkoutActivity
  */
 class MainListFragment : Fragment() {
 
-    val listener = object : MainWorkoutListAdapter.OnClickListener {
+    private val listener = object : MainWorkoutListAdapter.OnClickListener {
         override fun onClickItem(oneDayWorkout: OneDayWorkout) {
             showEditWorkoutScreen(oneDayWorkout)
         }

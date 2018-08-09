@@ -10,7 +10,6 @@ import seki.com.doyouworkout.data.cache.DataCache
 import seki.com.doyouworkout.data.db.AppDataBase
 import seki.com.doyouworkout.data.db.TrainingEntity
 import seki.com.doyouworkout.data.db.WorkoutEntity
-import seki.com.doyouworkout.ui.OneDayWorkout
 import seki.com.doyouworkout.ui.Training
 import java.util.*
 import javax.inject.Inject

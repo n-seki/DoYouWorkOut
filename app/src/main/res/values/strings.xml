@@ -11,4 +11,7 @@
     <string name="cancel">Cancel</string>
 
     <string name="input_today_workout"><u>Please Input today"'s Workout!</u></string>
+    <string name="commit_image">commitImage</string>
+    <string name="complete">Complete!</string>
+    <string name="please_input_workout">+ボタンを押してトレーニング実勢を入力してください</string>
 </resources>

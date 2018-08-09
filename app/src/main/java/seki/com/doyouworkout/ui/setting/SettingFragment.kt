@@ -31,10 +31,10 @@ class SettingFragment: Fragment() {
     }
 
     private fun initFab() {
-        regist_setting.setOnClickListener({
+        regist_setting.setOnClickListener {
             val stateChangeTrainingList = training_check_boxes.fetchCheckedData()
             viewModel.update(stateChangeTrainingList)
-        })
+        }
     }
 
     private fun showTrainingList(trainingList: List<Training>?) {
