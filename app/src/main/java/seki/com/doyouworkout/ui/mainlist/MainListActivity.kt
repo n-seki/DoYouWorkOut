@@ -3,18 +3,18 @@ package seki.com.doyouworkout.ui.mainlist
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import dagger.android.AndroidInjection
+import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main_list.*
-import seki.com.doyouworkout.App
 import seki.com.doyouworkout.R
 import seki.com.doyouworkout.ui.WorkoutViewModelFactory
 import seki.com.doyouworkout.ui.newWorkout.NewWorkoutActivity
 import seki.com.doyouworkout.ui.setting.SettingActivity
 import javax.inject.Inject
 
-class MainListActivity : AppCompatActivity() {
+class MainListActivity : DaggerAppCompatActivity() {
 
     @Inject lateinit var viewModelFactory: WorkoutViewModelFactory
     val viewModel: MainListViewModel by lazy {
@@ -27,7 +27,7 @@ class MainListActivity : AppCompatActivity() {
 
         fab.setOnClickListener { showEditWorkoutScreen() }
 
-        (applicationContext as App).appComponent.inject(this)
+        AndroidInjection.inject(this)
 
         viewModel.initAppStatus.observe(this, Observer { checkSettingState(it) })
     }
@@ -64,4 +64,5 @@ class MainListActivity : AppCompatActivity() {
         val intent = NewWorkoutActivity.getIntent(this)
         startActivity(intent)
     }
+
 }

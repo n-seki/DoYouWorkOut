@@ -5,17 +5,16 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.widget.Toast
+import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main_list.*
-import seki.com.doyouworkout.App
 import seki.com.doyouworkout.R
 import seki.com.doyouworkout.ui.WorkoutViewModelFactory
 import java.util.*
 import javax.inject.Inject
 
-class NewWorkoutActivity: AppCompatActivity(), NewWorkoutFragment.FragmentClickListener {
+class NewWorkoutActivity: DaggerAppCompatActivity(), NewWorkoutFragment.FragmentClickListener {
 
     companion object {
         private const val DATE = "date"
@@ -39,8 +38,6 @@ class NewWorkoutActivity: AppCompatActivity(), NewWorkoutFragment.FragmentClickL
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
         }
-
-        (application as App).appComponent.inject(this)
 
         viewModel.updateStatus.observe(this, Observer { onUpdateFinish(it) })
 
