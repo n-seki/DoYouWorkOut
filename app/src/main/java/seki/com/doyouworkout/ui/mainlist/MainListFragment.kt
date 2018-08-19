@@ -50,7 +50,7 @@ class MainListFragment : Fragment() {
 
     private fun initView(view: View) {
         val list = view.findViewById<RecyclerView>(R.id.workout_list)
-        list.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        list.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
         val decorator = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
         list.addItemDecoration(decorator)
         list.adapter = MainWorkoutListAdapter(listener)
