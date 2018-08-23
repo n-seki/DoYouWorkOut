@@ -5,8 +5,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
