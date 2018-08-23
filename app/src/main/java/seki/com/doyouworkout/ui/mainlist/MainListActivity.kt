@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main_list.*
@@ -69,11 +71,7 @@ class MainListActivity : DaggerAppCompatActivity() {
 
     private fun changeFabVisibility(hasTodayWorkout: Boolean?) {
         hasTodayWorkout ?: return
-        if (hasTodayWorkout) {
-            fab.visibility = View.INVISIBLE
-        } else {
-            fab.visibility = View.VISIBLE
-        }
+        fab.isVisible = !hasTodayWorkout
     }
 
 }
