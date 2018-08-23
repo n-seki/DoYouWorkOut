@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main_list.*
@@ -30,6 +31,7 @@ class MainListActivity : DaggerAppCompatActivity() {
         AndroidInjection.inject(this)
 
         viewModel.initAppStatus.observe(this, Observer { checkSettingState(it) })
+        viewModel.hasTodayWorkout.observe(this, Observer { changeFabVisibility(it) })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -63,6 +65,15 @@ class MainListActivity : DaggerAppCompatActivity() {
     private fun showEditWorkoutScreen() {
         val intent = NewWorkoutActivity.getIntent(this)
         startActivity(intent)
+    }
+
+    private fun changeFabVisibility(hasTodayWorkout: Boolean?) {
+        hasTodayWorkout ?: return
+        if (hasTodayWorkout) {
+            fab.visibility = View.INVISIBLE
+        } else {
+            fab.visibility = View.VISIBLE
+        }
     }
 
 }
