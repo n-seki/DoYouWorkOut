@@ -76,10 +76,11 @@ class WorkoutRepository
         cache.updateTraining(trainingList)
     }
 
-    fun updateTraining(trainingList: List<TrainingEntity>): Completable {
+    fun updateTraining(trainingList: List<Training>): Completable {
         return Completable.fromAction {
-            trainingDao.update(trainingList)
-            cache.updateTraining(trainingList)
+            val list = trainingList.map { it.toEntity() }
+            trainingDao.update(list)
+            cache.updateTraining(list)
         }
     }
 

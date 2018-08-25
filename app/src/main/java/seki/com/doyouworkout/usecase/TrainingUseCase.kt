@@ -20,7 +20,7 @@ class TrainingUseCase @Inject constructor(
                     .map { list -> list.map { workoutMapper.toTraining(it) } }
 
     fun updateTraining(list: List<Training>): Flowable<Boolean> =
-            repository.updateTraining(list.map { it.toEntity() })
+            repository.updateTraining(list)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .toSingleDefault(true)
