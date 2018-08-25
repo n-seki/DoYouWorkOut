@@ -5,7 +5,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import seki.com.doyouworkout.data.db.mapper.WorkoutMapper
 import seki.com.doyouworkout.data.repository.WorkoutRepository
-import seki.com.doyouworkout.data.repository.toEntity
 import seki.com.doyouworkout.ui.Training
 import javax.inject.Inject
 
