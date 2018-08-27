@@ -1,15 +1,13 @@
 package seki.com.doyouworkout.data.db.mapper
 
-import android.content.Context
 import seki.com.doyouworkout.data.db.TrainingEntity
 import seki.com.doyouworkout.data.db.WorkoutEntity
 import seki.com.doyouworkout.ui.OneDayWorkout
 import seki.com.doyouworkout.ui.Training
 import seki.com.doyouworkout.ui.Workout
 import java.util.*
-import javax.inject.Inject
 
-class WorkoutMapper @Inject constructor(private val context: Context) {
+class WorkoutMapper {
 
     fun toWorkout(workoutEntities: List<WorkoutEntity>, trainingEntities: List<TrainingEntity>): List<Workout> {
         val trainingEntityMap: Map<Int, TrainingEntity> = trainingEntities.associateBy { it.id }
@@ -20,9 +18,7 @@ class WorkoutMapper @Inject constructor(private val context: Context) {
             val trainingEntity: TrainingEntity =
                     trainingEntityMap[workoutEntity.trainingId] ?: continue
 
-            val trainingName: String = trainingEntity.name
-
-            val training = Workout(trainingEntity.id, trainingName, workoutEntity.count)
+            val training = Workout(trainingEntity.id, trainingEntity.name, workoutEntity.count)
             workoutList += training
         }
 
@@ -42,9 +38,7 @@ class WorkoutMapper @Inject constructor(private val context: Context) {
                 val trainingEntity: TrainingEntity =
                         trainingEntityMap[workout.trainingId] ?: continue
 
-                val trainingName: String = trainingEntity.name
-
-                trainingList += Workout(trainingEntity.id, trainingName, workout.count)
+                trainingList += Workout(trainingEntity.id, trainingEntity.name, workout.count)
             }
 
             oneDayWorkoutList += OneDayWorkout(date, trainingList)
@@ -67,16 +61,14 @@ class WorkoutMapper @Inject constructor(private val context: Context) {
 
         return trainingEntities.map { it.toWorkout() }
     }
-
-    fun toTraining(entity: TrainingEntity) = entity.toData()
-
-    private fun TrainingEntity.toData() =
-            Training(
-                    id = id,
-                    name = name,
-                    isUsed = used,
-                    isDeleted = delete,
-                    isCustom = custom
-            )
 }
+
+fun TrainingEntity.toData() =
+        Training(
+                id = id,
+                name = name,
+                isUsed = used,
+                isDeleted = delete,
+                isCustom = custom
+        )
 
