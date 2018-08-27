@@ -26,22 +26,22 @@ class MainListViewModel @Inject constructor(
     }
 
     private fun containsTodayWorkout(workoutList: List<OneDayWorkout>): LiveData<Boolean> {
-        val has = MutableLiveData<Boolean>()
+        val isContainTodayWorkout = MutableLiveData<Boolean>()
 
         if (workoutList.isEmpty()) {
-            has.postValue(false)
-            return has
+            isContainTodayWorkout.postValue(false)
+            return isContainTodayWorkout
         }
 
-        has.postValue(workoutList.last().trainingDate.equalDay(Date()))
-        return has
+        isContainTodayWorkout.postValue(workoutList.last().trainingDate.equalDay(Date()))
+        return isContainTodayWorkout
     }
 
     private fun Date.equalDay(date: Date): Boolean {
-        return format.format(this) == format.format(date)
+        return formatter.format(this) == formatter.format(date)
     }
 
     companion object {
-        val format = SimpleDateFormat("yyyyMMdd", Locale.US)
+        val formatter = SimpleDateFormat("yyyyMMdd", Locale.US)
     }
 }
