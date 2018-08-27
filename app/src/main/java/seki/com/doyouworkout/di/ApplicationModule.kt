@@ -26,7 +26,7 @@ class ApplicationModule(private val applicationContext: Context) {
     @Singleton
     @Provides
     fun provideEntityMapper() =
-            WorkoutMapper(applicationContext)
+            WorkoutMapper()
 
     @Singleton
     @Provides
@@ -40,8 +40,8 @@ class ApplicationModule(private val applicationContext: Context) {
 
     @Singleton
     @Provides
-    fun provideTrainingUseCase(repository: WorkoutRepository, mapper: WorkoutMapper) =
-            TrainingUseCase(repository, mapper)
+    fun provideTrainingUseCase(repository: WorkoutRepository) =
+            TrainingUseCase(repository)
 
     @Singleton
     @Provides
