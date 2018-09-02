@@ -35,7 +35,6 @@ class MainListFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         val viewModel = (activity as MainListActivity).viewModel
         viewModel.workoutList.observe(this, Observer { dataList ->
             dataList?.let {

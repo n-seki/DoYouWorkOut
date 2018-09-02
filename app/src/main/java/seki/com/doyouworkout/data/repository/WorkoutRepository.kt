@@ -102,6 +102,10 @@ class WorkoutRepository
     fun getWorkoutList(): Single<List<WorkoutEntity>> {
         return workoutDao.load(Date())
     }
+
+    fun getWorkoutList(today: Date): Single<List<WorkoutEntity>> {
+        return workoutDao.insertAndSelect(today)
+    }
 }
 
 fun Training.toEntity() =

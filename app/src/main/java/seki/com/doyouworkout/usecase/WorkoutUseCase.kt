@@ -8,6 +8,7 @@ import seki.com.doyouworkout.data.db.mapper.WorkoutMapper
 import seki.com.doyouworkout.data.repository.WorkoutRepository
 import seki.com.doyouworkout.ui.OneDayWorkout
 import seki.com.doyouworkout.ui.Workout
+import seki.com.doyouworkout.ui.mainlist.MainListViewModel
 import java.util.*
 import javax.inject.Inject
 
@@ -35,6 +36,18 @@ class WorkoutUseCase
 
     fun fetchOneDayWorkoutList(): Flowable<List<OneDayWorkout>> {
         return repository.getWorkoutList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMapPublisher { workoutList ->
+                    repository.getAllTrainingList()
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .map { mapper.toOneDayWorkout(workoutList, it) }
+                }
+    }
+
+    fun fetchOneDayWorkoutListWith(): Flowable<List<OneDayWorkout>> {
+        return repository.getWorkoutList(Date())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMapPublisher { workoutList ->
