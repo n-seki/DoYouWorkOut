@@ -1,20 +1,17 @@
 package seki.com.doyouworkout.data.db
 
-import android.arch.persistence.room.*
-import io.reactivex.Flowable
+import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Insert
+import android.arch.persistence.room.OnConflictStrategy
+import android.arch.persistence.room.Query
+import io.reactivex.Single
 
 @Dao
 interface TrainingDao {
 
     @Query("SELECT * FROM training ORDER BY id")
-    fun loadAll(): Flowable<List<TrainingEntity>>
+    fun select(): Single<List<TrainingEntity>>
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(list: List<TrainingEntity>)
-
-    @Update
-    fun update(list: List<TrainingEntity>)
-
-    @Query("SELECT COUNT(*) FROM training")
-    fun count(): Int
 }

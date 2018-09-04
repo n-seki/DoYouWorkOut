@@ -19,7 +19,7 @@ class MainListViewModel @Inject constructor(
     val initAppStatus: LiveData<Boolean> =
             trainingUseCase.isCompleteInitApp().toLiveData()
 
-    val workoutList: LiveData<List<OneDayWorkout>> = workoutUseCase.fetchOneDayWorkoutListWith().toLiveData()
+    val workoutList: LiveData<List<OneDayWorkout>> = workoutUseCase.fetchOneDayWorkoutList().toLiveData()
 
     val hasTodayWorkout: LiveData<Boolean> = Transformations.switchMap(workoutList) { list ->
         containsTodayWorkout(list)

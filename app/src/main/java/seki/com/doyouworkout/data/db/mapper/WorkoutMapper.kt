@@ -63,7 +63,7 @@ class WorkoutMapper {
     }
 }
 
-fun TrainingEntity.toData() =
+fun TrainingEntity.toUIData() =
         Training(
                 id = id,
                 name = name,

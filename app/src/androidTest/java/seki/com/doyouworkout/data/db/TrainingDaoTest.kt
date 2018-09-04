@@ -36,7 +36,7 @@ class TrainingDaoTest {
         val training = listOf(TrainingEntity(1, 1, true))
         dao.insert(training)
 
-        dao.loadAll()
+        dao.select()
                 .subscribeOn(Schedulers.trampoline())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { assertThat(it, `is`(training)) }
@@ -59,7 +59,7 @@ class TrainingDaoTest {
 
         dao.update(newTraining)
 
-        dao.loadAll()
+        dao.select()
                 .subscribeOn(Schedulers.trampoline())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { assertThat(it, `is`(newTraining)) }

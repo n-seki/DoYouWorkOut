@@ -3,7 +3,6 @@ package seki.com.doyouworkout.data.repository
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import io.reactivex.Completable
-import io.reactivex.Flowable
 import io.reactivex.Single
 import seki.com.doyouworkout.R
 import seki.com.doyouworkout.data.ResourceSupplier
@@ -58,15 +57,15 @@ class WorkoutRepository
         }
     }
 
-    fun getAllTrainingList(): Flowable<List<TrainingEntity>> {
+    fun getAllTrainingList(): Single<List<TrainingEntity>> {
         if (cache.hasTraining()) {
             return cache.getAllTraining()
         }
 
-        return trainingDao.loadAll()
+        return trainingDao.select()
     }
 
-    fun getUsedTrainingList(): Flowable<List<TrainingEntity>> {
+    fun getUsedTrainingList(): Single<List<TrainingEntity>> {
         return getAllTrainingList().map { list ->
             list.filter { it.used }
         }
@@ -79,7 +78,7 @@ class WorkoutRepository
     fun updateTraining(trainingList: List<Training>): Completable {
         return Completable.fromAction {
             val list = trainingList.map { it.toEntity() }
-            trainingDao.update(list)
+            trainingDao.insert(list)
             cache.updateTraining(list)
         }
     }
@@ -89,7 +88,7 @@ class WorkoutRepository
             return cache.getWorkoutAt(date)
         }
 
-        return workoutDao.select(date)
+        return workoutDao.selectAt(date)
     }
 
     fun updateWorkout(workoutEntities: List<WorkoutEntity>): Completable {
@@ -100,11 +99,15 @@ class WorkoutRepository
     }
 
     fun getWorkoutList(): Single<List<WorkoutEntity>> {
-        return workoutDao.load(Date())
+        return workoutDao.selectUntil(Date())
     }
 
-    fun getWorkoutList(today: Date): Single<List<WorkoutEntity>> {
-        return workoutDao.insertAndSelect(today)
+//    fun getWorkoutList(today: Date): Single<List<WorkoutEntity>> {
+//        return workoutDao.insertAndSelect(today)
+//    }
+
+    fun insertEmptyWorkoutDataUntil(date: Date, trainingList: List<Training>) {
+
     }
 }
 

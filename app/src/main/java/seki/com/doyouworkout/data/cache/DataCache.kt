@@ -18,8 +18,8 @@ class DataCache {
 
     fun getTraining(id: Int) = _trainings[id]
 
-    fun getAllTraining(): Flowable<List<TrainingEntity>> =
-            Flowable.just(_trainings.values.asSequence().sortedBy { it.id }.toList())
+    fun getAllTraining(): Single<List<TrainingEntity>> =
+            Single.just(_trainings.values.asSequence().sortedBy { it.id }.toList())
 
     fun putWorkout(workoutEntities: List<WorkoutEntity>) {
         _workouts += workoutEntities[0].date to workoutEntities.toMutableList()
