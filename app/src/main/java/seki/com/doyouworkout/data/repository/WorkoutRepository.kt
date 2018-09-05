@@ -101,14 +101,6 @@ class WorkoutRepository
     fun getWorkoutList(): Single<List<WorkoutEntity>> {
         return workoutDao.selectUntil(Date())
     }
-
-//    fun getWorkoutList(today: Date): Single<List<WorkoutEntity>> {
-//        return workoutDao.insertAndSelect(today)
-//    }
-
-    fun insertEmptyWorkoutDataUntil(date: Date, trainingList: List<Training>) {
-
-    }
 }
 
 fun Training.toEntity() =
