@@ -98,8 +98,8 @@ class WorkoutRepository
         }
     }
 
-    fun getWorkoutList(): Single<List<WorkoutEntity>> {
-        return workoutDao.selectUntil(Date())
+    fun getWorkoutList(limit: Int = 100): Single<List<WorkoutEntity>> {
+        return workoutDao.selectUntil(Date(), limit)
     }
 }
 

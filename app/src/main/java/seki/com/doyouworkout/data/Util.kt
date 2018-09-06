@@ -1,5 +1,6 @@
 package seki.com.doyouworkout.data
 
+import java.text.SimpleDateFormat
 import java.util.*
 
 operator fun ClosedRange<Date>.iterator(): Iterator<Date> {
@@ -24,3 +25,9 @@ class DateIterator(private val dateRange: ClosedRange<Date>): Iterator<Date> {
         return calendar.time
     }
 }
+
+fun Date.equalsDay(date: Date): Boolean {
+    return formatter.format(this) == formatter.format(date)
+}
+
+val formatter = SimpleDateFormat("yyyyMMdd", Locale.US)

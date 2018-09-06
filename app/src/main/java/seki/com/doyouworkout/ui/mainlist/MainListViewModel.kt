@@ -4,11 +4,11 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
+import seki.com.doyouworkout.data.equalsDay
 import seki.com.doyouworkout.ui.OneDayWorkout
 import seki.com.doyouworkout.ui.toLiveData
 import seki.com.doyouworkout.usecase.TrainingUseCase
 import seki.com.doyouworkout.usecase.WorkoutUseCase
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -33,15 +33,7 @@ class MainListViewModel @Inject constructor(
             return isContainTodayWorkout
         }
 
-        isContainTodayWorkout.postValue(workoutList.last().trainingDate.equalDay(Date()))
+        isContainTodayWorkout.postValue(workoutList.last().trainingDate.equalsDay(Date()))
         return isContainTodayWorkout
-    }
-
-    private fun Date.equalDay(date: Date): Boolean {
-        return formatter.format(this) == formatter.format(date)
-    }
-
-    companion object {
-        val formatter = SimpleDateFormat("yyyyMMdd", Locale.US)
     }
 }

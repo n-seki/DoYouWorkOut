@@ -7,6 +7,7 @@ import io.reactivex.schedulers.Schedulers
 import seki.com.doyouworkout.data.db.TrainingEntity
 import seki.com.doyouworkout.data.db.WorkoutEntity
 import seki.com.doyouworkout.data.db.mapper.WorkoutMapper
+import seki.com.doyouworkout.data.equalsDay
 import seki.com.doyouworkout.data.iterator
 import seki.com.doyouworkout.data.repository.WorkoutRepository
 import seki.com.doyouworkout.ui.OneDayWorkout
@@ -20,13 +21,11 @@ class WorkoutUseCase
     fun getWorkout(date: Date): Flowable<List<Workout>> {
         return repository.getWorkout(date)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap { workoutList ->
-                    repository.getAllTrainingList()
+                .flatMap { workoutList -> repository.getAllTrainingList()
                             .map { mapper.toWorkout(workoutList, it) }
                             .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
                 }
+                .observeOn(AndroidSchedulers.mainThread())
                 .toFlowable()
     }
 
@@ -46,29 +45,14 @@ class WorkoutUseCase
                     repository.getAllTrainingList()
                             .map { mapper.toOneDayWorkout(workoutList, it) }
                             .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
                 }
+                .observeOn(AndroidSchedulers.mainThread())
                 .toFlowable()
     }
 
-//    fun fetchOneDayWorkoutListWith(): Flowable<List<OneDayWorkout>> {
-//        return repository.getWorkoutList(Date())
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .flatMap { workoutList ->
-//                    repository.getAllTrainingList()
-//                            .subscribeOn(Schedulers.io())
-//                            .observeOn(AndroidSchedulers.mainThread())
-//                            .map { mapper.toOneDayWorkout(workoutList, it) }
-//                }
-//                .toFlowable()
-//    }
-
-    fun ddd(lastDate: Date): Completable {
+    private fun insertEmptyWorkoutData(lastDate: Date): Completable {
         return repository.getAllTrainingList()
                 .map { insertEmptyWorkoutDataUntil(lastDate, it) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .ignoreElement()
     }
 
@@ -87,8 +71,16 @@ class WorkoutUseCase
         }
     }
 
-    fun aaa() {
-
+    fun aaa(): Flowable<List<OneDayWorkout>> {
+        return repository.getWorkoutList(1)
+                .map { list -> list[0].date } // TODO [Date?]
+                .doOnSuccess { date ->
+                    if (!date.equalsDay(Date())) {
+                        insertEmptyWorkoutData(date)
+                    }
+                }
+                .subscribeOn(Schedulers.io())
+                .flatMapPublisher { fetchOneDayWorkoutList() }
     }
 
     fun updateWorkout(date: Date, workoutList: List<Workout>): Flowable<Boolean> {
