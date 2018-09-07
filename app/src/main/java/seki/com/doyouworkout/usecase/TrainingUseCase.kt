@@ -12,10 +12,10 @@ class TrainingUseCase @Inject constructor(private val repository: WorkoutReposit
 
     fun fetchTrainingList(): Flowable<List<Training>> =
             repository.getAllTrainingList()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
                     .doOnSuccess { repository.putTrainingCache(it) }
                     .map { list -> list.map { it.toUIData() } }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .toFlowable()
 
     fun updateTraining(list: List<Training>): Flowable<Boolean> =

@@ -23,8 +23,8 @@ class WorkoutUseCase
                 .subscribeOn(Schedulers.io())
                 .flatMap { workoutList -> repository.getAllTrainingList()
                             .map { mapper.toWorkout(workoutList, it) }
-                            .subscribeOn(Schedulers.io())
                 }
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .toFlowable()
     }
@@ -40,12 +40,11 @@ class WorkoutUseCase
     fun fetchOneDayWorkoutList(): Flowable<List<OneDayWorkout>> {
         return repository.getWorkoutList()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .flatMap { workoutList ->
                     repository.getAllTrainingList()
                             .map { mapper.toOneDayWorkout(workoutList, it) }
-                            .subscribeOn(Schedulers.io())
                 }
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .toFlowable()
     }
