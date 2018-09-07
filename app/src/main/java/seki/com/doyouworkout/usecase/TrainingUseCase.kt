@@ -1,6 +1,6 @@
 package seki.com.doyouworkout.usecase
 
-import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import seki.com.doyouworkout.data.db.mapper.toUIData
@@ -10,27 +10,24 @@ import javax.inject.Inject
 
 class TrainingUseCase @Inject constructor(private val repository: WorkoutRepository) {
 
-    fun fetchTrainingList(): Flowable<List<Training>> =
+    fun fetchTrainingList(): Single<List<Training>> =
             repository.getAllTrainingList()
                     .doOnSuccess { repository.putTrainingCache(it) }
                     .map { list -> list.map { it.toUIData() } }
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .toFlowable()
 
-    fun updateTraining(list: List<Training>): Flowable<Boolean> =
+    fun updateTraining(list: List<Training>): Single<Boolean> =
             repository.updateTraining(list)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .toSingleDefault(true)
                     .onErrorReturnItem(false)
-                    .toFlowable()
 
-    fun isCompleteInitApp(): Flowable<Boolean> =
+    fun isCompleteInitApp(): Single<Boolean> =
             repository.isInitApp()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .toFlowable()
 
     fun initApp() {
         repository.putDefaultTraining()
