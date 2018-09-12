@@ -1,6 +1,5 @@
 package seki.com.doyouworkout.data.cache
 
-import io.reactivex.Single
 import org.hamcrest.CoreMatchers.*
 import org.junit.After
 import org.junit.Assert.assertThat
@@ -39,15 +38,17 @@ class DataCacheTest {
 
     @Test
     fun `Trainingを追加したときにhasTrainingがtrueであること`() {
-        val trainingEntity = listOf(TrainingEntity(id = 1))
+        val trainingEntity = listOf(TrainingEntity(id = 1, name = "test"))
         dataCache.putTraining(trainingEntity)
 
         assertThat(dataCache.hasTraining(), `is`(true))
     }
 
-    @Test
-    fun `Workoutを追加していない場合にgetWorkoutAtがnullを通知すること`() {
-        assertThat(dataCache.getWorkoutAt(Date()), `is`(nullValue()))
+    @Test(expected = NullPointerException::class)
+    fun `Workoutを追加していない場合にgetWorkoutAtが例外をthrowすること`() {
+        dataCache.getWorkoutAt(Date())
+                .test()
+                .assertValue { list -> list.isEmpty() }
     }
 
     @Test
@@ -56,8 +57,9 @@ class DataCacheTest {
         val workoutEntity = listOf(WorkoutEntity(date = date, trainingId = 1, count = 1))
         dataCache.putWorkout(workoutEntity)
 
-        assertThat(dataCache.getWorkoutAt(date), `is`(notNullValue()))
-        assertThat(dataCache.getWorkoutAt(date), `is`(Single.just(workoutEntity)))
+        dataCache.getWorkoutAt(date)
+                .test()
+                .assertValue(workoutEntity)
     }
 
     @Test
@@ -67,7 +69,7 @@ class DataCacheTest {
 
     @Test
     fun `Trainingを追加したときにgetTrainingでTrainingが通知されること`() {
-        val trainingEntity = listOf(TrainingEntity(id = 1))
+        val trainingEntity = listOf(TrainingEntity(id = 1, name = "test"))
         dataCache.putTraining(trainingEntity)
 
         assertThat(dataCache.getTraining(1), `is`(notNullValue()))
