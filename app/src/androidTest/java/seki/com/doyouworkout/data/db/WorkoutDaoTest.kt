@@ -4,15 +4,11 @@ import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
 import android.support.test.filters.SmallTest
 import android.support.test.runner.AndroidJUnit4
-import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.empty
 import org.junit.After
-import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.text.SimpleDateFormat
-import java.util.*
 
 @RunWith(AndroidJUnit4::class) @SmallTest
 class WorkoutDaoTest {
@@ -34,14 +30,18 @@ class WorkoutDaoTest {
 
     @Test
     fun `insertしたworkoutがselectできること`() {
-        val workout = listOf(
-                WorkoutEntity(Date(), 1, 1)
-        )
+        val format = SimpleDateFormat("yyyyMMDD")
+        val date = format.parse("20180624")
+
+        val workout = arrayListOf(WorkoutEntity(date, 1, 1))
 
         dao.insert(workout)
 
-        val actual: List<WorkoutEntity> = dao.selectUntil(Date())
-        assertThat(actual[0].trainingId, `is`(workout.trainingId))
+        dao.selectUntil(date)
+                .test()
+                .await()
+                .assertValueCount(1)
+                .assertValue(workout)
     }
 
     @Test
@@ -49,16 +49,20 @@ class WorkoutDaoTest {
         val format = SimpleDateFormat("yyyyMMDD")
         val today = format.parse("20180624")
 
-        val yesterdayWorkout = WorkoutEntity(format.parse("20180623"), 1, 1)
-        val todayWorkout = WorkoutEntity(today, 2, 2)
-        val tomorrowWorkout = WorkoutEntity(format.parse("20180625"), 3, 3)
+        val workouts = listOf(
+                WorkoutEntity(format.parse("20180623"), 1, 1),
+                WorkoutEntity(today, 2, 2),
+                WorkoutEntity(format.parse("20180625"), 3, 3)
+        )
 
-        dao.insert(yesterdayWorkout, todayWorkout, tomorrowWorkout)
+        dao.insert(workouts)
 
-        val actual: List<WorkoutEntity> = dao.selectUntil(today)
-
-        assertThat(actual.size, `is`(2))
-        assertThat(actual[0], `is`(yesterdayWorkout))
-        assertThat(actual[1], `is`(todayWorkout))
+        dao.selectUntil(today)
+                .test()
+                .await()
+                .assertValueCount(1)
+                .assertValue { list ->
+                    list == workouts.dropLast(1)
+                }
     }
 }

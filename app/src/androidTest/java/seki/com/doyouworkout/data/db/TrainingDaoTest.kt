@@ -4,10 +4,6 @@ import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
 import android.support.test.filters.SmallTest
 import android.support.test.runner.AndroidJUnit4
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.MatcherAssert.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -33,36 +29,28 @@ class TrainingDaoTest {
 
     @Test
     fun `インサートしたtrainingがselectできること`() {
-        val training = listOf(TrainingEntity(1, 1, true))
+        val training = listOf(TrainingEntity(id = 1, name = "test"))
         dao.insert(training)
 
         dao.select()
-                .subscribeOn(Schedulers.trampoline())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { assertThat(it, `is`(training)) }
-                .dispose()
+                .test()
+                .await()
+                .assertValueCount(1)
+                .assertValue(training)
     }
 
     @Test
     fun `trainingをupdateできること`() {
-        val training = listOf(TrainingEntity(1, 1, true))
+        val training = listOf(TrainingEntity(id = 1, name = "test"))
         dao.insert(training)
 
-        val newTraining = listOf(
-                training[0].copy(
-                        trainingNameId = 2,
-                        used = false,
-                        custom = true,
-                        customName = "test",
-                        delete = true)
-        )
-
-        dao.update(newTraining)
+        val newTraining = listOf(TrainingEntity(id = 1, name = "replace"))
+        dao.insert(newTraining)
 
         dao.select()
-                .subscribeOn(Schedulers.trampoline())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { assertThat(it, `is`(newTraining)) }
-                .dispose()
+                .test()
+                .await()
+                .assertValueCount(1)
+                .assertValue(newTraining)
     }
 }
