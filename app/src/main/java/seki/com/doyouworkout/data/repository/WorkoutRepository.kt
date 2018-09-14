@@ -19,7 +19,7 @@ class WorkoutRepository
         db: AppDataBase,
         private val sharedPref: SharedPreferences,
         private val cache: DataCache,
-        resourceSupplier: ResourceSupplier) {
+        resourceSupplier: ResourceSupplier): Repository {
 
     private val trainingDao = db.trainingDao()
     private val workoutDao = db.workoutDao()
@@ -36,7 +36,7 @@ class WorkoutRepository
         const val KEY_INIT_APP = "key_init_app"
     }
 
-    fun isInitApp(): Single<Boolean> {
+    override fun isInitApp(): Single<Boolean> {
         return Single.create<Boolean> { emitter ->
             if (sharedPref.getInt(KEY_INIT_APP, 0) == 1) {
                 emitter.onSuccess(true)
@@ -46,7 +46,7 @@ class WorkoutRepository
         }
     }
 
-    fun putDefaultTraining(): Completable {
+    override fun putDefaultTraining(): Completable {
         return Completable.fromAction {
             if (sharedPref.getInt(KEY_INIT_APP, 0) == 0) {
                 trainingDao.insert(defaultTraining)
@@ -57,7 +57,7 @@ class WorkoutRepository
         }
     }
 
-    fun getAllTrainingList(): Single<List<TrainingEntity>> {
+    override fun getAllTrainingList(): Single<List<TrainingEntity>> {
         if (cache.hasTraining()) {
             return cache.getAllTraining()
         }
@@ -65,17 +65,17 @@ class WorkoutRepository
         return trainingDao.select()
     }
 
-    fun getUsedTrainingList(): Single<List<TrainingEntity>> {
+    override fun getUsedTrainingList(): Single<List<TrainingEntity>> {
         return getAllTrainingList().map { list ->
             list.filter { it.used }
         }
     }
 
-    fun putTrainingCache(trainingList: List<TrainingEntity>) {
+    override fun putTrainingCache(trainingList: List<TrainingEntity>) {
         cache.updateTraining(trainingList)
     }
 
-    fun updateTraining(trainingList: List<Training>): Completable {
+    override fun updateTraining(trainingList: List<Training>): Completable {
         return Completable.fromAction {
             val list = trainingList.map { it.toEntity() }
             trainingDao.insert(list)
@@ -83,7 +83,7 @@ class WorkoutRepository
         }
     }
 
-    fun getWorkout(date: Date): Single<List<WorkoutEntity>> {
+    override fun getWorkout(date: Date): Single<List<WorkoutEntity>> {
         if (cache.hasWorkoutAt(date)) {
             return cache.getWorkoutAt(date)
         }
@@ -91,14 +91,14 @@ class WorkoutRepository
         return workoutDao.selectAt(date)
     }
 
-    fun updateWorkout(workoutEntities: List<WorkoutEntity>): Completable {
+    override fun updateWorkout(workoutEntities: List<WorkoutEntity>): Completable {
         return Completable.fromAction {
             workoutDao.insert(workoutEntities)
             cache.putWorkout(workoutEntities)
         }
     }
 
-    fun getWorkoutList(limit: Int = 100): Single<List<WorkoutEntity>> {
+    override fun getWorkoutList(limit: Int): Single<List<WorkoutEntity>> {
         return workoutDao.selectUntil(Date(), limit)
     }
 }
