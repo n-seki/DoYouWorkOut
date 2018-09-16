@@ -1,9 +1,10 @@
-package seki.com.doyouworkout.data.cache
+package seki.com.doyouworkout.cache
 
 import org.hamcrest.CoreMatchers.*
 import org.junit.After
 import org.junit.Assert.assertThat
 import org.junit.Test
+import seki.com.doyouworkout.data.cache.DataCache
 import seki.com.doyouworkout.data.db.TrainingEntity
 import seki.com.doyouworkout.data.db.WorkoutEntity
 import java.util.*

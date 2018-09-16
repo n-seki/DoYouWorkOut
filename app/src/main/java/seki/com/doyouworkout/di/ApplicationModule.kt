@@ -11,6 +11,7 @@ import seki.com.doyouworkout.data.cache.DataCache
 import seki.com.doyouworkout.data.db.AppDataBase
 import seki.com.doyouworkout.data.db.mapper.WorkoutMapper
 import seki.com.doyouworkout.data.repository.WorkoutRepository
+import seki.com.doyouworkout.usecase.SchedulersProvider
 import seki.com.doyouworkout.usecase.TrainingUseCase
 import seki.com.doyouworkout.usecase.WorkoutUseCase
 import javax.inject.Singleton
@@ -41,12 +42,12 @@ class ApplicationModule(private val applicationContext: Context) {
     @Singleton
     @Provides
     fun provideTrainingUseCase(repository: WorkoutRepository) =
-            TrainingUseCase(repository)
+            TrainingUseCase(repository, SchedulersProvider)
 
     @Singleton
     @Provides
     fun provideWorkoutUseCase(repository: WorkoutRepository, mapper: WorkoutMapper) =
-            WorkoutUseCase(repository, mapper)
+            WorkoutUseCase(repository, mapper, SchedulersProvider)
 
     @Singleton
     @Provides

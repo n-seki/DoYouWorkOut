@@ -1,38 +1,37 @@
 package seki.com.doyouworkout.usecase
 
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import seki.com.doyouworkout.data.db.mapper.toUIData
-import seki.com.doyouworkout.data.repository.WorkoutRepository
+import seki.com.doyouworkout.data.repository.Repository
 import seki.com.doyouworkout.ui.Training
 import javax.inject.Inject
 
-class TrainingUseCase @Inject constructor(private val repository: WorkoutRepository) {
+class TrainingUseCase @Inject constructor(
+        private val repository: Repository, private val scheduleProvider: SchedulersProviderBase) {
 
     fun fetchTrainingList(): Single<List<Training>> =
             repository.getAllTrainingList()
                     .doOnSuccess { repository.putTrainingCache(it) }
                     .map { list -> list.map { it.toUIData() } }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(scheduleProvider.io())
+                    .observeOn(scheduleProvider.ui())
 
     fun updateTraining(list: List<Training>): Single<Boolean> =
             repository.updateTraining(list)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(scheduleProvider.io())
+                    .observeOn(scheduleProvider.ui())
                     .toSingleDefault(true)
                     .onErrorReturnItem(false)
 
     fun isCompleteInitApp(): Single<Boolean> =
             repository.isInitApp()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(scheduleProvider.io())
+                    .observeOn(scheduleProvider.ui())
 
     fun initApp() {
         repository.putDefaultTraining()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(scheduleProvider.io())
+                .observeOn(scheduleProvider.ui())
                 .subscribe()
     }
 }

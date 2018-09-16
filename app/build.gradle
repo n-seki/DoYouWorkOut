@@ -71,6 +71,9 @@ dependencies {
     // unit test
     testImplementation "junit:junit:$junit_version"
 
+    // mockito
+    debugImplementation "org.mockito:mockito-core:$mockito_version"
+
     // android test
     androidTestImplementation "com.android.support.test:runner:$test_runner_version"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso_version"
