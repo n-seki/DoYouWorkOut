@@ -19,6 +19,9 @@ class MockRepository(private val cache: Cache): Repository {
                         TrainingEntity(id=2, name = "背筋"),
                         TrainingEntity(id=3, name = "スクワット")
                 )
+
+        private val format = SimpleDateFormat("yyyyMMDD")
+        val today = format.parse(format.format(Date()))!!
     }
 
     override fun isInitApp(): Single<Boolean> {
@@ -49,8 +52,6 @@ class MockRepository(private val cache: Cache): Repository {
     }
 
     override fun getWorkout(date: Date): Single<List<WorkoutEntity>> {
-        val format = SimpleDateFormat("yyyyMMDD")
-        val today = format.parse("20180624")
         return Single.create { emitter ->
             emitter.onSuccess(
                     listOf(
@@ -63,8 +64,6 @@ class MockRepository(private val cache: Cache): Repository {
     }
 
     override fun getWorkoutList(limit: Int): Single<List<WorkoutEntity>> {
-        val format = SimpleDateFormat("yyyyMMDD")
-        val today = format.parse("20180624")
         return Single.create { emitter ->
             emitter.onSuccess(
                     listOf(WorkoutEntity(today.previousDay(), 1, 1))
