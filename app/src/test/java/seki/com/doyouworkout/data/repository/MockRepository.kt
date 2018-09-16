@@ -6,6 +6,7 @@ import seki.com.doyouworkout.data.cache.Cache
 import seki.com.doyouworkout.data.db.TrainingEntity
 import seki.com.doyouworkout.data.db.WorkoutEntity
 import seki.com.doyouworkout.ui.Training
+import java.text.SimpleDateFormat
 import java.util.*
 
 class MockRepository(private val cache: Cache): Repository {
@@ -48,10 +49,12 @@ class MockRepository(private val cache: Cache): Repository {
     }
 
     override fun getWorkout(date: Date): Single<List<WorkoutEntity>> {
+        val format = SimpleDateFormat("yyyyMMDD")
+        val today = format.parse("20180624")
         return Single.create { emitter ->
             emitter.onSuccess(
                     listOf(
-                            WorkoutEntity(Date(), 1, 1)
+                            WorkoutEntity(today, 1, 1)
                     )) }
     }
 
@@ -60,17 +63,18 @@ class MockRepository(private val cache: Cache): Repository {
     }
 
     override fun getWorkoutList(limit: Int): Single<List<WorkoutEntity>> {
+        val format = SimpleDateFormat("yyyyMMDD")
+        val today = format.parse("20180624")
         return Single.create { emitter ->
             emitter.onSuccess(
-                    listOf(WorkoutEntity(Date().previousDay(), 1, 1))
+                    listOf(WorkoutEntity(today.previousDay(), 1, 1))
             )
         }
     }
+}
 
-    private fun Date.previousDay(): Date {
-        val calendar = Calendar.getInstance().apply { time = this@previousDay }
-        calendar.add(Calendar.DAY_OF_MONTH, -1)
-        return calendar.time
-    }
-
+fun Date.previousDay(): Date {
+    val calendar = Calendar.getInstance().apply { time = this@previousDay }
+    calendar.add(Calendar.DAY_OF_MONTH, -1)
+    return calendar.time
 }
