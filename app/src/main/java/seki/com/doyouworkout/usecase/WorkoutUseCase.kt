@@ -67,7 +67,7 @@ class WorkoutUseCase
     fun aaa(): Single<List<OneDayWorkout>> {
         return repository.getWorkoutList(1)
                 .map { list -> list[0].date } // TODO [Date?]
-                .doOnSuccess { date ->
+                .map { date ->
                     if (!date.equalsDay(Date())) {
                         insertEmptyWorkoutData(date)
                     }
