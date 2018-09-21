@@ -26,8 +26,28 @@ class DateIterator(private val dateRange: ClosedRange<Date>): Iterator<Date> {
     }
 }
 
+infix fun Date.until(to: Date): ClosedRange<Date> {
+    return object : ClosedRange<Date> {
+        override val endInclusive: Date
+            get() = to.previousDay().ignoreTime()
+        override val start: Date
+            get() = this@until
+    }
+}
+
 fun Date.equalsDay(date: Date): Boolean {
     return formatter.format(this) == formatter.format(date)
+}
+
+fun Date.ignoreTime(): Date {
+    val format = SimpleDateFormat("yyyyMMDD", Locale.US)
+    return format.parse(format.format(this))!!
+}
+
+fun Date.previousDay(): Date {
+    val calendar = Calendar.getInstance().apply { time = this@previousDay }
+    calendar.add(Calendar.DAY_OF_MONTH, -1)
+    return calendar.time
 }
 
 val formatter = SimpleDateFormat("yyyyMMdd", Locale.US)
