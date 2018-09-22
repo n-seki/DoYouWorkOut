@@ -1,6 +1,8 @@
 package seki.com.doyouworkout.data
 
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 
 operator fun ClosedRange<Date>.iterator(): Iterator<Date> {
@@ -20,9 +22,8 @@ class DateIterator(private val dateRange: ClosedRange<Date>): Iterator<Date> {
     }
 
     private fun Date.nextDay(): Date {
-        val calendar = Calendar.getInstance().apply { time = this@nextDay }
-        calendar.add(Calendar.DAY_OF_MONTH, 1)
-        return calendar.time
+        val yesterday = LocalDateTime.ofInstant(toInstant(), ZoneId.systemDefault()).plusDays(1)
+        return Date.from(yesterday.atZone(ZoneId.systemDefault()).toInstant())
     }
 }
 
@@ -40,14 +41,18 @@ fun Date.equalsDay(date: Date): Boolean {
 }
 
 fun Date.ignoreTime(): Date {
-    val format = SimpleDateFormat("yyyyMMDD", Locale.US)
-    return format.parse(format.format(this))!!
+    val modifyDate = LocalDateTime.ofInstant(toInstant(), ZoneId.systemDefault())
+            .withHour(0)
+            .withMinute(0)
+            .withSecond(0)
+            .withNano(0)
+
+    return Date.from(modifyDate.atZone(ZoneId.systemDefault()).toInstant())
 }
 
 fun Date.previousDay(): Date {
-    val calendar = Calendar.getInstance().apply { time = this@previousDay }
-    calendar.add(Calendar.DAY_OF_MONTH, -1)
-    return calendar.time
+    val yesterday = LocalDateTime.ofInstant(toInstant(), ZoneId.systemDefault()).minusDays(1)
+    return Date.from(yesterday.atZone(ZoneId.systemDefault()).toInstant())
 }
 
 val formatter = SimpleDateFormat("yyyyMMdd", Locale.US)

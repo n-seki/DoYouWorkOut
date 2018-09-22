@@ -117,8 +117,9 @@ class WorkoutUseCaseTest {
 
         `when`(mockRepository.getWorkoutList(1))
                 .thenReturn(Single.create {
-                    emitter -> emitter.onSuccess(listOf(WorkoutEntity(today.previousDay(), 1 ,1)))
-                })
+                    emitter -> emitter.onSuccess(listOf(
+                        WorkoutEntity(today.previousDay().previousDay(), 1 ,1)
+                )) })
 
         `when`(mockRepository.getWorkoutList(100))
                 .thenReturn(Single.create {
@@ -133,6 +134,7 @@ class WorkoutUseCaseTest {
                 .thenReturn(Single.just(trainingEntityList))
 
         val emptyWorkout = listOf(
+                WorkoutEntity(today.previousDay().previousDay(), 1, 0),
                 WorkoutEntity(today.previousDay(), 1, 0)
         )
 
