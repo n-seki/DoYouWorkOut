@@ -4,10 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
-import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposables
-import io.reactivex.internal.disposables.DisposableContainer
 import seki.com.doyouworkout.data.equalsDay
 import seki.com.doyouworkout.ui.OneDayWorkout
 import seki.com.doyouworkout.ui.toLiveData
