@@ -30,7 +30,7 @@ class MainListActivity : DaggerAppCompatActivity() {
 
         AndroidInjection.inject(this)
 
-        viewModel.initAppStatus.observe(this, Observer { checkSettingState(it) })
+        viewModel.checkInitApp { showSettingScreenIfNotInit(it) }
         viewModel.hasTodayWorkout.observe(this, Observer { changeFabVisibility(it) })
     }
 
@@ -50,8 +50,7 @@ class MainListActivity : DaggerAppCompatActivity() {
         }
     }
 
-    private fun checkSettingState(settingComplete: Boolean?) {
-        settingComplete ?: return
+    private fun showSettingScreenIfNotInit(settingComplete: Boolean) {
         if (!settingComplete) {
             showSettingScreen(false)
         }

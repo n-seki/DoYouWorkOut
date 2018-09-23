@@ -4,6 +4,10 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
+import io.reactivex.Single
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposables
+import io.reactivex.internal.disposables.DisposableContainer
 import seki.com.doyouworkout.data.equalsDay
 import seki.com.doyouworkout.ui.OneDayWorkout
 import seki.com.doyouworkout.ui.toLiveData
@@ -13,16 +17,20 @@ import java.util.*
 import javax.inject.Inject
 
 class MainListViewModel @Inject constructor(
-        trainingUseCase: TrainingUseCase,
+        private val trainingUseCase: TrainingUseCase,
         workoutUseCase: WorkoutUseCase): ViewModel() {
 
-    val initAppStatus: LiveData<Boolean> =
-            trainingUseCase.isCompleteInitApp().toLiveData()
+    private val disposables = CompositeDisposable()
 
     val workoutList: LiveData<List<OneDayWorkout>> = workoutUseCase.fetchOneDayWorkoutList().toLiveData()
 
     val hasTodayWorkout: LiveData<Boolean> = Transformations.switchMap(workoutList) { list ->
         containsTodayWorkout(list)
+    }
+
+    fun checkInitApp(onSuccess: (Boolean) -> Unit) {
+        val dispose = trainingUseCase.isCompleteInitApp().subscribe(onSuccess)
+        disposables.add(dispose)
     }
 
     private fun containsTodayWorkout(workoutList: List<OneDayWorkout>): LiveData<Boolean> {
@@ -35,5 +43,10 @@ class MainListViewModel @Inject constructor(
 
         isContainTodayWorkout.postValue(workoutList.last().trainingDate.equalsDay(Date()))
         return isContainTodayWorkout
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposables.clear()
     }
 }
