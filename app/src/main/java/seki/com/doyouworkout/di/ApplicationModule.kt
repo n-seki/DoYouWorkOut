@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
 import seki.com.doyouworkout.data.ResourceSupplier
+import seki.com.doyouworkout.data.ResourceSupplierImp
 import seki.com.doyouworkout.data.cache.DataCache
 import seki.com.doyouworkout.data.db.AppDataBase
 import seki.com.doyouworkout.data.db.mapper.WorkoutMapper
@@ -57,5 +58,5 @@ class ApplicationModule(private val applicationContext: Context) {
     @Singleton
     @Provides
     fun provideResourceSupplier(): ResourceSupplier =
-            ResourceSupplier(applicationContext)
+            ResourceSupplierImp(applicationContext)
 }
