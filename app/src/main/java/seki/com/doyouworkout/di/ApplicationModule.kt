@@ -11,6 +11,8 @@ import seki.com.doyouworkout.data.ResourceSupplierImp
 import seki.com.doyouworkout.data.cache.DataCache
 import seki.com.doyouworkout.data.db.AppDataBase
 import seki.com.doyouworkout.data.db.mapper.WorkoutMapper
+import seki.com.doyouworkout.data.repository.LocalRepository
+import seki.com.doyouworkout.data.repository.LocalRepositoryImp
 import seki.com.doyouworkout.data.repository.WorkoutRepository
 import seki.com.doyouworkout.usecase.SchedulersProvider
 import seki.com.doyouworkout.usecase.TrainingUseCase
@@ -37,8 +39,13 @@ class ApplicationModule(private val applicationContext: Context) {
 
     @Singleton
     @Provides
-    fun provideRepository(db: AppDataBase, sharedPreferences: SharedPreferences, cache: DataCache, resourceSupplier: ResourceSupplier) =
-            WorkoutRepository(db, sharedPreferences, cache, resourceSupplier)
+    fun provideRepository(localRepository: LocalRepository, cache: DataCache) =
+            WorkoutRepository(localRepository, cache)
+
+    @Singleton
+    @Provides
+    fun provideLocalRepository(db: AppDataBase, sharedPreferences: SharedPreferences, resourceSupplier: ResourceSupplier): LocalRepository =
+            LocalRepositoryImp(db, sharedPreferences, resourceSupplier)
 
     @Singleton
     @Provides
