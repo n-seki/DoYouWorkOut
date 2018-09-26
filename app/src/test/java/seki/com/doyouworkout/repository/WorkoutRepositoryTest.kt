@@ -6,8 +6,12 @@ import org.junit.Test
 import org.mockito.Mockito.*
 import seki.com.doyouworkout.data.cache.Cache
 import seki.com.doyouworkout.data.db.TrainingEntity
+import seki.com.doyouworkout.data.db.WorkoutEntity
 import seki.com.doyouworkout.data.repository.LocalRepository
 import seki.com.doyouworkout.data.repository.WorkoutRepository
+import seki.com.doyouworkout.data.repository.toEntity
+import seki.com.doyouworkout.ui.Training
+import java.util.*
 
 class WorkoutRepositoryTest {
 
@@ -112,5 +116,63 @@ class WorkoutRepositoryTest {
         repository.putTrainingCache(trainingList)
 
         verify(cache).updateTraining(trainingList)
+    }
+
+    @Test
+    fun `updateTrainingメソッドでDBとCacheにTraining情報が保存されること`() {
+        val localRepository = mock(LocalRepository::class.java)
+        val cache = mock(Cache::class.java)
+        val repository = WorkoutRepository(localRepository, cache)
+
+        val training = listOf(
+                Training(
+                        id = 1,
+                        name = "test",
+                        isUsed = true,
+                        isCustom = false,
+                        isDeleted = false)
+        )
+
+        val trainingEntity = training.map { it.toEntity() }
+
+        repository.updateTraining(training)
+                .test()
+                .assertComplete()
+
+        verify(localRepository).insertTraining(trainingEntity)
+        verify(cache).updateTraining(trainingEntity)
+    }
+
+    @Test
+    fun `キャッシュがある場合にgetWorkoutメソッドにてCache#getWorkoutAtが実行されること`() {
+        val localRepository = mock(LocalRepository::class.java)
+        val cache = mock(Cache::class.java)
+        val today = Date()
+        `when`(cache.hasWorkoutAt(today)).thenReturn(true)
+
+        val repository = WorkoutRepository(localRepository, cache)
+
+        repository.getWorkout(today)
+
+        verify(cache).getWorkoutAt(today)
+        verify(localRepository, times(0)).selectWorkoutAt(today)
+    }
+
+    @Test
+    fun `updateWorkoutでDBとCacheにWorkout情報が保存されること`() {
+        val localRepository = mock(LocalRepository::class.java)
+        val cache = mock(Cache::class.java)
+        val repository = WorkoutRepository(localRepository, cache)
+
+        val workoutEntity = listOf(
+                WorkoutEntity(date = Date(), trainingId = 1, count = 1)
+        )
+
+        repository.updateWorkout(workoutEntity)
+                .test()
+                .assertComplete()
+
+        verify(localRepository).insertWorkout(workoutEntity)
+        verify(cache).putWorkout(workoutEntity)
     }
 }
