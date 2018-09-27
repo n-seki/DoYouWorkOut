@@ -2,8 +2,8 @@ package seki.com.doyouworkout.usecase
 
 import io.reactivex.Completable
 import io.reactivex.Single
-import seki.com.doyouworkout.data.db.TrainingEntity
-import seki.com.doyouworkout.data.db.WorkoutEntity
+import seki.com.doyouworkout.data.db.entity.TrainingEntity
+import seki.com.doyouworkout.data.db.entity.WorkoutEntity
 import seki.com.doyouworkout.data.db.mapper.WorkoutMapper
 import seki.com.doyouworkout.data.equalsDay
 import seki.com.doyouworkout.data.ignoreTime

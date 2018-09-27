@@ -5,6 +5,7 @@ import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
 import io.reactivex.Single
+import seki.com.doyouworkout.data.db.entity.TrainingEntity
 
 @Dao
 interface TrainingDao {

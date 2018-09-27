@@ -1,7 +1,7 @@
 package seki.com.doyouworkout.data.db.mapper
 
-import seki.com.doyouworkout.data.db.TrainingEntity
-import seki.com.doyouworkout.data.db.WorkoutEntity
+import seki.com.doyouworkout.data.db.entity.TrainingEntity
+import seki.com.doyouworkout.data.db.entity.WorkoutEntity
 import seki.com.doyouworkout.ui.OneDayWorkout
 import seki.com.doyouworkout.ui.Training
 import seki.com.doyouworkout.ui.Workout

@@ -4,8 +4,8 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import org.junit.Test
 import org.mockito.Mockito.*
-import seki.com.doyouworkout.data.db.TrainingEntity
-import seki.com.doyouworkout.data.db.WorkoutEntity
+import seki.com.doyouworkout.data.db.entity.TrainingEntity
+import seki.com.doyouworkout.data.db.entity.WorkoutEntity
 import seki.com.doyouworkout.data.db.mapper.WorkoutMapper
 import seki.com.doyouworkout.data.previousDay
 import seki.com.doyouworkout.data.repository.Repository
@@ -26,7 +26,7 @@ class WorkoutUseCaseTest {
         val yesterday = today.previousDay()
 
         val trainingEntityList = listOf(
-                TrainingEntity(id=1, name = "腕立て伏せ")
+                TrainingEntity(id = 1, name = "腕立て伏せ")
         )
 
         `when`(mockRepository.getWorkout(yesterday)).thenReturn(
@@ -53,10 +53,10 @@ class WorkoutUseCaseTest {
     fun `回数0のWorkoutのリストが取得できること`() {
         val trainingEntityList =
                 listOf(
-                        TrainingEntity(id=0, name = "腹筋"),
-                        TrainingEntity(id=1, name = "腕立て伏せ"),
-                        TrainingEntity(id=2, name = "背筋"),
-                        TrainingEntity(id=3, name = "スクワット")
+                        TrainingEntity(id = 0, name = "腹筋"),
+                        TrainingEntity(id = 1, name = "腕立て伏せ"),
+                        TrainingEntity(id = 2, name = "背筋"),
+                        TrainingEntity(id = 3, name = "スクワット")
                         )
 
         `when`(mockRepository.getUsedTrainingList()).thenReturn(
@@ -80,7 +80,7 @@ class WorkoutUseCaseTest {
 
         `when`(mockRepository.getWorkoutList(100))
                 .thenReturn(Single.create {
-                    emitter -> emitter.onSuccess(listOf(WorkoutEntity(today, 1 ,1))
+                    emitter -> emitter.onSuccess(listOf(WorkoutEntity(today, 1, 1))
                 ) }
         )
 
@@ -118,12 +118,12 @@ class WorkoutUseCaseTest {
         `when`(mockRepository.getWorkoutList(1))
                 .thenReturn(Single.create {
                     emitter -> emitter.onSuccess(listOf(
-                        WorkoutEntity(today.previousDay().previousDay(), 1 ,1)
+                        WorkoutEntity(today.previousDay().previousDay(), 1, 1)
                 )) })
 
         `when`(mockRepository.getWorkoutList(100))
                 .thenReturn(Single.create {
-                    emitter -> emitter.onSuccess(listOf(WorkoutEntity(today, 1 ,1)))
+                    emitter -> emitter.onSuccess(listOf(WorkoutEntity(today, 1, 1)))
                 })
 
         val trainingEntityList = listOf(

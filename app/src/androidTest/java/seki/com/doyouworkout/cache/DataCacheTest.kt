@@ -5,8 +5,8 @@ import org.junit.After
 import org.junit.Assert.assertThat
 import org.junit.Test
 import seki.com.doyouworkout.data.cache.DataCache
-import seki.com.doyouworkout.data.db.TrainingEntity
-import seki.com.doyouworkout.data.db.WorkoutEntity
+import seki.com.doyouworkout.data.db.entity.TrainingEntity
+import seki.com.doyouworkout.data.db.entity.WorkoutEntity
 import java.util.*
 
 class DataCacheTest {

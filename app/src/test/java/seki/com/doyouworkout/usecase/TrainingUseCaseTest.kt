@@ -3,7 +3,7 @@ package seki.com.doyouworkout.usecase
 import io.reactivex.Single
 import org.junit.Test
 import org.mockito.Mockito.*
-import seki.com.doyouworkout.data.db.TrainingEntity
+import seki.com.doyouworkout.data.db.entity.TrainingEntity
 import seki.com.doyouworkout.data.db.mapper.toUIData
 import seki.com.doyouworkout.data.repository.Repository
 
@@ -16,10 +16,10 @@ class TrainingUseCaseTest {
     fun `Trainingのリストが取得できること`() {
 
         val trainingEntityList = listOf(
-                TrainingEntity(id=0, name = "腹筋"),
-                TrainingEntity(id=1, name = "腕立て伏せ"),
-                TrainingEntity(id=2, name = "背筋"),
-                TrainingEntity(id=3, name = "スクワット")
+                TrainingEntity(id = 0, name = "腹筋"),
+                TrainingEntity(id = 1, name = "腕立て伏せ"),
+                TrainingEntity(id = 2, name = "背筋"),
+                TrainingEntity(id = 3, name = "スクワット")
         )
 
 

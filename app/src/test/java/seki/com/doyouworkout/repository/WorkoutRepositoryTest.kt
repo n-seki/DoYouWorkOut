@@ -5,8 +5,8 @@ import io.reactivex.Single
 import org.junit.Test
 import org.mockito.Mockito.*
 import seki.com.doyouworkout.data.cache.Cache
-import seki.com.doyouworkout.data.db.TrainingEntity
-import seki.com.doyouworkout.data.db.WorkoutEntity
+import seki.com.doyouworkout.data.db.entity.TrainingEntity
+import seki.com.doyouworkout.data.db.entity.WorkoutEntity
 import seki.com.doyouworkout.data.repository.LocalRepository
 import seki.com.doyouworkout.data.repository.WorkoutRepository
 import seki.com.doyouworkout.data.repository.toEntity

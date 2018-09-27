@@ -7,8 +7,8 @@ import io.reactivex.Single
 import seki.com.doyouworkout.R
 import seki.com.doyouworkout.data.ResourceSupplier
 import seki.com.doyouworkout.data.db.AppDataBase
-import seki.com.doyouworkout.data.db.TrainingEntity
-import seki.com.doyouworkout.data.db.WorkoutEntity
+import seki.com.doyouworkout.data.db.entity.TrainingEntity
+import seki.com.doyouworkout.data.db.entity.WorkoutEntity
 import java.util.*
 import javax.inject.Inject
 
@@ -23,10 +23,10 @@ class LocalRepositoryImp
 
     private val defaultTraining =
             listOf(
-                    TrainingEntity(id=0, name = resourceSupplier.getString(R.string.hukkin)),
-                    TrainingEntity(id=1, name = resourceSupplier.getString(R.string.udetate)),
-                    TrainingEntity(id=2, name = resourceSupplier.getString(R.string.haikin)),
-                    TrainingEntity(id=3, name = resourceSupplier.getString(R.string.squat))
+                    TrainingEntity(id = 0, name = resourceSupplier.getString(R.string.hukkin)),
+                    TrainingEntity(id = 1, name = resourceSupplier.getString(R.string.udetate)),
+                    TrainingEntity(id = 2, name = resourceSupplier.getString(R.string.haikin)),
+                    TrainingEntity(id = 3, name = resourceSupplier.getString(R.string.squat))
             )
 
     companion object {

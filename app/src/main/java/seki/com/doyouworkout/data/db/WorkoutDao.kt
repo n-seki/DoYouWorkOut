@@ -2,6 +2,7 @@ package seki.com.doyouworkout.data.db
 
 import android.arch.persistence.room.*
 import io.reactivex.Single
+import seki.com.doyouworkout.data.db.entity.WorkoutEntity
 import java.util.*
 
 @Dao
