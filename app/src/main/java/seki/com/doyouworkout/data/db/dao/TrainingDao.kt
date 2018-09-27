@@ -1,4 +1,4 @@
-package seki.com.doyouworkout.data.db
+package seki.com.doyouworkout.data.db.dao
 
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert

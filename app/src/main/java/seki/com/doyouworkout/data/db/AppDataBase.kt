@@ -3,6 +3,8 @@ package seki.com.doyouworkout.data.db
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
+import seki.com.doyouworkout.data.db.dao.TrainingDao
+import seki.com.doyouworkout.data.db.dao.WorkoutDao
 import seki.com.doyouworkout.data.db.entity.TrainingEntity
 import seki.com.doyouworkout.data.db.entity.WorkoutEntity
 

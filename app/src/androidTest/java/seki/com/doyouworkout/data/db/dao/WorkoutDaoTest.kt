@@ -1,4 +1,4 @@
-package seki.com.doyouworkout.data.db
+package seki.com.doyouworkout.data.db.dao
 
 import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
@@ -8,6 +8,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import seki.com.doyouworkout.data.db.AppDataBase
 import seki.com.doyouworkout.data.db.entity.WorkoutEntity
 import java.text.SimpleDateFormat
 
