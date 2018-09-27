@@ -68,12 +68,11 @@ class WorkoutUseCase
         )
     }
 
-    fun aaa(): Single<List<OneDayWorkout>> {
+    fun fetchAndInsertOneDayWorkout(): Single<List<OneDayWorkout>> {
         return repository.getWorkoutList(1)
-                .map { list -> list[0].date } // TODO [Date?]
-                .flatMapCompletable { date ->
-                    if (!date.equalsDay(Date())) {
-                        return@flatMapCompletable insertEmptyWorkoutData(date)
+                .flatMapCompletable { workoutList ->
+                    if (workoutList.isNotEmpty() && !workoutList[0].date.equalsDay(Date())) {
+                        return@flatMapCompletable insertEmptyWorkoutData(workoutList[0].date)
                     }
                     return@flatMapCompletable Completable.complete()
                 }
@@ -89,7 +88,6 @@ class WorkoutUseCase
                 .toSingleDefault(true)
                 .onErrorReturnItem(false)
     }
-
 
     private fun List<Workout>.toTrainingEntity(date: Date): List<WorkoutEntity> {
         return this.map {

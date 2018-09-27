@@ -107,6 +107,37 @@ class WorkoutUseCaseTest {
     }
 
     @Test
+    fun `トレーニング実績が存在しない場合に空のリストを通知すること`() {
+        val expected = listOf<OneDayWorkout>()
+
+        `when`(mockRepository.getWorkoutList(1))
+                .thenReturn(Single.create {
+                    emitter -> emitter.onSuccess(listOf())
+                })
+
+        `when`(mockRepository.getWorkoutList(100))
+                .thenReturn(Single.create {
+                    emitter -> emitter.onSuccess(listOf())
+                })
+
+        val trainingEntityList = listOf(
+                TrainingEntity(id = 1, name = "腕立て伏せ")
+        )
+
+        `when`(mockRepository.getAllTrainingList())
+                .thenReturn(Single.just(trainingEntityList))
+
+
+        sut.fetchAndInsertOneDayWorkout()
+                .test()
+                .await()
+                .assertValue(expected)
+
+        verify(mockRepository, times(0)).updateWorkout(listOf())
+
+    }
+
+    @Test
     fun `今日までの空トレーニング実績をinsert後に最新のトレーニング実績が取得できること`() {
         val format = SimpleDateFormat("yyyyMMDD")
         val today = format.parse(format.format(Date()))!!
@@ -141,7 +172,7 @@ class WorkoutUseCaseTest {
         `when`(mockRepository.updateWorkout(emptyWorkout))
                 .thenReturn(Completable.complete())
 
-        sut.aaa()
+        sut.fetchAndInsertOneDayWorkout()
                 .test()
                 .await()
                 .assertValue(expected)
