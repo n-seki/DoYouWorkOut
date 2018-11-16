@@ -7,7 +7,9 @@ import seki.com.doyouworkout.ui.Training
 import javax.inject.Inject
 
 class TrainingUseCase @Inject constructor(
-        private val repository: Repository, private val scheduleProvider: SchedulersProviderBase) {
+        private val repository: Repository,
+        private val scheduleProvider: SchedulersProviderBase)
+{
 
     fun fetchTrainingList(): Single<List<Training>> =
             repository.getAllTrainingList()

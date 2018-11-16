@@ -15,17 +15,17 @@ import seki.com.doyouworkout.ui.Workout
 import java.util.*
 import javax.inject.Inject
 
-class WorkoutUseCase
-@Inject constructor(
+class WorkoutUseCase @Inject constructor(
         private val repository: Repository,
         private val mapper: WorkoutMapper,
-        private val schedulersProvider: SchedulersProviderBase) {
+        private val schedulersProvider: SchedulersProviderBase
+) {
 
     fun getWorkout(date: Date): Single<List<Workout>> {
         return repository.getWorkout(date)
-                .subscribeOn(schedulersProvider.io())
-                .flatMap { workoutList -> repository.getAllTrainingList()
-                            .map { mapper.toWorkout(workoutList, it) }
+                .flatMap {
+                    workoutList -> repository.getAllTrainingList()
+                        .map { mapper.toWorkout(workoutList, it) }
                 }
                 .subscribeOn(schedulersProvider.io())
                 .observeOn(schedulersProvider.ui())
@@ -40,7 +40,6 @@ class WorkoutUseCase
 
     fun fetchOneDayWorkoutList(): Single<List<OneDayWorkout>> {
         return repository.getWorkoutList(100)
-                .subscribeOn(schedulersProvider.io())
                 .flatMap { workoutList ->
                     repository.getAllTrainingList()
                             .map { mapper.toOneDayWorkout(workoutList, it) }
