@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">DoYouWorkOut</string>
+    <string name="settings">Settings</string>
+    <string name="today">Today</string>
     <string name="action_settings">Settings</string>
 
     <string name="hukkin">腹筋</string>

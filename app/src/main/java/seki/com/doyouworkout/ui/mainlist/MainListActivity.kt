@@ -45,7 +45,6 @@ class MainListActivity : DaggerAppCompatActivity() {
                 showSettingScreen()
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }

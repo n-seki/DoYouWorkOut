@@ -21,7 +21,7 @@ class NewWorkoutActivity: DaggerAppCompatActivity(), NewWorkoutFragment.Fragment
 
         fun getIntent(context: Context, date: Date? = null) =
                 Intent(context, NewWorkoutActivity::class.java).apply {
-                    date.let { putExtra(DATE, it) }
+                    putExtra(DATE, date)
                 }
     }
 
@@ -35,9 +35,7 @@ class NewWorkoutActivity: DaggerAppCompatActivity(), NewWorkoutFragment.Fragment
         setContentView(R.layout.activity_new_workout)
         setSupportActionBar(toolbar)
 
-        supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-        }
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         viewModel.updateStatus.observe(this, Observer { onUpdateFinish(it) })
 
@@ -49,7 +47,7 @@ class NewWorkoutActivity: DaggerAppCompatActivity(), NewWorkoutFragment.Fragment
         item ?: return super.onOptionsItemSelected(item)
         return when (item.itemId) {
             android.R.id.home -> {
-                finish()
+                onBackPressed()
                 true
             }
             else -> super.onOptionsItemSelected(item)

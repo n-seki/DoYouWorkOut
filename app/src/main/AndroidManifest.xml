@@ -23,9 +23,11 @@
 
         <activity
             android:name=".ui.setting.SettingActivity"
+            android:label="@string/settings"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".ui.newWorkout.NewWorkoutActivity"
+            android:label="@string/today"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

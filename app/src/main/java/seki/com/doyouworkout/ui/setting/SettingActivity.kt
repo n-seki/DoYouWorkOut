@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main_list.*
@@ -34,10 +35,22 @@ class SettingActivity: DaggerAppCompatActivity() {
         setContentView(R.layout.activity_setting)
         setSupportActionBar(toolbar)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         if (!isCompleteSetting) {
             initSetting()
         }
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        item ?: return super.onOptionsItemSelected(item)
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun initSetting() {
