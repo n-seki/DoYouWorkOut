@@ -8,7 +8,7 @@ import java.util.*
 @Dao
 interface WorkoutDao {
 
-    @Query("SELECT * FROM workout WHERE date <= :maxDate LIMIT :limit")
+    @Query("SELECT * FROM workout WHERE date <= :maxDate ORDER BY date LIMIT :limit")
     fun selectUntil(maxDate: Date, limit: Int = 100): Single<List<WorkoutEntity>>
 
     @Query("SELECT * FROM workout WHERE date = :date")
