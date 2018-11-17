@@ -63,8 +63,12 @@ class WorkoutRepository
         }
     }
 
-    override fun getWorkoutList(limit: Int): Single<List<WorkoutEntity>> {
-        return localRepository.selectWorkoutUntil(Date(), limit)
+    override fun getWorkoutList(date: Date, limit: Int): Single<List<WorkoutEntity>> {
+        return localRepository.selectWorkoutUntil(date, limit)
+    }
+
+    override fun getLastWorkout(): Single<WorkoutEntity?> {
+        return localRepository.selectLatestWorkout()
     }
 }
 

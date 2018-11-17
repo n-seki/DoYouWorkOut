@@ -72,6 +72,10 @@ class LocalRepositoryImp
         }
     }
 
+    override fun selectLatestWorkout(): Single<WorkoutEntity?> {
+        return workoutDao.selectLatest()
+    }
+
     private fun getAppInitStatus(): Int =
             sharedPref.getInt(KEY_INIT_APP, 0)
 

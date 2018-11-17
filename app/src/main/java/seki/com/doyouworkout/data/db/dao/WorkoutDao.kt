@@ -11,6 +11,9 @@ interface WorkoutDao {
     @Query("SELECT * FROM workout WHERE date <= :maxDate ORDER BY date LIMIT :limit")
     fun selectUntil(maxDate: Date, limit: Int = 100): Single<List<WorkoutEntity>>
 
+    @Query("SELECT * FROM workout ORDER BY date DESC LIMIT 1")
+    fun selectLatest(): Single<WorkoutEntity?>
+
     @Query("SELECT * FROM workout WHERE date = :date")
     fun selectAt(date: Date): Single<List<WorkoutEntity>>
 

@@ -38,8 +38,8 @@ class WorkoutUseCase @Inject constructor(
                 .observeOn(schedulersProvider.ui())
     }
 
-    fun fetchOneDayWorkoutList(): Single<List<OneDayWorkout>> {
-        return repository.getWorkoutList(100)
+    fun fetchOneDayWorkoutList(today: Date = Date()): Single<List<OneDayWorkout>> {
+        return repository.getWorkoutList(today, 100)
                 .flatMap { workoutList ->
                     repository.getAllTrainingList()
                             .map { mapper.toOneDayWorkout(workoutList, it) }
@@ -50,14 +50,18 @@ class WorkoutUseCase @Inject constructor(
 
     private fun insertEmptyWorkoutData(lastDate: Date): Completable {
         return repository.getAllTrainingList()
-                .flatMap { createEmptyWorkoutList(lastDate, it) }
+                .flatMap { createEmptyWorkoutList(startDate = lastDate, trainingList = it) }
                 .flatMapCompletable { repository.updateWorkout(it) }
                 .subscribeOn(schedulersProvider.io())
     }
 
-    fun createEmptyWorkoutList(date: Date, trainingList: List<TrainingEntity>): Single<List<WorkoutEntity>> {
-        return Single.just(
-                    (date until Date().ignoreTime()).iterator()
+    fun createEmptyWorkoutList(
+            startDate: Date,
+            endDate: Date = Date(),
+            trainingList: List<TrainingEntity>
+    ): Single<List<WorkoutEntity>> =
+            Single.just(
+                    (startDate until endDate.ignoreTime()).iterator()
                             .asSequence()
                             .map { workoutDay ->
                                 trainingList.map { training -> WorkoutEntity(workoutDay, training.id, 0) }
@@ -65,13 +69,12 @@ class WorkoutUseCase @Inject constructor(
                             .toList()
                             .flatten()
         )
-    }
 
-    fun fetchAndInsertOneDayWorkout(): Single<List<OneDayWorkout>> {
-        return repository.getWorkoutList(1)
-                .flatMapCompletable { workoutList ->
-                    if (workoutList.isNotEmpty() && !workoutList[0].date.equalsDay(Date())) {
-                        return@flatMapCompletable insertEmptyWorkoutData(workoutList[0].date)
+    fun fetchAndInsertOneDayWorkout(today: Date = Date()): Single<List<OneDayWorkout>> {
+        return repository.getLastWorkout()
+                .flatMapCompletable { workout ->
+                    if (!workout.date.equalsDay(today)) {
+                        return@flatMapCompletable insertEmptyWorkoutData(workout.date)
                     }
                     return@flatMapCompletable Completable.complete()
                 }

@@ -16,5 +16,6 @@ interface Repository {
     fun updateTraining(trainingList: List<Training>): Completable
     fun getWorkout(date: Date): Single<List<WorkoutEntity>>
     fun updateWorkout(workoutEntities: List<WorkoutEntity>): Completable
-    fun getWorkoutList(limit: Int): Single<List<WorkoutEntity>>
+    fun getWorkoutList(date: Date, limit: Int): Single<List<WorkoutEntity>>
+    fun getLastWorkout(): Single<WorkoutEntity?>
 }

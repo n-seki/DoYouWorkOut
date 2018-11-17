@@ -14,5 +14,6 @@ interface LocalRepository {
     fun selectWorkoutAt(date: Date): Single<List<WorkoutEntity>>
     fun insertWorkout(workoutList: List<WorkoutEntity>)
     fun selectWorkoutUntil(date: Date, limit: Int): Single<List<WorkoutEntity>>
+    fun selectLatestWorkout(): Single<WorkoutEntity?>
     fun isInitApp(): Single<Boolean>
 }
