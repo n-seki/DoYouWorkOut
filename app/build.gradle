@@ -17,6 +17,11 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        staging {
+            minifyEnabled false
+            debuggable true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -25,6 +30,15 @@ android {
 
     dataBinding {
         enabled = true
+    }
+
+    signingConfigs {
+        staging {
+            storeFile file(System.getenv('HOME') + '/keystore/staging.keystore')
+            keyPassword System.getenv('STAGING_KEYSTORE_PASS')
+            keyAlias System.getenv('STAGING_KEY_ALIAS')
+            keyPassword System.getenv('STAGING_KEY_PASS')
+        }
     }
 }
 
