@@ -40,6 +40,10 @@ android {
             keyPassword System.getenv('STAGING_KEY_PASS')
         }
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
