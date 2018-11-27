@@ -78,7 +78,7 @@ class WorkoutUseCaseTest {
         val format = SimpleDateFormat("yyyyMMDD")
         val today = format.parse(format.format(Date().previousDay()))!!
 
-        `when`(mockRepository.getWorkoutList(100))
+        `when`(mockRepository.getWorkoutList(today, 100))
                 .thenReturn(Single.create {
                     emitter -> emitter.onSuccess(listOf(WorkoutEntity(today, 1, 1))
                 ) }
@@ -110,12 +110,12 @@ class WorkoutUseCaseTest {
     fun `トレーニング実績が存在しない場合に空のリストを通知すること`() {
         val expected = listOf<OneDayWorkout>()
 
-        `when`(mockRepository.getWorkoutList(1))
+        `when`(mockRepository.getWorkoutList(Date(), 1))
                 .thenReturn(Single.create {
                     emitter -> emitter.onSuccess(listOf())
                 })
 
-        `when`(mockRepository.getWorkoutList(100))
+        `when`(mockRepository.getWorkoutList(Date(), 100))
                 .thenReturn(Single.create {
                     emitter -> emitter.onSuccess(listOf())
                 })
@@ -146,13 +146,13 @@ class WorkoutUseCaseTest {
                 OneDayWorkout(today, listOf(Workout(1, "腕立て伏せ", 1)))
         )
 
-        `when`(mockRepository.getWorkoutList(1))
+        `when`(mockRepository.getWorkoutList(today, 1))
                 .thenReturn(Single.create {
                     emitter -> emitter.onSuccess(listOf(
                         WorkoutEntity(today.previousDay().previousDay(), 1, 1)
                 )) })
 
-        `when`(mockRepository.getWorkoutList(100))
+        `when`(mockRepository.getWorkoutList(Date(), 100))
                 .thenReturn(Single.create {
                     emitter -> emitter.onSuccess(listOf(WorkoutEntity(today, 1, 1)))
                 })
@@ -189,7 +189,9 @@ class WorkoutUseCaseTest {
                 TrainingEntity(id = 1, name = "腕立て伏せ")
         )
 
-        sut.createEmptyWorkoutList(yesterday, trainingEntityList)
+        sut.createEmptyWorkoutList(
+                startDate = yesterday,
+                trainingList = trainingEntityList)
                 .test()
                 .await()
                 .assertValue(
