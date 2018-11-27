@@ -35,7 +35,7 @@ android {
     signingConfigs {
         staging {
             storeFile file(System.getenv('HOME') + '/keystores/staging.keystore')
-            keyPassword System.getenv('STAGING_KEYSTORE_PASS')
+            storePassword System.getenv('STAGING_KEYSTORE_PASS')
             keyAlias System.getenv('STAGING_KEY_ALIAS')
             keyPassword System.getenv('STAGING_KEY_PASS')
         }
