@@ -4,8 +4,6 @@ about: Suggest an idea for this project
 
 ---
 
-## 関連Issue
-
-## やったこと
+## やりたいこと
 
 ## その他
