@@ -16,7 +16,23 @@ android {
         versionName "0.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        staging {
+            storeFile file(System.getenv('HOME') + '/keystores/staging.keystore')
+            storePassword System.getenv('STAGING_KEYSTORE_PASS')
+            keyAlias System.getenv('STAGING_KEY_ALIAS')
+            keyPassword System.getenv('STAGING_KEY_PASS')
+        }
+    }
+
     buildTypes {
+        staging {
+            minifyEnabled false
+            debuggable true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.staging
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -25,6 +41,10 @@ android {
 
     dataBinding {
         enabled = true
+    }
+
+    lintOptions {
+        abortOnError false
     }
 }
 
