@@ -15,6 +15,7 @@ import seki.com.doyouworkout.data.repository.LocalRepository
 import seki.com.doyouworkout.data.repository.LocalRepositoryImp
 import seki.com.doyouworkout.data.repository.WorkoutRepository
 import seki.com.doyouworkout.usecase.*
+import seki.com.doyouworkout.usecase.impl.FetchTrainingUseCaseImp
 import seki.com.doyouworkout.usecase.impl.GetWorkoutUseCaseImp
 import seki.com.doyouworkout.usecase.impl.UpdateWorkoutUseCaseImp
 import javax.inject.Singleton
@@ -90,5 +91,12 @@ class ApplicationModule(private val applicationContext: Context) {
             repository: WorkoutRepository
     ): UpdateWorkoutUseCase {
         return UpdateWorkoutUseCaseImp(repository)
+    }
+
+    @Provides
+    fun provideFetchTrainingUseCase(
+            repository: WorkoutRepository
+    ): FetchTrainingUseCase {
+        return FetchTrainingUseCaseImp(repository)
     }
 }
