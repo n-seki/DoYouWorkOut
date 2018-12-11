@@ -10,7 +10,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class UpddateWorkoutUseCaseImp @Inject constructor(
+internal class UpdateWorkoutUseCaseImp @Inject constructor(
         private val repository: Repository
 ) : UpdateWorkoutUseCase {
 
