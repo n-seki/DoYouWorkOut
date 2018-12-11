@@ -51,4 +51,31 @@ class GetWorkoutUseCaseTest {
                 .await()
                 .assertValue(expected)
     }
+
+    @Test
+    fun `日付指定なしの場合に回数0のWorkoutのリストが取得できること`() {
+        val trainingEntityList =
+                listOf(
+                        TrainingEntity(id = 0, name = "腹筋"),
+                        TrainingEntity(id = 1, name = "腕立て伏せ"),
+                        TrainingEntity(id = 2, name = "背筋"),
+                        TrainingEntity(id = 3, name = "スクワット")
+                )
+
+        val repository = mock(Repository::class.java)
+        `when`(repository.getUsedTrainingList()).thenReturn(
+                Single.create { emitter ->
+                    emitter.onSuccess(trainingEntityList)
+                }
+        )
+
+        val expected = trainingEntityList.map { Workout(it.id, it.name, 0) }
+
+        GetWorkoutUseCaseImp(repository, WorkoutMapper())
+                .execute(null)
+                .test()
+                .await()
+                .assertValue(expected)
+    }
+
 }
