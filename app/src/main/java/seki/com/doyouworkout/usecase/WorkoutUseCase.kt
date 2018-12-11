@@ -72,22 +72,4 @@ class WorkoutUseCase @Inject constructor(
                 .flatMap { it }
                 .subscribeOn(schedulersProvider.io())
     }
-
-    fun updateWorkout(date: Date, workoutList: List<Workout>): Single<Boolean> {
-        return repository.updateWorkout(workoutList.toTrainingEntity(date))
-                .subscribeOn(schedulersProvider.io())
-                .observeOn(schedulersProvider.ui())
-                .toSingleDefault(true)
-                .onErrorReturnItem(false)
-    }
-
-    private fun List<Workout>.toTrainingEntity(date: Date): List<WorkoutEntity> {
-        return this.map {
-            WorkoutEntity(
-                    date = date,
-                    trainingId = it.id,
-                    count = it.count
-            )
-        }
-    }
 }

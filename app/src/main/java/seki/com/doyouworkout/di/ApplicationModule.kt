@@ -16,6 +16,7 @@ import seki.com.doyouworkout.data.repository.LocalRepositoryImp
 import seki.com.doyouworkout.data.repository.WorkoutRepository
 import seki.com.doyouworkout.usecase.*
 import seki.com.doyouworkout.usecase.impl.GetWorkoutUseCaseImp
+import seki.com.doyouworkout.usecase.impl.UpddateWorkoutUseCaseImp
 import javax.inject.Singleton
 
 @Module
@@ -82,5 +83,12 @@ class ApplicationModule(private val applicationContext: Context) {
             mapper: WorkoutMapper
     ): GetWorkoutUseCase {
         return GetWorkoutUseCaseImp(repository, mapper)
+    }
+
+    @Provides
+    fun provideUpdateWorkoutUseCase(
+            repository: WorkoutRepository
+    ): UpdateWorkoutUseCase {
+        return UpddateWorkoutUseCaseImp(repository)
     }
 }

@@ -9,6 +9,7 @@ import seki.com.doyouworkout.ui.Workout
 import seki.com.doyouworkout.ui.toLiveData
 import seki.com.doyouworkout.usecase.GetWorkoutUseCase
 import seki.com.doyouworkout.usecase.SchedulersProviderBase
+import seki.com.doyouworkout.usecase.UpdateWorkoutUseCase
 import seki.com.doyouworkout.usecase.WorkoutUseCase
 import java.util.*
 import javax.inject.Inject
@@ -16,7 +17,8 @@ import javax.inject.Inject
 class NewWorkoutViewModel @Inject constructor(
         private val useCase: WorkoutUseCase,
         private val schedulerProvider: SchedulersProviderBase,
-        private val getWorkoutUseCase: GetWorkoutUseCase
+        private val getWorkoutUseCase: GetWorkoutUseCase,
+        private val updateWorkoutUseCase: UpdateWorkoutUseCase
 ): ViewModel() {
 
     val trainingList: LiveData<List<Workout>>
@@ -49,7 +51,10 @@ class NewWorkoutViewModel @Inject constructor(
     }
 
     private fun updateWorkout(workoutList: List<Workout>, data: Date): LiveData<Boolean> {
-        return useCase.updateWorkout(data, workoutList).toLiveData()
+        return updateWorkoutUseCase.execute(data, workoutList)
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
+                .toLiveData()
     }
 
     fun showWorkoutAt(date: Date?) {
