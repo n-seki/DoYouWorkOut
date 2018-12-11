@@ -21,16 +21,6 @@ class WorkoutUseCase @Inject constructor(
         private val schedulersProvider: SchedulersProviderBase
 ) {
 
-    fun getWorkout(date: Date): Single<List<Workout>> {
-        return repository.getWorkout(date)
-                .flatMap {
-                    workoutList -> repository.getAllTrainingList()
-                        .map { mapper.toWorkout(workoutList, it) }
-                }
-                .subscribeOn(schedulersProvider.io())
-                .observeOn(schedulersProvider.ui())
-    }
-
     fun fetchEmptyWorkout(): Single<List<Workout>> {
         return repository.getUsedTrainingList()
                 .map { mapper.toWorkoutList(it) }

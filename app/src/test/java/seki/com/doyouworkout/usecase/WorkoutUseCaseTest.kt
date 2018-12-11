@@ -20,36 +20,6 @@ class WorkoutUseCaseTest {
     private val sut = WorkoutUseCase(mockRepository, WorkoutMapper(), TestSchedulersProvider)
 
     @Test
-    fun `Workoutが取得できること`() {
-        val format = SimpleDateFormat("yyyyMMDD")
-        val today = format.parse(format.format(Date()))!!
-        val yesterday = today.previousDay()
-
-        val trainingEntityList = listOf(
-                TrainingEntity(id = 1, name = "腕立て伏せ")
-        )
-
-        `when`(mockRepository.getWorkout(yesterday)).thenReturn(
-                Single.create { emitter -> emitter.onSuccess(
-                        listOf(WorkoutEntity(yesterday, 1, 1))
-                ) }
-        )
-
-        `when`(mockRepository.getAllTrainingList()).thenReturn(
-                Single.create { emitter -> emitter.onSuccess(trainingEntityList) }
-        )
-
-        val expected = listOf(
-                Workout(1, "腕立て伏せ", 1)
-        )
-
-        sut.getWorkout(yesterday)
-                .test()
-                .await()
-                .assertValue(expected)
-    }
-
-    @Test
     fun `回数0のWorkoutのリストが取得できること`() {
         val trainingEntityList =
                 listOf(
