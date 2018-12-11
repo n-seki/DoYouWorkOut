@@ -11,7 +11,6 @@ import seki.com.doyouworkout.data.iterator
 import seki.com.doyouworkout.data.repository.Repository
 import seki.com.doyouworkout.data.until
 import seki.com.doyouworkout.ui.OneDayWorkout
-import seki.com.doyouworkout.ui.Workout
 import java.util.*
 import javax.inject.Inject
 
@@ -20,13 +19,6 @@ class WorkoutUseCase @Inject constructor(
         private val mapper: WorkoutMapper,
         private val schedulersProvider: SchedulersProviderBase
 ) {
-
-    fun fetchEmptyWorkout(): Single<List<Workout>> {
-        return repository.getUsedTrainingList()
-                .map { mapper.toWorkoutList(it) }
-                .subscribeOn(schedulersProvider.io())
-                .observeOn(schedulersProvider.ui())
-    }
 
     fun fetchOneDayWorkoutList(today: Date = Date()): Single<List<OneDayWorkout>> {
         return repository.getWorkoutList(today, 100)

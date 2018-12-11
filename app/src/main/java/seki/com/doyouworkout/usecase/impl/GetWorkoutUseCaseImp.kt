@@ -15,11 +15,15 @@ internal class GetWorkoutUseCaseImp @Inject constructor(
         private val mapper: WorkoutMapper
 ): GetWorkoutUseCase {
 
-    override fun execute(date: Date): Single<List<Workout>> {
-        return repo.getWorkout(date)
-                .flatMap { workoutList ->
-                    repo.getAllTrainingList()
+    override fun execute(date: Date?): Single<List<Workout>> {
+        return if (date != null) {
+            repo.getWorkout(date).flatMap { workoutList ->
+                repo.getAllTrainingList()
                         .map { mapper.toWorkout(workoutList, it) }
-                }
+                    }
+        } else {
+            repo.getUsedTrainingList()
+                    .map { mapper.toWorkoutList(it) }
+        }
     }
 }

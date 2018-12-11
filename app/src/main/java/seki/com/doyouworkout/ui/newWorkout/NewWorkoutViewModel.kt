@@ -10,12 +10,10 @@ import seki.com.doyouworkout.ui.toLiveData
 import seki.com.doyouworkout.usecase.GetWorkoutUseCase
 import seki.com.doyouworkout.usecase.SchedulersProviderBase
 import seki.com.doyouworkout.usecase.UpdateWorkoutUseCase
-import seki.com.doyouworkout.usecase.WorkoutUseCase
 import java.util.*
 import javax.inject.Inject
 
 class NewWorkoutViewModel @Inject constructor(
-        private val useCase: WorkoutUseCase,
         private val schedulerProvider: SchedulersProviderBase,
         private val getWorkoutUseCase: GetWorkoutUseCase,
         private val updateWorkoutUseCase: UpdateWorkoutUseCase
@@ -35,14 +33,10 @@ class NewWorkoutViewModel @Inject constructor(
         }
 
         trainingList = Transformations.switchMap(_trainingDate) { date ->
-            if (date != null) {
                 getWorkoutUseCase.execute(date)
                         .subscribeOn(schedulerProvider.io())
                         .observeOn(schedulerProvider.ui())
                         .toLiveData()
-            } else {
-                useCase.fetchEmptyWorkout().toLiveData()
-            }
         }
     }
 

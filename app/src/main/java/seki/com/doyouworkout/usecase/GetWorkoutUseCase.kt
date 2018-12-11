@@ -5,5 +5,5 @@ import seki.com.doyouworkout.ui.Workout
 import java.util.*
 
 interface GetWorkoutUseCase {
-    fun execute(date: Date): Single<List<Workout>>
+    fun execute(date: Date?): Single<List<Workout>>
 }
