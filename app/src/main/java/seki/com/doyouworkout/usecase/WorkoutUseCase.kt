@@ -13,7 +13,9 @@ import seki.com.doyouworkout.data.until
 import seki.com.doyouworkout.ui.OneDayWorkout
 import java.util.*
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class WorkoutUseCase @Inject constructor(
         private val repository: Repository,
         private val mapper: WorkoutMapper,

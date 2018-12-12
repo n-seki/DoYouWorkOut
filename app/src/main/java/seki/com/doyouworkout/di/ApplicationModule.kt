@@ -8,11 +8,13 @@ import dagger.Module
 import dagger.Provides
 import seki.com.doyouworkout.data.ResourceSupplier
 import seki.com.doyouworkout.data.ResourceSupplierImp
+import seki.com.doyouworkout.data.cache.Cache
 import seki.com.doyouworkout.data.cache.DataCache
 import seki.com.doyouworkout.data.db.AppDataBase
 import seki.com.doyouworkout.data.db.mapper.WorkoutMapper
 import seki.com.doyouworkout.data.repository.LocalRepository
 import seki.com.doyouworkout.data.repository.LocalRepositoryImp
+import seki.com.doyouworkout.data.repository.Repository
 import seki.com.doyouworkout.data.repository.WorkoutRepository
 import seki.com.doyouworkout.usecase.*
 import seki.com.doyouworkout.usecase.impl.FetchTrainingUseCaseImp
@@ -26,42 +28,30 @@ class ApplicationModule(private val applicationContext: Context) {
 
     @Singleton
     @Provides
-    fun provideDataBase() =
-            Room.databaseBuilder(applicationContext, AppDataBase::class.java, "workout").build()
+    fun provideDataBase(): AppDataBase {
+        return Room.databaseBuilder(applicationContext, AppDataBase::class.java, "workout").build()
+    }
 
     @Singleton
     @Provides
-    fun provideEntityMapper() =
-            WorkoutMapper()
+    fun provideCache(): Cache {
+        return DataCache()
+    }
 
     @Singleton
     @Provides
-    fun provideCache()
-            = DataCache()
+    fun provideRepository(localRepository: LocalRepository, cache: Cache): Repository {
+        return WorkoutRepository(localRepository, cache)
+    }
 
     @Singleton
     @Provides
-    fun provideRepository(localRepository: LocalRepository, cache: DataCache) =
-            WorkoutRepository(localRepository, cache)
-
-    @Singleton
-    @Provides
-    fun provideLocalRepository(db: AppDataBase, sharedPreferences: SharedPreferences, resourceSupplier: ResourceSupplier): LocalRepository =
-            LocalRepositoryImp(db, sharedPreferences, resourceSupplier)
-
-    @Singleton
-    @Provides
-    fun provideTrainingUseCase(repository: WorkoutRepository, schedulersProvider: SchedulersProviderBase) =
-            TrainingUseCase(repository, schedulersProvider)
-
-    @Singleton
-    @Provides
-    fun provideWorkoutUseCase(
-            repository: WorkoutRepository,
-            mapper: WorkoutMapper,
-            schedulersProvider: SchedulersProviderBase
-    ): WorkoutUseCase {
-        return WorkoutUseCase(repository, mapper, schedulersProvider)
+    fun provideLocalRepository(
+            db: AppDataBase,
+            sharedPreferences: SharedPreferences,
+            resourceSupplier: ResourceSupplier
+    ): LocalRepository {
+        return LocalRepositoryImp(db, sharedPreferences, resourceSupplier)
     }
 
     @Singleton
@@ -74,11 +64,13 @@ class ApplicationModule(private val applicationContext: Context) {
     fun provideResourceSupplier(): ResourceSupplier =
             ResourceSupplierImp(applicationContext)
 
+    @Singleton
     @Provides
     fun provideSchedulerProvider(): SchedulersProviderBase {
-        return SchedulersProvider
+        return SchedulersProvider()
     }
 
+    @Singleton
     @Provides
     fun provideGetWorkoutUseCase(
             repository: WorkoutRepository,
@@ -87,6 +79,7 @@ class ApplicationModule(private val applicationContext: Context) {
         return GetWorkoutUseCaseImp(repository, mapper)
     }
 
+    @Singleton
     @Provides
     fun provideUpdateWorkoutUseCase(
             repository: WorkoutRepository
@@ -94,6 +87,7 @@ class ApplicationModule(private val applicationContext: Context) {
         return UpdateWorkoutUseCaseImp(repository)
     }
 
+    @Singleton
     @Provides
     fun provideFetchTrainingUseCase(
             repository: WorkoutRepository
@@ -101,6 +95,7 @@ class ApplicationModule(private val applicationContext: Context) {
         return FetchTrainingUseCaseImp(repository)
     }
 
+    @Singleton
     @Provides
     fun provideUpdateTrainingUseCase(
             repository: WorkoutRepository

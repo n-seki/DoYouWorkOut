@@ -7,9 +7,7 @@ import seki.com.doyouworkout.ui.Workout
 import seki.com.doyouworkout.usecase.GetWorkoutUseCase
 import java.util.*
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 internal class GetWorkoutUseCaseImp @Inject constructor(
         private val repo: Repository,
         private val mapper: WorkoutMapper
