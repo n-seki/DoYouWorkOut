@@ -11,7 +11,6 @@ import seki.com.doyouworkout.data.iterator
 import seki.com.doyouworkout.data.repository.Repository
 import seki.com.doyouworkout.data.until
 import seki.com.doyouworkout.ui.OneDayWorkout
-import seki.com.doyouworkout.ui.Workout
 import java.util.*
 import javax.inject.Inject
 
@@ -20,23 +19,6 @@ class WorkoutUseCase @Inject constructor(
         private val mapper: WorkoutMapper,
         private val schedulersProvider: SchedulersProviderBase
 ) {
-
-    fun getWorkout(date: Date): Single<List<Workout>> {
-        return repository.getWorkout(date)
-                .flatMap {
-                    workoutList -> repository.getAllTrainingList()
-                        .map { mapper.toWorkout(workoutList, it) }
-                }
-                .subscribeOn(schedulersProvider.io())
-                .observeOn(schedulersProvider.ui())
-    }
-
-    fun fetchEmptyWorkout(): Single<List<Workout>> {
-        return repository.getUsedTrainingList()
-                .map { mapper.toWorkoutList(it) }
-                .subscribeOn(schedulersProvider.io())
-                .observeOn(schedulersProvider.ui())
-    }
 
     fun fetchOneDayWorkoutList(today: Date = Date()): Single<List<OneDayWorkout>> {
         return repository.getWorkoutList(today, 100)
@@ -81,23 +63,5 @@ class WorkoutUseCase @Inject constructor(
                 .toSingle { fetchOneDayWorkoutList() }
                 .flatMap { it }
                 .subscribeOn(schedulersProvider.io())
-    }
-
-    fun updateWorkout(date: Date, workoutList: List<Workout>): Single<Boolean> {
-        return repository.updateWorkout(workoutList.toTrainingEntity(date))
-                .subscribeOn(schedulersProvider.io())
-                .observeOn(schedulersProvider.ui())
-                .toSingleDefault(true)
-                .onErrorReturnItem(false)
-    }
-
-    private fun List<Workout>.toTrainingEntity(date: Date): List<WorkoutEntity> {
-        return this.map {
-            WorkoutEntity(
-                    date = date,
-                    trainingId = it.id,
-                    count = it.count
-            )
-        }
     }
 }

@@ -20,60 +20,6 @@ class WorkoutUseCaseTest {
     private val sut = WorkoutUseCase(mockRepository, WorkoutMapper(), TestSchedulersProvider)
 
     @Test
-    fun `Workoutが取得できること`() {
-        val format = SimpleDateFormat("yyyyMMDD")
-        val today = format.parse(format.format(Date()))!!
-        val yesterday = today.previousDay()
-
-        val trainingEntityList = listOf(
-                TrainingEntity(id = 1, name = "腕立て伏せ")
-        )
-
-        `when`(mockRepository.getWorkout(yesterday)).thenReturn(
-                Single.create { emitter -> emitter.onSuccess(
-                        listOf(WorkoutEntity(yesterday, 1, 1))
-                ) }
-        )
-
-        `when`(mockRepository.getAllTrainingList()).thenReturn(
-                Single.create { emitter -> emitter.onSuccess(trainingEntityList) }
-        )
-
-        val expected = listOf(
-                Workout(1, "腕立て伏せ", 1)
-        )
-
-        sut.getWorkout(yesterday)
-                .test()
-                .await()
-                .assertValue(expected)
-    }
-
-    @Test
-    fun `回数0のWorkoutのリストが取得できること`() {
-        val trainingEntityList =
-                listOf(
-                        TrainingEntity(id = 0, name = "腹筋"),
-                        TrainingEntity(id = 1, name = "腕立て伏せ"),
-                        TrainingEntity(id = 2, name = "背筋"),
-                        TrainingEntity(id = 3, name = "スクワット")
-                        )
-
-        `when`(mockRepository.getUsedTrainingList()).thenReturn(
-                Single.create { emitter -> emitter.onSuccess(
-                        trainingEntityList
-                ) }
-        )
-
-        val expected = trainingEntityList.map { Workout(it.id, it.name, 0) }
-
-        sut.fetchEmptyWorkout()
-                .test()
-                .await()
-                .assertValue(expected)
-    }
-
-    @Test
     fun `トレーニング実績が取得できること`() {
         val format = SimpleDateFormat("yyyyMMDD")
         val today = format.parse(format.format(Date().previousDay()))!!

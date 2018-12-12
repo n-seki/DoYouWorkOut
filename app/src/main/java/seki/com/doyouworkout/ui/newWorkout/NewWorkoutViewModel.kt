@@ -7,11 +7,17 @@ import android.arch.lifecycle.ViewModel
 import seki.com.doyouworkout.ui.OneDayWorkout
 import seki.com.doyouworkout.ui.Workout
 import seki.com.doyouworkout.ui.toLiveData
-import seki.com.doyouworkout.usecase.WorkoutUseCase
+import seki.com.doyouworkout.usecase.GetWorkoutUseCase
+import seki.com.doyouworkout.usecase.SchedulersProviderBase
+import seki.com.doyouworkout.usecase.UpdateWorkoutUseCase
 import java.util.*
 import javax.inject.Inject
 
-class NewWorkoutViewModel @Inject constructor(private val useCase: WorkoutUseCase): ViewModel() {
+class NewWorkoutViewModel @Inject constructor(
+        private val schedulerProvider: SchedulersProviderBase,
+        private val getWorkoutUseCase: GetWorkoutUseCase,
+        private val updateWorkoutUseCase: UpdateWorkoutUseCase
+): ViewModel() {
 
     val trainingList: LiveData<List<Workout>>
 
@@ -27,11 +33,10 @@ class NewWorkoutViewModel @Inject constructor(private val useCase: WorkoutUseCas
         }
 
         trainingList = Transformations.switchMap(_trainingDate) { date ->
-            if (date != null) {
-                useCase.getWorkout(date).toLiveData()
-            } else {
-                useCase.fetchEmptyWorkout().toLiveData()
-            }
+                getWorkoutUseCase.execute(date)
+                        .subscribeOn(schedulerProvider.io())
+                        .observeOn(schedulerProvider.ui())
+                        .toLiveData()
         }
     }
 
@@ -40,7 +45,10 @@ class NewWorkoutViewModel @Inject constructor(private val useCase: WorkoutUseCas
     }
 
     private fun updateWorkout(workoutList: List<Workout>, data: Date): LiveData<Boolean> {
-        return useCase.updateWorkout(data, workoutList).toLiveData()
+        return updateWorkoutUseCase.execute(data, workoutList)
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.ui())
+                .toLiveData()
     }
 
     fun showWorkoutAt(date: Date?) {

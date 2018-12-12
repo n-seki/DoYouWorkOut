@@ -14,9 +14,11 @@ import seki.com.doyouworkout.data.db.mapper.WorkoutMapper
 import seki.com.doyouworkout.data.repository.LocalRepository
 import seki.com.doyouworkout.data.repository.LocalRepositoryImp
 import seki.com.doyouworkout.data.repository.WorkoutRepository
-import seki.com.doyouworkout.usecase.SchedulersProvider
-import seki.com.doyouworkout.usecase.TrainingUseCase
-import seki.com.doyouworkout.usecase.WorkoutUseCase
+import seki.com.doyouworkout.usecase.*
+import seki.com.doyouworkout.usecase.impl.FetchTrainingUseCaseImp
+import seki.com.doyouworkout.usecase.impl.GetWorkoutUseCaseImp
+import seki.com.doyouworkout.usecase.impl.UpdateTrainingUseCaseImp
+import seki.com.doyouworkout.usecase.impl.UpdateWorkoutUseCaseImp
 import javax.inject.Singleton
 
 @Module
@@ -49,13 +51,18 @@ class ApplicationModule(private val applicationContext: Context) {
 
     @Singleton
     @Provides
-    fun provideTrainingUseCase(repository: WorkoutRepository) =
-            TrainingUseCase(repository, SchedulersProvider)
+    fun provideTrainingUseCase(repository: WorkoutRepository, schedulersProvider: SchedulersProviderBase) =
+            TrainingUseCase(repository, schedulersProvider)
 
     @Singleton
     @Provides
-    fun provideWorkoutUseCase(repository: WorkoutRepository, mapper: WorkoutMapper) =
-            WorkoutUseCase(repository, mapper, SchedulersProvider)
+    fun provideWorkoutUseCase(
+            repository: WorkoutRepository,
+            mapper: WorkoutMapper,
+            schedulersProvider: SchedulersProviderBase
+    ): WorkoutUseCase {
+        return WorkoutUseCase(repository, mapper, schedulersProvider)
+    }
 
     @Singleton
     @Provides
@@ -66,4 +73,38 @@ class ApplicationModule(private val applicationContext: Context) {
     @Provides
     fun provideResourceSupplier(): ResourceSupplier =
             ResourceSupplierImp(applicationContext)
+
+    @Provides
+    fun provideSchedulerProvider(): SchedulersProviderBase {
+        return SchedulersProvider
+    }
+
+    @Provides
+    fun provideGetWorkoutUseCase(
+            repository: WorkoutRepository,
+            mapper: WorkoutMapper
+    ): GetWorkoutUseCase {
+        return GetWorkoutUseCaseImp(repository, mapper)
+    }
+
+    @Provides
+    fun provideUpdateWorkoutUseCase(
+            repository: WorkoutRepository
+    ): UpdateWorkoutUseCase {
+        return UpdateWorkoutUseCaseImp(repository)
+    }
+
+    @Provides
+    fun provideFetchTrainingUseCase(
+            repository: WorkoutRepository
+    ): FetchTrainingUseCase {
+        return FetchTrainingUseCaseImp(repository)
+    }
+
+    @Provides
+    fun provideUpdateTrainingUseCase(
+            repository: WorkoutRepository
+    ): UpdateTrainingUseCase {
+        return UpdateTrainingUseCaseImp(repository)
+    }
 }

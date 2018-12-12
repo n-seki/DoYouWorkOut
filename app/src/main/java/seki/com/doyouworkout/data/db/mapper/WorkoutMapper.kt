@@ -9,7 +9,10 @@ import java.util.*
 
 class WorkoutMapper {
 
-    fun toWorkout(workoutEntities: List<WorkoutEntity>, trainingEntities: List<TrainingEntity>): List<Workout> {
+    fun toWorkout(
+            workoutEntities: List<WorkoutEntity>,
+            trainingEntities: List<TrainingEntity>
+    ): List<Workout> {
         val trainingEntityMap: Map<Int, TrainingEntity> = trainingEntities.associateBy { it.id }
 
         val workoutList: MutableList<Workout> = mutableListOf()

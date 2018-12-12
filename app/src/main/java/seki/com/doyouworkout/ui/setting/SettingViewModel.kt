@@ -6,13 +6,24 @@ import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
 import seki.com.doyouworkout.ui.Training
 import seki.com.doyouworkout.ui.toLiveData
+import seki.com.doyouworkout.usecase.FetchTrainingUseCase
+import seki.com.doyouworkout.usecase.SchedulersProviderBase
 import seki.com.doyouworkout.usecase.TrainingUseCase
+import seki.com.doyouworkout.usecase.UpdateTrainingUseCase
 import javax.inject.Inject
 
-class SettingViewModel @Inject constructor(private val useCase: TrainingUseCase): ViewModel() {
+class SettingViewModel @Inject constructor(
+        private val useCase: TrainingUseCase,
+        fetchTrainingUseCase: FetchTrainingUseCase,
+        private val updateTrainingUseCase: UpdateTrainingUseCase,
+        private val schedulersProvider: SchedulersProviderBase
+): ViewModel() {
 
     val trainingList: LiveData<List<Training>> =
-            useCase.fetchTrainingList().toLiveData()
+            fetchTrainingUseCase.execute()
+                    .subscribeOn(schedulersProvider.io())
+                    .observeOn(schedulersProvider.ui())
+                    .toLiveData()
 
     val snackBarStatus: LiveData<Boolean>
     private val _updateList: MutableLiveData<List<Training>> = MutableLiveData()
@@ -31,6 +42,10 @@ class SettingViewModel @Inject constructor(private val useCase: TrainingUseCase)
         _updateList.postValue(trainingList)
     }
 
-    private fun updateSetting(trainingList: List<Training>) =
-            useCase.updateTraining(trainingList).toLiveData()
+    private fun updateSetting(trainingList: List<Training>): LiveData<Boolean> {
+        return updateTrainingUseCase.execute(trainingList)
+                .subscribeOn(schedulersProvider.io())
+                .observeOn(schedulersProvider.ui())
+                .toLiveData()
+    }
 }
