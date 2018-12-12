@@ -2,20 +2,12 @@ package seki.com.doyouworkout.usecase
 
 import io.reactivex.Single
 import seki.com.doyouworkout.data.repository.Repository
-import seki.com.doyouworkout.ui.Training
 import javax.inject.Inject
 
 class TrainingUseCase @Inject constructor(
         private val repository: Repository,
         private val scheduleProvider: SchedulersProviderBase)
 {
-    fun updateTraining(list: List<Training>): Single<Boolean> =
-            repository.updateTraining(list)
-                    .subscribeOn(scheduleProvider.io())
-                    .observeOn(scheduleProvider.ui())
-                    .toSingleDefault(true)
-                    .onErrorReturnItem(false)
-
     fun isCompleteInitApp(): Single<Boolean> =
             repository.isInitApp()
                     .subscribeOn(scheduleProvider.io())

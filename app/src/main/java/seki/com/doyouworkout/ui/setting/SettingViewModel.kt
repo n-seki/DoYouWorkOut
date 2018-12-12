@@ -9,12 +9,14 @@ import seki.com.doyouworkout.ui.toLiveData
 import seki.com.doyouworkout.usecase.FetchTrainingUseCase
 import seki.com.doyouworkout.usecase.SchedulersProviderBase
 import seki.com.doyouworkout.usecase.TrainingUseCase
+import seki.com.doyouworkout.usecase.UpdateTrainingUseCase
 import javax.inject.Inject
 
 class SettingViewModel @Inject constructor(
         private val useCase: TrainingUseCase,
         fetchTrainingUseCase: FetchTrainingUseCase,
-        schedulersProvider: SchedulersProviderBase
+        private val updateTrainingUseCase: UpdateTrainingUseCase,
+        private val schedulersProvider: SchedulersProviderBase
 ): ViewModel() {
 
     val trainingList: LiveData<List<Training>> =
@@ -40,6 +42,10 @@ class SettingViewModel @Inject constructor(
         _updateList.postValue(trainingList)
     }
 
-    private fun updateSetting(trainingList: List<Training>) =
-            useCase.updateTraining(trainingList).toLiveData()
+    private fun updateSetting(trainingList: List<Training>): LiveData<Boolean> {
+        return updateTrainingUseCase.execute(trainingList)
+                .subscribeOn(schedulersProvider.io())
+                .observeOn(schedulersProvider.ui())
+                .toLiveData()
+    }
 }
