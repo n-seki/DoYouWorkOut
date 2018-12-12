@@ -6,8 +6,11 @@ import seki.com.doyouworkout.ui.OneDayWorkout
 import seki.com.doyouworkout.ui.Training
 import seki.com.doyouworkout.ui.Workout
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class WorkoutMapper {
+@Singleton
+class WorkoutMapper @Inject constructor() {
 
     fun toWorkout(
             workoutEntities: List<WorkoutEntity>,

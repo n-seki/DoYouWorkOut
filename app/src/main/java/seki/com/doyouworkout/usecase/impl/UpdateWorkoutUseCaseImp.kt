@@ -7,9 +7,7 @@ import seki.com.doyouworkout.ui.Workout
 import seki.com.doyouworkout.usecase.UpdateWorkoutUseCase
 import java.util.*
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 internal class UpdateWorkoutUseCaseImp @Inject constructor(
         private val repository: Repository
 ) : UpdateWorkoutUseCase {
