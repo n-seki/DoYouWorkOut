@@ -45,6 +45,7 @@ class MainListFragment : Fragment() {
                 }
             }
         })
+        viewModel.fetchList()
     }
 
     private fun initView(view: View) {
