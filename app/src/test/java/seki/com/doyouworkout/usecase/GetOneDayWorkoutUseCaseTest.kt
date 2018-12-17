@@ -14,7 +14,7 @@ import seki.com.doyouworkout.ui.Workout
 import java.text.SimpleDateFormat
 import java.util.*
 
-class WorkoutUseCaseTest {
+class GetOneDayWorkoutUseCaseTest {
 
     private val mockRepository = mock(Repository::class.java)
     private val sut = WorkoutUseCase(mockRepository, WorkoutMapper(), TestSchedulersProvider)
