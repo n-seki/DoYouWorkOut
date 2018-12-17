@@ -4,6 +4,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import org.junit.Test
 import org.mockito.Mockito.*
+import seki.com.doyouworkout.data.DateSupplier
 import seki.com.doyouworkout.data.db.entity.TrainingEntity
 import seki.com.doyouworkout.data.db.entity.WorkoutEntity
 import seki.com.doyouworkout.data.db.mapper.WorkoutMapper
@@ -11,23 +12,29 @@ import seki.com.doyouworkout.data.previousDay
 import seki.com.doyouworkout.data.repository.Repository
 import seki.com.doyouworkout.ui.OneDayWorkout
 import seki.com.doyouworkout.ui.Workout
+import seki.com.doyouworkout.usecase.impl.GetOneDayWorkoutListUseCaseImp
 import java.text.SimpleDateFormat
 import java.util.*
 
-class WorkoutUseCaseTest {
+class GetOneDayWorkoutUseCaseTest {
 
     private val mockRepository = mock(Repository::class.java)
-    private val sut = WorkoutUseCase(mockRepository, WorkoutMapper(), TestSchedulersProvider)
+    private val today = SimpleDateFormat("yyyyMMdd", Locale.US).parse("20181203")
+    private val mockDateSupplier = mock(DateSupplier::class.java).apply {
+        `when`(this.getToday()).thenReturn(today)
+    }
+    private val sut =
+            GetOneDayWorkoutListUseCaseImp(mockRepository, WorkoutMapper(), mockDateSupplier)
 
     @Test
     fun `トレーニング実績が取得できること`() {
-        val format = SimpleDateFormat("yyyyMMDD")
-        val today = format.parse(format.format(Date().previousDay()))!!
+        `when`(mockRepository.getLastWorkout())
+                .thenReturn(Single.just(WorkoutEntity(today, 1, 1)))
 
         `when`(mockRepository.getWorkoutList(today, 100))
-                .thenReturn(Single.create {
-                    emitter -> emitter.onSuccess(listOf(WorkoutEntity(today, 1, 1))
-                ) }
+                .thenReturn(Single.just(
+                    listOf(WorkoutEntity(today, 1, 1))
+                )
         )
 
         val trainingEntityList = listOf(
@@ -35,16 +42,14 @@ class WorkoutUseCaseTest {
         )
 
         `when`(mockRepository.getAllTrainingList()).thenReturn(
-                Single.create { emitter -> emitter.onSuccess(
-                        trainingEntityList
-                ) }
+                Single.just(trainingEntityList)
         )
 
         val expected = listOf(
                 OneDayWorkout(today, listOf(Workout(1, "腕立て伏せ", 1)))
         )
 
-        sut.fetchOneDayWorkoutList()
+        sut.execute(null)
                 .test()
                 .await()
                 .assertValue(expected)
@@ -56,15 +61,8 @@ class WorkoutUseCaseTest {
     fun `トレーニング実績が存在しない場合に空のリストを通知すること`() {
         val expected = listOf<OneDayWorkout>()
 
-        `when`(mockRepository.getWorkoutList(Date(), 1))
-                .thenReturn(Single.create {
-                    emitter -> emitter.onSuccess(listOf())
-                })
-
-        `when`(mockRepository.getWorkoutList(Date(), 100))
-                .thenReturn(Single.create {
-                    emitter -> emitter.onSuccess(listOf())
-                })
+        `when`(mockRepository.getWorkoutList(today, 100))
+                .thenReturn(Single.just(listOf()))
 
         val trainingEntityList = listOf(
                 TrainingEntity(id = 1, name = "腕立て伏せ")
@@ -74,7 +72,7 @@ class WorkoutUseCaseTest {
                 .thenReturn(Single.just(trainingEntityList))
 
 
-        sut.fetchAndInsertOneDayWorkout()
+        sut.execute(today)
                 .test()
                 .await()
                 .assertValue(expected)
@@ -85,23 +83,16 @@ class WorkoutUseCaseTest {
 
     @Test
     fun `今日までの空トレーニング実績をinsert後に最新のトレーニング実績が取得できること`() {
-        val format = SimpleDateFormat("yyyyMMDD")
-        val today = format.parse(format.format(Date()))!!
+        `when`(mockRepository.getLastWorkout())
+                .thenReturn(Single.just(WorkoutEntity(
+                        today.previousDay().previousDay().previousDay(), 1, 1)))
 
         val expected = listOf(
                 OneDayWorkout(today, listOf(Workout(1, "腕立て伏せ", 1)))
         )
 
-        `when`(mockRepository.getWorkoutList(today, 1))
-                .thenReturn(Single.create {
-                    emitter -> emitter.onSuccess(listOf(
-                        WorkoutEntity(today.previousDay().previousDay(), 1, 1)
-                )) })
-
-        `when`(mockRepository.getWorkoutList(Date(), 100))
-                .thenReturn(Single.create {
-                    emitter -> emitter.onSuccess(listOf(WorkoutEntity(today, 1, 1)))
-                })
+        `when`(mockRepository.getWorkoutList(today, 100))
+                .thenReturn(Single.just(listOf(WorkoutEntity(today, 1, 1))))
 
         val trainingEntityList = listOf(
                 TrainingEntity(id = 1, name = "腕立て伏せ")
@@ -112,38 +103,16 @@ class WorkoutUseCaseTest {
 
         val emptyWorkout = listOf(
                 WorkoutEntity(today.previousDay().previousDay(), 1, 0),
-                WorkoutEntity(today.previousDay(), 1, 0)
-        )
+                WorkoutEntity(today.previousDay(), 1, 0))
 
-        `when`(mockRepository.updateWorkout(emptyWorkout))
+        `when`(mockRepository.updateWorkout(anyList()))
                 .thenReturn(Completable.complete())
 
-        sut.fetchAndInsertOneDayWorkout()
+        sut.execute(null)
                 .test()
                 .await()
                 .assertValue(expected)
 
         verify(mockRepository).updateWorkout(emptyWorkout)
     }
-
-    @Test
-    fun `空のWorkoutListが作成されること`() {
-        val format = SimpleDateFormat("yyyyMMDD")
-        val yesterday = format.parse(format.format(Date().previousDay()))!!
-
-        val trainingEntityList = listOf(
-                TrainingEntity(id = 1, name = "腕立て伏せ")
-        )
-
-        sut.createEmptyWorkoutList(
-                startDate = yesterday,
-                trainingList = trainingEntityList)
-                .test()
-                .await()
-                .assertValue(
-                        listOf(WorkoutEntity(yesterday, 1, 0))
-                )
-    }
-
-
 }

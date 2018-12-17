@@ -10,14 +10,14 @@ operator fun ClosedRange<Date>.iterator(): Iterator<Date> {
 }
 
 class DateIterator(private val dateRange: ClosedRange<Date>): Iterator<Date> {
-    private var current = dateRange.start
+    private var current = dateRange.start.nextDay().ignoreTime()
     override fun hasNext(): Boolean {
         return current <= dateRange.endInclusive
     }
 
     override fun next(): Date {
         val result = current
-        current = current.nextDay()
+        current = current.nextDay().ignoreTime()
         return result
     }
 
