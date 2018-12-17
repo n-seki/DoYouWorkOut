@@ -6,6 +6,8 @@ import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
+import seki.com.doyouworkout.data.DateSupplier
+import seki.com.doyouworkout.data.DateSupplierImp
 import seki.com.doyouworkout.data.ResourceSupplier
 import seki.com.doyouworkout.data.ResourceSupplierImp
 import seki.com.doyouworkout.data.cache.Cache
@@ -59,6 +61,12 @@ class ApplicationModule(private val applicationContext: Context) {
     @Provides
     fun provideResourceSupplier(): ResourceSupplier =
             ResourceSupplierImp(applicationContext)
+
+    @Singleton
+    @Provides
+    fun provideDateSupplier(): DateSupplier {
+        return DateSupplierImp()
+    }
 
     @Singleton
     @Provides

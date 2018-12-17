@@ -2,12 +2,10 @@ package seki.com.doyouworkout.usecase
 
 import dagger.Module
 import dagger.Provides
+import seki.com.doyouworkout.data.DateSupplier
 import seki.com.doyouworkout.data.db.mapper.WorkoutMapper
 import seki.com.doyouworkout.data.repository.WorkoutRepository
-import seki.com.doyouworkout.usecase.impl.FetchTrainingUseCaseImp
-import seki.com.doyouworkout.usecase.impl.GetWorkoutUseCaseImp
-import seki.com.doyouworkout.usecase.impl.UpdateTrainingUseCaseImp
-import seki.com.doyouworkout.usecase.impl.UpdateWorkoutUseCaseImp
+import seki.com.doyouworkout.usecase.impl.*
 import javax.inject.Singleton
 
 @Module
@@ -44,5 +42,17 @@ class UseCaseModule {
             repository: WorkoutRepository
     ): UpdateTrainingUseCase {
         return UpdateTrainingUseCaseImp(repository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGetOneDayWorkoutListUseCase(
+            repository: WorkoutRepository,
+            mapper: WorkoutMapper,
+            dateSupplier: DateSupplier
+    ): GetOneDayWorkoutListUseCase {
+        return GetOneDayWorkoutListUseCaseImp(
+                repository, mapper, dateSupplier
+        )
     }
 }

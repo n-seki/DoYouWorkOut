@@ -2,14 +2,11 @@ package seki.com.doyouworkout.usecase.impl
 
 import io.reactivex.Completable
 import io.reactivex.Single
+import seki.com.doyouworkout.data.*
 import seki.com.doyouworkout.data.db.entity.TrainingEntity
 import seki.com.doyouworkout.data.db.entity.WorkoutEntity
 import seki.com.doyouworkout.data.db.mapper.WorkoutMapper
-import seki.com.doyouworkout.data.equalsDay
-import seki.com.doyouworkout.data.ignoreTime
-import seki.com.doyouworkout.data.iterator
 import seki.com.doyouworkout.data.repository.Repository
-import seki.com.doyouworkout.data.until
 import seki.com.doyouworkout.ui.OneDayWorkout
 import seki.com.doyouworkout.usecase.GetOneDayWorkoutListUseCase
 import java.util.*
@@ -17,11 +14,12 @@ import javax.inject.Inject
 
 internal class GetOneDayWorkoutListUseCaseImp @Inject constructor(
         private val repository: Repository,
-        private val mapper: WorkoutMapper
+        private val mapper: WorkoutMapper,
+        private val dateSupplier: DateSupplier
 ) : GetOneDayWorkoutListUseCase {
     override fun execute(startExclusive: Date?): Single<List<OneDayWorkout>> {
         if (startExclusive == null) {
-            return fetchAndInsertOneDayWorkout(Date())
+            return fetchAndInsertOneDayWorkout(dateSupplier.getToday())
         }
 
         return fetchOneDayWorkoutList(startExclusive)
@@ -49,7 +47,11 @@ internal class GetOneDayWorkoutListUseCaseImp @Inject constructor(
 
     private fun insertEmptyWorkoutData(lastDate: Date): Completable {
         return repository.getAllTrainingList()
-                .map { createEmptyWorkoutList(startDate = lastDate, endDate = Date(), trainingList = it) }
+                .map { createEmptyWorkoutList(
+                        startDate = lastDate,
+                        endDate = dateSupplier.getToday(),
+                        trainingList = it)
+                }
                 .flatMapCompletable { repository.updateWorkout(it) }
     }
 
