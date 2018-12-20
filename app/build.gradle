@@ -94,6 +94,7 @@ dependencies {
 
     // unit test
     testImplementation "junit:junit:$junit_version"
+    testImplementation "com.google.truth:truth:$truth_version"
 
     // mockito
     debugImplementation "org.mockito:mockito-core:$mockito_version"

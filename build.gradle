@@ -13,10 +13,12 @@ buildscript {
     ext.mockito_version = '2.18.0'
     ext.test_runner_version='1.0.2'
     ext.espresso_version='3.0.2'
+    ext.truth_version='0.42'
 
     repositories {
         google()
         jcenter()
+        mavenLocal()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.4'
