@@ -1,9 +1,9 @@
 package seki.com.doyouworkout.usecase
 
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
 import io.reactivex.Single
 import org.junit.Test
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 import seki.com.doyouworkout.data.db.entity.TrainingEntity
 import seki.com.doyouworkout.data.db.entity.WorkoutEntity
 import seki.com.doyouworkout.data.db.mapper.WorkoutMapper
@@ -19,27 +19,17 @@ class GetWorkoutUseCaseTest {
     @Test
     fun `Workoutが取得できること`() {
 
-        val repository = mock(Repository::class.java)
-
         val format = SimpleDateFormat("yyyyMMDD")
         val today = format.parse(format.format(Date()))!!
         val yesterday = today.previousDay()
 
-        val trainingEntityList = listOf(
-                TrainingEntity(id = 1, name = "腕立て伏せ")
-        )
+        val repository = mock<Repository> {
+            on { getWorkout(yesterday) }
+                    .doReturn(Single.just(listOf(WorkoutEntity(yesterday, 1, 1))))
 
-        `when`(repository.getWorkout(yesterday)).thenReturn(
-                Single.create { emitter ->
-                    emitter.onSuccess(listOf(WorkoutEntity(yesterday, 1, 1)))
-                }
-        )
-
-        `when`(repository.getAllTrainingList()).thenReturn(
-                Single.create { emitter ->
-                    emitter.onSuccess(trainingEntityList)
-                }
-        )
+            on { getAllTrainingList() }
+                    .doReturn(Single.just(listOf(TrainingEntity(id = 1, name = "腕立て伏せ"))))
+        }
 
         val expected = listOf(
                 Workout(1, "腕立て伏せ", 1)
@@ -62,12 +52,9 @@ class GetWorkoutUseCaseTest {
                         TrainingEntity(id = 3, name = "スクワット")
                 )
 
-        val repository = mock(Repository::class.java)
-        `when`(repository.getUsedTrainingList()).thenReturn(
-                Single.create { emitter ->
-                    emitter.onSuccess(trainingEntityList)
-                }
-        )
+        val repository = mock<Repository> {
+            on { getUsedTrainingList() }.doReturn(Single.just(trainingEntityList))
+        }
 
         val expected = trainingEntityList.map { Workout(it.id, it.name, 0) }
 
