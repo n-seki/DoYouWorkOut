@@ -12,7 +12,8 @@ buildscript {
     ext.junit_version='4.12'
     ext.mockito_version = '2.18.0'
     ext.test_runner_version='1.0.2'
-    ext.espresso_version='3.0.2'
+    ext.espresso_version = '3.0.2'
+    ext.mockito_kotlin = '2.0.0'
 
     repositories {
         google()

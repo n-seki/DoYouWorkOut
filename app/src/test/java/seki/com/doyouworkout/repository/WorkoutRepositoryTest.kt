@@ -1,9 +1,15 @@
 package seki.com.doyouworkout.repository
 
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
 import io.reactivex.Completable
 import io.reactivex.Single
+import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.mockito.Mockito.*
+import org.mockito.Mockito.times
+import org.mockito.Mockito.verify
 import seki.com.doyouworkout.data.cache.Cache
 import seki.com.doyouworkout.data.db.entity.TrainingEntity
 import seki.com.doyouworkout.data.db.entity.WorkoutEntity
@@ -17,14 +23,11 @@ class WorkoutRepositoryTest {
 
     @Test
     fun `isInitAppメソッドでLocalRepository#isInitAppが実行されること`() {
-        val localRepository = mock(LocalRepository::class.java)
-        val cache = mock(Cache::class.java)
+        val localRepository = mock<LocalRepository> {
+            on { isInitApp() }.doReturn(Single.just(true))
+        }
 
-        `when`(localRepository.isInitApp()).thenReturn(
-                Single.just(true)
-        )
-
-        val repository = WorkoutRepository(localRepository, cache)
+        val repository = WorkoutRepository(localRepository, mock())
 
         repository.isInitApp()
                 .test()
@@ -34,15 +37,12 @@ class WorkoutRepositoryTest {
     }
 
     @Test
-    fun `putDefaultTrainingメソッドでLocalRepositoty#putDefaultTrainingが実行されること`() {
-        val localRepository = mock(LocalRepository::class.java)
-        val cache = mock(Cache::class.java)
+    fun `putDefaultTrainingメソッドでLocalRepository#putDefaultTrainingが実行されること`() {
+        val localRepository = mock<LocalRepository> {
+            on { putDefaultTraining() }.doReturn(Completable.complete())
+        }
 
-        `when`(localRepository.putDefaultTraining()).thenReturn(
-                Completable.complete()
-        )
-
-        val repository = WorkoutRepository(localRepository, cache)
+        val repository = WorkoutRepository(localRepository, mock())
 
         repository.putDefaultTraining()
                 .test()
@@ -53,10 +53,10 @@ class WorkoutRepositoryTest {
 
     @Test
     fun `キャッシュがない状態ではgetAlTrainingListメソッドでLocalRepository#selectTrainingが実行されること`() {
-        val localRepository = mock(LocalRepository::class.java)
-        val cache = mock(Cache::class.java)
-
-        `when`(cache.hasTraining()).thenReturn(false)
+        val localRepository = mock<LocalRepository>()
+        val cache = mock<Cache> {
+            on { hasTraining() }.doReturn(false)
+        }
 
         val repository = WorkoutRepository(localRepository, cache)
 
@@ -68,10 +68,10 @@ class WorkoutRepositoryTest {
 
     @Test
     fun `キャッシュがある状態ではgetAlTrainingListメソッドでCache#getAllTrainingが実行されること`() {
-        val localRepository = mock(LocalRepository::class.java)
-        val cache = mock(Cache::class.java)
-
-        `when`(cache.hasTraining()).thenReturn(true)
+        val localRepository = mock<LocalRepository>()
+        val cache = mock<Cache> {
+            on { hasTraining() }.doReturn(true)
+        }
 
         val repository = WorkoutRepository(localRepository, cache)
 
@@ -83,18 +83,16 @@ class WorkoutRepositoryTest {
 
     @Test
     fun `使用中のTrainingのリストが取得できること`() {
-        val localRepository = mock(LocalRepository::class.java)
-        val cache = mock(Cache::class.java)
-
-        `when`(cache.hasTraining()).thenReturn(false)
-        `when`(localRepository.selectTraining()).thenReturn(
-                Single.just(
-                        listOf(
-                                TrainingEntity(id = 1, name = "one", used = false),
-                                TrainingEntity(id = 2, name = "one", used = true)
-                        )
-                )
-        )
+        val localRepository = mock<LocalRepository> {
+            on { selectTraining() }.doReturn(
+                    Single.just(
+                            listOf(TrainingEntity(id = 1, name = "one", used = false),
+                                    TrainingEntity(id = 2, name = "one", used = true)))
+            )
+        }
+        val cache = mock<Cache> {
+            on { hasTraining() }.doReturn(false)
+        }
 
         val repository = WorkoutRepository(localRepository, cache)
 
@@ -106,22 +104,24 @@ class WorkoutRepositoryTest {
 
     @Test
     fun `putTrainingCacheメソッドでCache#updateTrainingが実行されること`() {
-        val localRepository = mock(LocalRepository::class.java)
-        val cache = mock(Cache::class.java)
-
-        val repository = WorkoutRepository(localRepository, cache)
+        val cache = mock<Cache>()
+        val repository = WorkoutRepository(mock(), cache)
 
         val trainingList = listOf(TrainingEntity(id = 1, name = "test"))
 
         repository.putTrainingCache(trainingList)
 
-        verify(cache).updateTraining(trainingList)
+        argumentCaptor<List<TrainingEntity>>().apply {
+            verify(cache).updateTraining(capture())
+            assertEquals(firstValue, trainingList)
+        }
+
     }
 
     @Test
     fun `updateTrainingメソッドでDBとCacheにTraining情報が保存されること`() {
-        val localRepository = mock(LocalRepository::class.java)
-        val cache = mock(Cache::class.java)
+        val localRepository = mock<LocalRepository>()
+        val cache = mock<Cache>()
         val repository = WorkoutRepository(localRepository, cache)
 
         val training = listOf(
@@ -139,29 +139,42 @@ class WorkoutRepositoryTest {
                 .test()
                 .assertComplete()
 
-        verify(localRepository).insertTraining(trainingEntity)
-        verify(cache).updateTraining(trainingEntity)
+        argumentCaptor<List<TrainingEntity>>().apply {
+            verify(localRepository).insertTraining(capture())
+            assertEquals(firstValue, trainingEntity)
+        }
+
+        argumentCaptor<List<TrainingEntity>>().apply {
+            verify(cache).updateTraining(capture())
+            assertEquals(firstValue, trainingEntity)
+        }
+
     }
 
     @Test
     fun `キャッシュがある場合にgetWorkoutメソッドにてCache#getWorkoutAtが実行されること`() {
-        val localRepository = mock(LocalRepository::class.java)
-        val cache = mock(Cache::class.java)
         val today = Date()
-        `when`(cache.hasWorkoutAt(today)).thenReturn(true)
+        val localRepository = mock<LocalRepository>()
+        val cache = mock<Cache> {
+            on { hasWorkoutAt(today) }.doReturn(true)
+        }
 
         val repository = WorkoutRepository(localRepository, cache)
 
         repository.getWorkout(today)
 
-        verify(cache).getWorkoutAt(today)
-        verify(localRepository, times(0)).selectWorkoutAt(today)
+        argumentCaptor<Date>().apply {
+            verify(cache).getWorkoutAt(capture())
+            assertEquals(firstValue, today)
+        }
+
+        verify(localRepository, times(0)).selectWorkoutAt(any())
     }
 
     @Test
     fun `updateWorkoutでDBとCacheにWorkout情報が保存されること`() {
-        val localRepository = mock(LocalRepository::class.java)
-        val cache = mock(Cache::class.java)
+        val localRepository = mock<LocalRepository>()
+        val cache = mock<Cache>()
         val repository = WorkoutRepository(localRepository, cache)
 
         val workoutEntity = listOf(
@@ -172,7 +185,14 @@ class WorkoutRepositoryTest {
                 .test()
                 .assertComplete()
 
-        verify(localRepository).insertWorkout(workoutEntity)
-        verify(cache).putWorkout(workoutEntity)
+        argumentCaptor<List<WorkoutEntity>>().apply {
+            verify(localRepository).insertWorkout(capture())
+            assertEquals(firstValue, workoutEntity)
+        }
+
+        argumentCaptor<List<WorkoutEntity>>().apply {
+            verify(cache).putWorkout(capture())
+            assertEquals(firstValue, workoutEntity)
+        }
     }
 }

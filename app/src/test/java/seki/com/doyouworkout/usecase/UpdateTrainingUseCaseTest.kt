@@ -1,13 +1,12 @@
 package seki.com.doyouworkout.usecase
 
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
 import io.reactivex.Completable
 import org.junit.Test
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 import seki.com.doyouworkout.data.repository.Repository
 import seki.com.doyouworkout.ui.Training
 import seki.com.doyouworkout.usecase.impl.UpdateTrainingUseCaseImp
-import java.lang.RuntimeException
 
 class UpdateTrainingUseCaseTest {
 
@@ -19,10 +18,9 @@ class UpdateTrainingUseCaseTest {
                                 isCustom = false ,isDeleted = false)
                 )
 
-        val repository = mock(Repository::class.java)
-        `when`(repository.updateTraining(trainingList)).thenReturn(
-                Completable.complete()
-        )
+        val repository = mock<Repository> {
+            on { updateTraining(trainingList) }.doReturn(Completable.complete())
+        }
 
         UpdateTrainingUseCaseImp(repository)
                 .execute(trainingList)
@@ -39,10 +37,9 @@ class UpdateTrainingUseCaseTest {
                                 isCustom = false ,isDeleted = false)
                 )
 
-        val repository = mock(Repository::class.java)
-        `when`(repository.updateTraining(trainingList)).thenReturn(
-                Completable.error(RuntimeException())
-        )
+        val repository = mock<Repository> {
+            on { updateTraining(trainingList) }.doReturn(Completable.error(RuntimeException()))
+        }
 
         UpdateTrainingUseCaseImp(repository)
                 .execute(trainingList)
