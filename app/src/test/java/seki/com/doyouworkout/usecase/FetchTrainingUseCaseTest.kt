@@ -1,5 +1,7 @@
 package seki.com.doyouworkout.usecase
 
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
 import io.reactivex.Single
 import org.junit.Test
 import org.mockito.Mockito.*
@@ -19,10 +21,9 @@ class FetchTrainingUseCaseTest {
                 TrainingEntity(id = 3, name = "スクワット")
         )
 
-        val repository = mock(Repository::class.java)
-        `when`(repository.getAllTrainingList()).thenReturn(
-                Single.create { emitter -> emitter.onSuccess(trainingEntityList) }
-        )
+        val repository = mock<Repository> {
+            on { getAllTrainingList() }.doReturn(Single.just(trainingEntityList))
+        }
 
         val expected = trainingEntityList.map { it.toUIData() }
 
