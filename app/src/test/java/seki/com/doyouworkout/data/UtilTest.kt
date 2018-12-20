@@ -1,7 +1,6 @@
 package seki.com.doyouworkout.data
 
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.MatcherAssert.assertThat
+import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -19,14 +18,14 @@ class UtilTest {
         val format = SimpleDateFormat("yyyyMMddHHmmSS", Locale.US)
         val dateStr = format.format(result)
 
-        assertThat(dateStr.substring(8), `is`("000000"))
+        assertThat(dateStr).endsWith("000000")
     }
 
     @Test
     fun `Dateの比較ができること`() {
         val d1 = Date()
         val d2 = Date()
-        assert(d1.equalsDay(d2))
+        assertThat(d1.equalsDay(d2))
 
         val localDateTime = LocalDateTime.now().minusDays(1)
 
@@ -45,11 +44,11 @@ class UtilTest {
 
         val resultDateTime = LocalDateTime.ofInstant(result.toInstant(), ZoneId.systemDefault())
 
-        assertThat(resultDateTime.year, `is`(date.year))
-        assertThat(resultDateTime.month, `is`(date.month))
-        assertThat(resultDateTime.dayOfMonth, `is`(date.dayOfMonth - 1))
-        assertThat(resultDateTime.hour, `is`(time.hour))
-        assertThat(resultDateTime.minute, `is`(time.minute))
-        assertThat(resultDateTime.second, `is`(time.second))
+        assertThat(resultDateTime.year).isEqualTo(date.year)
+        assertThat(resultDateTime.month).isEqualTo(date.month)
+        assertThat(resultDateTime.dayOfMonth).isEqualTo(date.dayOfMonth - 1)
+        assertThat(resultDateTime.hour).isEqualTo(time.hour)
+        assertThat(resultDateTime.minute).isEqualTo(time.minute)
+        assertThat(resultDateTime.second).isEqualTo(time.second)
     }
 }

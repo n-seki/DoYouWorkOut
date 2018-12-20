@@ -1,12 +1,12 @@
 package seki.com.doyouworkout.repository
 
+import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import io.reactivex.Completable
 import io.reactivex.Single
-import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
@@ -113,7 +113,7 @@ class WorkoutRepositoryTest {
 
         argumentCaptor<List<TrainingEntity>>().apply {
             verify(cache).updateTraining(capture())
-            assertEquals(firstValue, trainingList)
+            assertThat(firstValue).isEqualTo(trainingList)
         }
 
     }
@@ -141,12 +141,12 @@ class WorkoutRepositoryTest {
 
         argumentCaptor<List<TrainingEntity>>().apply {
             verify(localRepository).insertTraining(capture())
-            assertEquals(firstValue, trainingEntity)
+            assertThat(firstValue).isEqualTo(trainingEntity)
         }
 
         argumentCaptor<List<TrainingEntity>>().apply {
             verify(cache).updateTraining(capture())
-            assertEquals(firstValue, trainingEntity)
+            assertThat(firstValue).isEqualTo(trainingEntity)
         }
 
     }
@@ -165,7 +165,7 @@ class WorkoutRepositoryTest {
 
         argumentCaptor<Date>().apply {
             verify(cache).getWorkoutAt(capture())
-            assertEquals(firstValue, today)
+            assertThat(firstValue).isEqualTo(today)
         }
 
         verify(localRepository, times(0)).selectWorkoutAt(any())
@@ -187,12 +187,12 @@ class WorkoutRepositoryTest {
 
         argumentCaptor<List<WorkoutEntity>>().apply {
             verify(localRepository).insertWorkout(capture())
-            assertEquals(firstValue, workoutEntity)
+            assertThat(firstValue).isEqualTo(workoutEntity)
         }
 
         argumentCaptor<List<WorkoutEntity>>().apply {
             verify(cache).putWorkout(capture())
-            assertEquals(firstValue, workoutEntity)
+            assertThat(firstValue).isEqualTo(workoutEntity)
         }
     }
 }
