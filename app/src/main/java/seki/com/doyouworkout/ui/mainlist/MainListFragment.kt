@@ -49,11 +49,12 @@ class MainListFragment : Fragment() {
     }
 
     private fun initView(view: View) {
-        val list = view.findViewById<RecyclerView>(R.id.workout_list)
-        list.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
-        val decorator = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-        list.addItemDecoration(decorator)
-        list.adapter = MainWorkoutListAdapter(listener)
+        view.findViewById<RecyclerView>(R.id.workout_list).apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            val decorator = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+            addItemDecoration(decorator)
+            adapter = MainWorkoutListAdapter(listener)
+        }
     }
 
     private fun showEditWorkoutScreen(oneDayWorkout: OneDayWorkout) {
