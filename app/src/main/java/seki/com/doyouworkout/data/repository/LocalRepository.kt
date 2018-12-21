@@ -1,6 +1,7 @@
 package seki.com.doyouworkout.data.repository
 
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.Single
 import seki.com.doyouworkout.data.db.entity.TrainingEntity
 import seki.com.doyouworkout.data.db.entity.WorkoutEntity
@@ -14,6 +15,6 @@ interface LocalRepository {
     fun selectWorkoutAt(date: Date): Single<List<WorkoutEntity>>
     fun insertWorkout(workoutList: List<WorkoutEntity>)
     fun selectWorkoutUntil(date: Date, limit: Int): Single<List<WorkoutEntity>>
-    fun selectLatestWorkout(): Single<WorkoutEntity?>
+    fun selectLatestWorkout(): Maybe<WorkoutEntity?>
     fun isInitApp(): Single<Boolean>
 }
