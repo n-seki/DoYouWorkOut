@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.Single
 import org.junit.Test
 import org.mockito.Mockito.*
@@ -34,7 +35,7 @@ class GetOneDayWorkoutUseCaseTest {
     @Test
     fun `トレーニング実績が取得できること`() {
         whenever(mockRepository.getLastWorkout())
-                .thenReturn(Single.just(WorkoutEntity(today, 1, 1)))
+                .thenReturn(Maybe.just(WorkoutEntity(today, 1, 1)))
 
         whenever(mockRepository.getWorkoutList(today, 100))
                 .thenReturn(Single.just(
@@ -87,7 +88,7 @@ class GetOneDayWorkoutUseCaseTest {
     @Test
     fun `今日までの空トレーニング実績をinsert後に最新のトレーニング実績が取得できること`() {
         whenever(mockRepository.getLastWorkout())
-                .thenReturn(Single.just(WorkoutEntity(
+                .thenReturn(Maybe.just(WorkoutEntity(
                         today.previousDay().previousDay().previousDay(), 1, 1)))
 
         val expected = listOf(

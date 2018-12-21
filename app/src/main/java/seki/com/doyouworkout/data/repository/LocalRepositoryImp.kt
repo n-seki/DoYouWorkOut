@@ -3,6 +3,7 @@ package seki.com.doyouworkout.data.repository
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.Single
 import seki.com.doyouworkout.R
 import seki.com.doyouworkout.data.ResourceSupplier
@@ -72,7 +73,7 @@ class LocalRepositoryImp
         }
     }
 
-    override fun selectLatestWorkout(): Single<WorkoutEntity?> {
+    override fun selectLatestWorkout(): Maybe<WorkoutEntity?> {
         return workoutDao.selectLatest()
     }
 
