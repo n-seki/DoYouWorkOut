@@ -1,12 +1,12 @@
 package seki.com.doyouworkout.usecase
 
+import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import io.reactivex.Completable
 import io.reactivex.Single
-import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.mockito.Mockito.*
 import seki.com.doyouworkout.data.DateSupplier
@@ -76,7 +76,6 @@ class GetOneDayWorkoutUseCaseTest {
         whenever(mockRepository.getAllTrainingList())
                 .thenReturn(Single.just(trainingEntityList))
 
-
         sut.execute(today)
                 .test()
                 .await()
@@ -119,7 +118,7 @@ class GetOneDayWorkoutUseCaseTest {
 
         argumentCaptor<List<WorkoutEntity>>().apply {
             verify(mockRepository).updateWorkout(capture())
-            assertEquals(firstValue, emptyWorkout)
+            assertThat(firstValue).isEqualTo(emptyWorkout)
         }
 
     }

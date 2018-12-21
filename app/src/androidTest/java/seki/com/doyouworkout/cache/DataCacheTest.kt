@@ -1,8 +1,7 @@
 package seki.com.doyouworkout.cache
 
-import org.hamcrest.CoreMatchers.*
+import com.google.common.truth.Truth.assertThat
 import org.junit.After
-import org.junit.Assert.assertThat
 import org.junit.Test
 import seki.com.doyouworkout.data.cache.DataCache
 import seki.com.doyouworkout.data.db.entity.TrainingEntity
@@ -20,7 +19,7 @@ class DataCacheTest {
 
     @Test
     fun `Workoutを追加していないときにhasWorkoutAtがfalseであること`() {
-        assertThat(dataCache.hasWorkoutAt(Date()), `is`(false))
+        assertThat(dataCache.hasWorkoutAt(Date())).isFalse()
     }
 
     @Test
@@ -29,12 +28,12 @@ class DataCacheTest {
         val workoutEntity = listOf(WorkoutEntity(date = date, trainingId = 1, count = 1))
         dataCache.putWorkout(workoutEntity)
 
-        assertThat(dataCache.hasWorkoutAt(date), `is`(true))
+        assertThat(dataCache.hasWorkoutAt(date)).isTrue()
     }
 
     @Test
     fun `Trainingを追加していないときにhasTrainingがfalseであること`() {
-        assertThat(dataCache.hasTraining(), `is`(false))
+        assertThat(dataCache.hasTraining()).isFalse()
     }
 
     @Test
@@ -42,7 +41,7 @@ class DataCacheTest {
         val trainingEntity = listOf(TrainingEntity(id = 1, name = "test"))
         dataCache.putTraining(trainingEntity)
 
-        assertThat(dataCache.hasTraining(), `is`(true))
+        assertThat(dataCache.hasTraining()).isTrue()
     }
 
     @Test(expected = NullPointerException::class)
@@ -65,7 +64,7 @@ class DataCacheTest {
 
     @Test
     fun `Trainingを追加していない場合にgetTrainingがnullを通知すること`() {
-        assertThat(dataCache.getTraining(1), `is`(nullValue()))
+        assertThat(dataCache.getTraining(1)).isNull()
     }
 
     @Test
@@ -73,7 +72,6 @@ class DataCacheTest {
         val trainingEntity = listOf(TrainingEntity(id = 1, name = "test"))
         dataCache.putTraining(trainingEntity)
 
-        assertThat(dataCache.getTraining(1), `is`(notNullValue()))
-        assertThat(dataCache.getTraining(1), `is`(trainingEntity[0]))
+        assertThat(dataCache.getTraining(1)).isEqualTo(trainingEntity[0])
     }
 }
