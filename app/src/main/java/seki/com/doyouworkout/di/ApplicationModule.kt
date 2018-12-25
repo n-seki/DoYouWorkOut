@@ -11,7 +11,7 @@ import seki.com.doyouworkout.data.DateSupplierImp
 import seki.com.doyouworkout.data.ResourceSupplier
 import seki.com.doyouworkout.data.ResourceSupplierImp
 import seki.com.doyouworkout.data.cache.Cache
-import seki.com.doyouworkout.data.cache.DataCache
+import seki.com.doyouworkout.data.cache.CacheImp
 import seki.com.doyouworkout.data.db.AppDataBase
 import seki.com.doyouworkout.data.repository.LocalRepositoryImp
 import seki.com.doyouworkout.data.repository.Repository
@@ -32,7 +32,7 @@ class ApplicationModule(private val applicationContext: Context) {
     @Singleton
     @Provides
     fun provideCache(): Cache {
-        return DataCache()
+        return CacheImp()
     }
 
     @Singleton

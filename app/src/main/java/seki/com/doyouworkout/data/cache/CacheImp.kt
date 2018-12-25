@@ -5,7 +5,7 @@ import seki.com.doyouworkout.data.db.entity.TrainingEntity
 import seki.com.doyouworkout.data.db.entity.WorkoutEntity
 import java.util.*
 
-open class DataCache: Cache {
+open class CacheImp: Cache {
     private val _workouts: MutableMap<Date, MutableList<WorkoutEntity>> = mutableMapOf()
     private val _trainings: MutableMap<Int, TrainingEntity> = mutableMapOf()
 

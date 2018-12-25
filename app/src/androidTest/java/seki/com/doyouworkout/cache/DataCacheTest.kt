@@ -3,14 +3,14 @@ package seki.com.doyouworkout.cache
 import com.google.common.truth.Truth.assertThat
 import org.junit.After
 import org.junit.Test
-import seki.com.doyouworkout.data.cache.DataCache
+import seki.com.doyouworkout.data.cache.CacheImp
 import seki.com.doyouworkout.data.db.entity.TrainingEntity
 import seki.com.doyouworkout.data.db.entity.WorkoutEntity
 import java.util.*
 
 class DataCacheTest {
 
-    private val dataCache = DataCache()
+    private val dataCache = CacheImp()
 
     @After
     fun clear() {
