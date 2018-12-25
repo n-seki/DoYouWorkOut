@@ -10,6 +10,8 @@ import seki.com.doyouworkout.data.ResourceSupplier
 import seki.com.doyouworkout.data.db.AppDataBase
 import seki.com.doyouworkout.data.db.entity.TrainingEntity
 import seki.com.doyouworkout.data.db.entity.WorkoutEntity
+import seki.com.doyouworkout.data.db.mapper.toUIData
+import seki.com.doyouworkout.ui.Training
 import java.util.*
 import javax.inject.Inject
 
@@ -17,7 +19,42 @@ class LocalRepositoryImp
 @Inject constructor(
         db: AppDataBase,
         private val sharedPref: SharedPreferences,
-        resourceSupplier: ResourceSupplier): LocalRepository {
+        resourceSupplier: ResourceSupplier
+): Repository {
+
+    override fun getAllTrainingList(): Single<List<TrainingEntity>> {
+        return trainingDao.select()
+    }
+
+    override fun getUsedTrainingList(): Single<List<TrainingEntity>> {
+        return trainingDao.select().map { list -> list.filter { it.used } }
+    }
+
+    override fun putTrainingCache(trainingList: List<TrainingEntity>) {
+        // do nothing
+    }
+
+    override fun updateTraining(trainingList: List<Training>): Completable {
+        return Completable.fromAction {
+            trainingDao.insert(trainingList.map { it.toEntity() })
+        }
+    }
+
+    override fun getWorkout(date: Date): Single<List<WorkoutEntity>> {
+        return workoutDao.selectAt(date)
+    }
+
+    override fun updateWorkout(workoutEntities: List<WorkoutEntity>): Completable {
+        return Completable.fromAction { workoutDao.insert(workoutEntities) }
+    }
+
+    override fun getWorkoutList(date: Date, limit: Int): Single<List<WorkoutEntity>> {
+        return workoutDao.selectUntil(date, limit)
+    }
+
+    override fun getLastWorkout(): Maybe<WorkoutEntity?> {
+        return workoutDao.selectLatest()
+    }
 
     private val trainingDao = db.trainingDao()
     private val workoutDao = db.workoutDao()
@@ -37,30 +74,10 @@ class LocalRepositoryImp
     override fun putDefaultTraining(): Completable {
         return Completable.fromAction {
             if (getAppInitStatus() == 0) {
-                insertTraining(defaultTraining)
+                updateTraining(defaultTraining.map { it.toUIData() })
                 putAppInitStatus()
             }
         }
-    }
-
-    override fun insertTraining(trainingList: List<TrainingEntity>) {
-        trainingDao.insert(trainingList)
-    }
-
-    override fun selectTraining(): Single<List<TrainingEntity>> {
-        return trainingDao.select()
-    }
-
-    override fun selectWorkoutAt(date: Date): Single<List<WorkoutEntity>> {
-        return workoutDao.selectAt(date)
-    }
-
-    override fun insertWorkout(workoutList: List<WorkoutEntity>) {
-        workoutDao.insert(workoutList)
-    }
-
-    override fun selectWorkoutUntil(date: Date, limit: Int): Single<List<WorkoutEntity>> {
-        return workoutDao.selectUntil(date, limit)
     }
 
     override fun isInitApp(): Single<Boolean> {
@@ -71,10 +88,6 @@ class LocalRepositoryImp
                 emitter.onSuccess(false)
             }
         }
-    }
-
-    override fun selectLatestWorkout(): Maybe<WorkoutEntity?> {
-        return workoutDao.selectLatest()
     }
 
     private fun getAppInitStatus(): Int =

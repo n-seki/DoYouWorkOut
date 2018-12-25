@@ -1,6 +1,9 @@
 package seki.com.doyouworkout.data.db.dao
 
-import android.arch.persistence.room.*
+import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Insert
+import android.arch.persistence.room.OnConflictStrategy
+import android.arch.persistence.room.Query
 import io.reactivex.Maybe
 import io.reactivex.Single
 import seki.com.doyouworkout.data.db.entity.WorkoutEntity

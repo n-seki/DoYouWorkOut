@@ -13,10 +13,9 @@ import seki.com.doyouworkout.data.ResourceSupplierImp
 import seki.com.doyouworkout.data.cache.Cache
 import seki.com.doyouworkout.data.cache.DataCache
 import seki.com.doyouworkout.data.db.AppDataBase
-import seki.com.doyouworkout.data.repository.LocalRepository
 import seki.com.doyouworkout.data.repository.LocalRepositoryImp
 import seki.com.doyouworkout.data.repository.Repository
-import seki.com.doyouworkout.data.repository.WorkoutRepository
+import seki.com.doyouworkout.data.repository.RepositoryImp
 import seki.com.doyouworkout.usecase.SchedulersProvider
 import seki.com.doyouworkout.usecase.SchedulersProviderBase
 import javax.inject.Singleton
@@ -38,17 +37,22 @@ class ApplicationModule(private val applicationContext: Context) {
 
     @Singleton
     @Provides
-    fun provideRepository(localRepository: LocalRepository, cache: Cache): Repository {
-        return WorkoutRepository(localRepository, cache)
+    @WorkoutRepository
+    fun provideRepository(
+            @LocalRepository repository: Repository,
+            cache: Cache
+    ): Repository {
+        return RepositoryImp(repository, cache)
     }
 
     @Singleton
     @Provides
+    @LocalRepository
     fun provideLocalRepository(
             db: AppDataBase,
             sharedPreferences: SharedPreferences,
             resourceSupplier: ResourceSupplier
-    ): LocalRepository {
+    ): Repository {
         return LocalRepositoryImp(db, sharedPreferences, resourceSupplier)
     }
 

@@ -10,9 +10,9 @@ import seki.com.doyouworkout.ui.Training
 import java.util.*
 import javax.inject.Inject
 
-class WorkoutRepository
+class RepositoryImp
 @Inject constructor(
-        private val localRepository: LocalRepository,
+        private val localRepository: Repository,
         private val cache: Cache): Repository {
 
     override fun isInitApp(): Single<Boolean> {
@@ -28,7 +28,7 @@ class WorkoutRepository
             return cache.getAllTraining()
         }
 
-        return localRepository.selectTraining()
+        return localRepository.getAllTrainingList()
     }
 
     override fun getUsedTrainingList(): Single<List<TrainingEntity>> {
@@ -42,11 +42,16 @@ class WorkoutRepository
     }
 
     override fun updateTraining(trainingList: List<Training>): Completable {
-        return Completable.fromAction {
+        val updateTraining = Completable.fromAction {
+            localRepository.updateTraining(trainingList)
+        }
+
+        val updateCache = Completable.fromAction {
             val list = trainingList.map { it.toEntity() }
-            localRepository.insertTraining(list)
             cache.updateTraining(list)
         }
+
+        return updateTraining.andThen(updateCache)
     }
 
     override fun getWorkout(date: Date): Single<List<WorkoutEntity>> {
@@ -54,22 +59,22 @@ class WorkoutRepository
             return cache.getWorkoutAt(date)
         }
 
-        return localRepository.selectWorkoutAt(date)
+        return localRepository.getWorkout(date)
     }
 
     override fun updateWorkout(workoutEntities: List<WorkoutEntity>): Completable {
         return Completable.fromAction {
-            localRepository.insertWorkout(workoutEntities)
+            localRepository.updateWorkout(workoutEntities)
             cache.putWorkout(workoutEntities)
         }
     }
 
     override fun getWorkoutList(date: Date, limit: Int): Single<List<WorkoutEntity>> {
-        return localRepository.selectWorkoutUntil(date, limit)
+        return localRepository.getWorkoutList(date, limit)
     }
 
     override fun getLastWorkout(): Maybe<WorkoutEntity?> {
-        return localRepository.selectLatestWorkout()
+        return localRepository.getLastWorkout()
     }
 }
 
