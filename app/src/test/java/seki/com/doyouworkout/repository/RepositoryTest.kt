@@ -14,8 +14,8 @@ import seki.com.doyouworkout.data.cache.Cache
 import seki.com.doyouworkout.data.db.entity.TrainingEntity
 import seki.com.doyouworkout.data.db.entity.WorkoutEntity
 import seki.com.doyouworkout.data.repository.Repository
-import seki.com.doyouworkout.data.repository.RepositoryImp
-import seki.com.doyouworkout.data.repository.toEntity
+import seki.com.doyouworkout.data.repository.impl.RepositoryImp
+import seki.com.doyouworkout.data.repository.impl.toEntity
 import seki.com.doyouworkout.ui.Training
 import java.util.*
 

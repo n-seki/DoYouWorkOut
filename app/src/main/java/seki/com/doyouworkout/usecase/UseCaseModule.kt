@@ -2,7 +2,7 @@ package seki.com.doyouworkout.usecase
 
 import dagger.Module
 import dagger.Provides
-import seki.com.doyouworkout.data.DateSupplier
+import seki.com.doyouworkout.data.resource.DateSupplier
 import seki.com.doyouworkout.data.db.mapper.WorkoutMapper
 import seki.com.doyouworkout.data.repository.Repository
 import seki.com.doyouworkout.di.WorkoutRepository

@@ -1,4 +1,4 @@
-package seki.com.doyouworkout.data.repository
+package seki.com.doyouworkout.data.repository.impl
 
 import io.reactivex.Completable
 import io.reactivex.Maybe
@@ -6,6 +6,7 @@ import io.reactivex.Single
 import seki.com.doyouworkout.data.cache.Cache
 import seki.com.doyouworkout.data.db.entity.TrainingEntity
 import seki.com.doyouworkout.data.db.entity.WorkoutEntity
+import seki.com.doyouworkout.data.repository.Repository
 import seki.com.doyouworkout.ui.Training
 import java.util.*
 import javax.inject.Inject

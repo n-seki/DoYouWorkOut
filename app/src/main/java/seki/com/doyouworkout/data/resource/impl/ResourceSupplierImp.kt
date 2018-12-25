@@ -1,7 +1,8 @@
-package seki.com.doyouworkout.data
+package seki.com.doyouworkout.data.resource.impl
 
 import android.content.Context
 import android.support.annotation.StringRes
+import seki.com.doyouworkout.data.resource.ResourceSupplier
 import javax.inject.Inject
 
 class ResourceSupplierImp @Inject constructor(
