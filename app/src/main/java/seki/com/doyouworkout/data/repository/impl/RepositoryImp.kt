@@ -11,10 +11,10 @@ import seki.com.doyouworkout.ui.Training
 import java.util.*
 import javax.inject.Inject
 
-class RepositoryImp
-@Inject constructor(
+class RepositoryImp @Inject constructor(
         private val localRepository: Repository,
-        private val cache: Cache): Repository {
+        private val cache: Cache
+) : Repository {
 
     override fun isInitApp(): Single<Boolean> {
         return localRepository.isInitApp()
@@ -43,9 +43,8 @@ class RepositoryImp
     }
 
     override fun updateTraining(trainingList: List<Training>): Completable {
-        val updateTraining = Completable.fromAction {
-            localRepository.updateTraining(trainingList)
-        }
+        val updateTraining =
+                localRepository.updateTraining(trainingList)
 
         val updateCache = Completable.fromAction {
             val list = trainingList.map { it.toEntity() }
@@ -64,10 +63,12 @@ class RepositoryImp
     }
 
     override fun updateWorkout(workoutEntities: List<WorkoutEntity>): Completable {
-        return Completable.fromAction {
-            localRepository.updateWorkout(workoutEntities)
+        val updateWorkout = localRepository.updateWorkout(workoutEntities)
+        val updateCache = Completable.fromAction {
             cache.putWorkout(workoutEntities)
         }
+
+        return updateWorkout.andThen(updateCache)
     }
 
     override fun getWorkoutList(date: Date, limit: Int): Single<List<WorkoutEntity>> {

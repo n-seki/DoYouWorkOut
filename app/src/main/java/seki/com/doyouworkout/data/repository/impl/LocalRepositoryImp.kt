@@ -6,22 +6,23 @@ import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
 import seki.com.doyouworkout.R
-import seki.com.doyouworkout.data.resource.ResourceSupplier
 import seki.com.doyouworkout.data.db.AppDataBase
 import seki.com.doyouworkout.data.db.entity.TrainingEntity
 import seki.com.doyouworkout.data.db.entity.WorkoutEntity
-import seki.com.doyouworkout.data.db.mapper.toUIData
 import seki.com.doyouworkout.data.repository.Repository
+import seki.com.doyouworkout.data.resource.ResourceSupplier
 import seki.com.doyouworkout.ui.Training
 import java.util.*
 import javax.inject.Inject
 
-class LocalRepositoryImp
-@Inject constructor(
+class LocalRepositoryImp @Inject constructor(
         db: AppDataBase,
         private val sharedPref: SharedPreferences,
         resourceSupplier: ResourceSupplier
-): Repository {
+) : Repository {
+
+    private val trainingDao = db.trainingDao()
+    private val workoutDao = db.workoutDao()
 
     override fun getAllTrainingList(): Single<List<TrainingEntity>> {
         return trainingDao.select()
@@ -57,9 +58,6 @@ class LocalRepositoryImp
         return workoutDao.selectLatest()
     }
 
-    private val trainingDao = db.trainingDao()
-    private val workoutDao = db.workoutDao()
-
     private val defaultTraining =
             listOf(
                     TrainingEntity(id = 0, name = resourceSupplier.getString(R.string.hukkin)),
@@ -75,7 +73,7 @@ class LocalRepositoryImp
     override fun putDefaultTraining(): Completable {
         return Completable.fromAction {
             if (getAppInitStatus() == 0) {
-                updateTraining(defaultTraining.map { it.toUIData() })
+                trainingDao.insert(defaultTraining)
                 putAppInitStatus()
             }
         }
