@@ -120,9 +120,6 @@ class RepositoryTest {
 
     @Test
     fun `updateTrainingメソッドでDBとCacheにTraining情報が保存されること`() {
-        val localRepository = mock<Repository>()
-        val cache = mock<Cache>()
-        val repository = RepositoryImp(localRepository, cache)
 
         val training = listOf(
                 Training(
@@ -132,6 +129,13 @@ class RepositoryTest {
                         isCustom = false,
                         isDeleted = false)
         )
+
+        val localRepository = mock<Repository> {
+            on { updateTraining(training) }
+                    .thenReturn(Completable.complete())
+        }
+        val cache = mock<Cache>()
+        val repository = RepositoryImp(localRepository, cache)
 
         val trainingEntity = training.map { it.toEntity() }
 
@@ -173,13 +177,17 @@ class RepositoryTest {
 
     @Test
     fun `updateWorkoutでDBとCacheにWorkout情報が保存されること`() {
-        val localRepository = mock<Repository>()
-        val cache = mock<Cache>()
-        val repository = RepositoryImp(localRepository, cache)
-
         val workoutEntity = listOf(
                 WorkoutEntity(date = Date(), trainingId = 1, count = 1)
         )
+
+        val localRepository = mock<Repository> {
+            on { updateWorkout(workoutEntity) }
+                    .thenReturn(Completable.complete())
+        }
+
+        val cache = mock<Cache>()
+        val repository = RepositoryImp(localRepository, cache)
 
         repository.updateWorkout(workoutEntity)
                 .test()
