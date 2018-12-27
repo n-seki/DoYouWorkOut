@@ -10,7 +10,7 @@ import io.reactivex.Maybe
 import io.reactivex.Single
 import org.junit.Test
 import org.mockito.Mockito.*
-import seki.com.doyouworkout.data.DateSupplier
+import seki.com.doyouworkout.data.resource.DateSupplier
 import seki.com.doyouworkout.data.db.entity.TrainingEntity
 import seki.com.doyouworkout.data.db.entity.WorkoutEntity
 import seki.com.doyouworkout.data.db.mapper.WorkoutMapper

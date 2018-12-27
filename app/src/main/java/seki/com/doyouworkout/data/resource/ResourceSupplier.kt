@@ -1,4 +1,4 @@
-package seki.com.doyouworkout.data
+package seki.com.doyouworkout.data.resource
 
 import android.support.annotation.StringRes
 

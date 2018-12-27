@@ -6,17 +6,16 @@ import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
-import seki.com.doyouworkout.data.DateSupplier
-import seki.com.doyouworkout.data.DateSupplierImp
-import seki.com.doyouworkout.data.ResourceSupplier
-import seki.com.doyouworkout.data.ResourceSupplierImp
+import seki.com.doyouworkout.data.resource.DateSupplier
+import seki.com.doyouworkout.data.resource.impl.DateSupplierImp
+import seki.com.doyouworkout.data.resource.ResourceSupplier
+import seki.com.doyouworkout.data.resource.impl.ResourceSupplierImp
 import seki.com.doyouworkout.data.cache.Cache
-import seki.com.doyouworkout.data.cache.DataCache
+import seki.com.doyouworkout.data.cache.CacheImp
 import seki.com.doyouworkout.data.db.AppDataBase
-import seki.com.doyouworkout.data.repository.LocalRepository
-import seki.com.doyouworkout.data.repository.LocalRepositoryImp
+import seki.com.doyouworkout.data.repository.impl.LocalRepositoryImp
 import seki.com.doyouworkout.data.repository.Repository
-import seki.com.doyouworkout.data.repository.WorkoutRepository
+import seki.com.doyouworkout.data.repository.impl.RepositoryImp
 import seki.com.doyouworkout.usecase.SchedulersProvider
 import seki.com.doyouworkout.usecase.SchedulersProviderBase
 import javax.inject.Singleton
@@ -33,22 +32,27 @@ class ApplicationModule(private val applicationContext: Context) {
     @Singleton
     @Provides
     fun provideCache(): Cache {
-        return DataCache()
+        return CacheImp()
     }
 
     @Singleton
     @Provides
-    fun provideRepository(localRepository: LocalRepository, cache: Cache): Repository {
-        return WorkoutRepository(localRepository, cache)
+    @WorkoutRepository
+    fun provideRepository(
+            @LocalRepository repository: Repository,
+            cache: Cache
+    ): Repository {
+        return RepositoryImp(repository, cache)
     }
 
     @Singleton
     @Provides
+    @LocalRepository
     fun provideLocalRepository(
             db: AppDataBase,
             sharedPreferences: SharedPreferences,
             resourceSupplier: ResourceSupplier
-    ): LocalRepository {
+    ): Repository {
         return LocalRepositoryImp(db, sharedPreferences, resourceSupplier)
     }
 

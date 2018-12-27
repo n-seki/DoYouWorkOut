@@ -2,9 +2,10 @@ package seki.com.doyouworkout.usecase
 
 import dagger.Module
 import dagger.Provides
-import seki.com.doyouworkout.data.DateSupplier
+import seki.com.doyouworkout.data.resource.DateSupplier
 import seki.com.doyouworkout.data.db.mapper.WorkoutMapper
 import seki.com.doyouworkout.data.repository.Repository
+import seki.com.doyouworkout.di.WorkoutRepository
 import seki.com.doyouworkout.usecase.impl.*
 import javax.inject.Singleton
 
@@ -14,7 +15,7 @@ class UseCaseModule {
     @Singleton
     @Provides
     fun provideGetWorkoutUseCase(
-            repository: Repository,
+            @WorkoutRepository repository: Repository,
             mapper: WorkoutMapper
     ): GetWorkoutUseCase {
         return GetWorkoutUseCaseImp(repository, mapper)
@@ -23,7 +24,7 @@ class UseCaseModule {
     @Singleton
     @Provides
     fun provideUpdateWorkoutUseCase(
-            repository: Repository
+            @WorkoutRepository repository: Repository
     ): UpdateWorkoutUseCase {
         return UpdateWorkoutUseCaseImp(repository)
     }
@@ -31,7 +32,7 @@ class UseCaseModule {
     @Singleton
     @Provides
     fun provideFetchTrainingUseCase(
-            repository: Repository
+            @WorkoutRepository repository: Repository
     ): FetchTrainingUseCase {
         return FetchTrainingUseCaseImp(repository)
     }
@@ -39,7 +40,7 @@ class UseCaseModule {
     @Singleton
     @Provides
     fun provideUpdateTrainingUseCase(
-            repository: Repository
+            @WorkoutRepository repository: Repository
     ): UpdateTrainingUseCase {
         return UpdateTrainingUseCaseImp(repository)
     }
@@ -47,7 +48,7 @@ class UseCaseModule {
     @Singleton
     @Provides
     fun provideGetOneDayWorkoutListUseCase(
-            repository: Repository,
+            @WorkoutRepository repository: Repository,
             mapper: WorkoutMapper,
             dateSupplier: DateSupplier
     ): GetOneDayWorkoutListUseCase {
