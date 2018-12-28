@@ -1,8 +1,6 @@
 package seki.com.doyouworkout.ui.setting
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
 import seki.com.doyouworkout.ui.Training
 import seki.com.doyouworkout.ui.toLiveData
@@ -25,27 +23,14 @@ class SettingViewModel @Inject constructor(
                     .observeOn(schedulersProvider.ui())
                     .toLiveData()
 
-    val snackBarStatus: LiveData<Boolean>
-    private val _updateList: MutableLiveData<List<Training>> = MutableLiveData()
-
-    init {
-        snackBarStatus = Transformations.switchMap(_updateList) {
-            updateSetting(it)
-        }
-    }
-
     fun initSetting() {
         useCase.initApp()
     }
 
     fun update(trainingList: List<Training>) {
-        _updateList.postValue(trainingList)
-    }
-
-    private fun updateSetting(trainingList: List<Training>): LiveData<Boolean> {
-        return updateTrainingUseCase.execute(trainingList)
+        updateTrainingUseCase.execute(trainingList)
                 .subscribeOn(schedulersProvider.io())
                 .observeOn(schedulersProvider.ui())
-                .toLiveData()
+                .subscribe()
     }
 }

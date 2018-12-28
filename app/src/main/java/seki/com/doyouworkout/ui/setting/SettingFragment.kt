@@ -2,7 +2,6 @@ package seki.com.doyouworkout.ui.setting
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -23,30 +22,17 @@ class SettingFragment: Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        initFab()
-
         viewModel = (context as SettingActivity).viewModel
         viewModel.trainingList.observe(this, Observer { showTrainingList(it) })
-        viewModel.snackBarStatus.observe(this, Observer { showSnackBar(it) })
-    }
-
-    private fun initFab() {
-        regist_setting.setOnClickListener {
-            val stateChangeTrainingList = training_check_boxes.fetchCheckedData()
-            viewModel.update(stateChangeTrainingList)
-        }
     }
 
     private fun showTrainingList(trainingList: List<Training>?) {
-        trainingList?.let {
+        trainingList?.let { it ->
             training_check_boxes.init(it)
-        }
-    }
-
-    private fun showSnackBar(boolean: Boolean?) {
-        boolean?.let {
-            if (it) {
-                Snackbar.make(view!!, "Complete update!", Snackbar.LENGTH_SHORT).show()
+            training_check_boxes.setOnClickListener {
+                val stateChangeTrainingList =
+                        this.training_check_boxes.fetchCheckedData()
+                viewModel.update(stateChangeTrainingList)
             }
         }
     }
