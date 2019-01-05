@@ -2,9 +2,11 @@ package seki.com.doyouworkout.ui.setting
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.Switch
+import kotlinx.android.synthetic.main.view_custom_switch.view.*
+import seki.com.doyouworkout.R
 import seki.com.doyouworkout.ui.Training
 
 class SettingCheckBoxGroup @JvmOverloads constructor(
@@ -32,18 +34,18 @@ class SettingCheckBoxGroup @JvmOverloads constructor(
     private fun createSwitch(
             training: Training,
             listener: View.OnClickListener
-    ): Switch {
-        return Switch(context).apply {
-            text = training.name
-            isChecked = training.isUsed
-            textSize = 20F
-            setPadding(8, 16, 8, 8)
-            tag = training.id
+    ): View {
+        return LayoutInflater.from(context).inflate(R.layout.view_custom_switch, this, false).apply {
+            switchView.apply {
+                text = training.name
+                isChecked = training.isUsed
+                tag = training.id
 
-            setOnCheckedChangeListener { switch, isChecked ->
-                val id = switch.tag as Int
-                updateData(id, isChecked)
-                listener.onClick(switch)
+                setOnCheckedChangeListener { switch, isChecked ->
+                    val id = switch.tag as Int
+                    updateData(id, isChecked)
+                    listener.onClick(switch)
+                }
             }
         }
     }
