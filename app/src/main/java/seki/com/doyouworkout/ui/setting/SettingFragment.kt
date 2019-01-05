@@ -27,13 +27,12 @@ class SettingFragment: Fragment() {
     }
 
     private fun showTrainingList(trainingList: List<Training>?) {
-        trainingList?.let { it ->
-            training_check_boxes.init(it)
-            training_check_boxes.setOnClickListener {
+        trainingList?.let { training ->
+            training_check_boxes.init(training, View.OnClickListener {
                 val stateChangeTrainingList =
-                        this.training_check_boxes.fetchCheckedData()
+                        training_check_boxes.fetchCheckedData()
                 viewModel.update(stateChangeTrainingList)
-            }
+            })
         }
     }
 }
