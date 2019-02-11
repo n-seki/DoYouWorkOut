@@ -36,7 +36,7 @@ object DateTest : Spek({
             context("前日日付と比較") {
                 val localDateTime = LocalDateTime.now().minusDays(1)
                 val yesterday = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant())
-                
+
                 it("日付が不一致であること") {
                     assert(!d1.equalsDay(yesterday))
                 }
