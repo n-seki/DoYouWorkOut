@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'de.mannodermaus.android-junit5'
 
 android {
     compileSdkVersion 27
@@ -50,6 +51,20 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    sourceSets.each {
+        it.java.srcDirs += "src/$it.name/kotlin"
+    }
+
+    testOptions {
+        junitPlatform {
+            filters {
+                engines {
+                    include 'spek2'
+                }
+            }
+        }
+    }
 }
 
 dependencies {
@@ -72,9 +87,6 @@ dependencies {
     // room
     implementation "android.arch.persistence.room:runtime:$room_version"
     kapt "android.arch.persistence.room:compiler:$room_version"
-
-    // data binding
-    kapt "com.android.databinding:compiler:$dataBinding_version"
 
     // dagger2
     implementation "com.google.dagger:dagger:$dagger_version"
