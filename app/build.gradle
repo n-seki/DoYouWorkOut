@@ -1,8 +1,10 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'de.mannodermaus.android-junit5'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+    id 'de.mannodermaus.android-junit5'
+}
 
 android {
     compileSdkVersion 27
@@ -77,7 +79,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // kotlin
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Deps.kotlinVersion}"
 
     // support library
     implementation "com.android.support:appcompat-v7:$support_library_version"
@@ -123,7 +125,7 @@ dependencies {
     testImplementation "org.spekframework.spek2:spek-runner-junit5:$spek_version"
 
     // spek requires kotlin-reflect
-    testImplementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    testImplementation "org.jetbrains.kotlin:kotlin-reflect:${Deps.kotlinVersion}"
 
     // mockito
     debugImplementation "org.mockito:mockito-core:$mockito_version"
