@@ -3,11 +3,10 @@ package seki.com.doyouworkout
 import com.facebook.stetho.Stetho
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
-import seki.com.doyouworkout.di.ApplicationComponent
 import seki.com.doyouworkout.di.ApplicationModule
 import seki.com.doyouworkout.di.DaggerApplicationComponent
 
-class App: dagger.android.DaggerApplication() {
+class App: DaggerApplication() {
 
     override fun onCreate() {
         super.onCreate()
@@ -19,6 +18,4 @@ class App: dagger.android.DaggerApplication() {
                 .applicationModule(ApplicationModule(this))
                 .build()
     }
-
-    lateinit var appComponent: ApplicationComponent
 }
