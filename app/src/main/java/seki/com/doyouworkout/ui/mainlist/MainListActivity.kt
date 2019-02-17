@@ -28,8 +28,6 @@ class MainListActivity : DaggerAppCompatActivity() {
 
         fab.setOnClickListener { showEditWorkoutScreen() }
 
-        AndroidInjection.inject(this)
-
         viewModel.checkInitApp { showSettingScreenIfNotInit(it) }
         viewModel.hasTodayWorkout.observe(this, Observer { changeFabVisibility(it) })
     }
