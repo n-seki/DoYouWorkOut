@@ -7,7 +7,6 @@ import seki.com.doyouworkout.App
 import seki.com.doyouworkout.di.component.MainListActivityBuilder
 import seki.com.doyouworkout.di.component.NewWorkoutActivityBuilder
 import seki.com.doyouworkout.di.component.SettingActivityBuilder
-import seki.com.doyouworkout.ui.setting.SettingActivity
 import seki.com.doyouworkout.usecase.UseCaseModule
 import javax.inject.Singleton
 
@@ -21,6 +20,4 @@ import javax.inject.Singleton
     NewWorkoutActivityBuilder::class,
     SettingActivityBuilder::class
 ])
-interface ApplicationComponent: AndroidInjector<App> {
-    fun inject(settingActivity: SettingActivity)
-}
+interface ApplicationComponent: AndroidInjector<App>
