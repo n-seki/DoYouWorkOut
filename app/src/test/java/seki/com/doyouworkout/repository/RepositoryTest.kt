@@ -24,15 +24,12 @@ class RepositoryTest {
     @Test
     fun `isInitAppメソッドでLocalRepository#isInitAppが実行されること`() {
         val localRepository = mock<Repository> {
-            on { isInitApp() }.doReturn(Single.just(true))
+            on { isInitApp() }.doReturn(true)
         }
 
         val repository = RepositoryImp(localRepository, mock())
 
-        repository.isInitApp()
-                .test()
-                .assertValue(true)
-
+        assertThat(repository.isInitApp()).isTrue()
         verify(localRepository).isInitApp()
     }
 

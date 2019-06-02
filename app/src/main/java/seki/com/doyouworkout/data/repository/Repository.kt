@@ -9,7 +9,7 @@ import seki.com.doyouworkout.ui.Training
 import java.util.*
 
 interface Repository {
-    fun isInitApp(): Single<Boolean>
+    fun isInitApp(): Boolean
     fun putDefaultTraining(): Completable
     fun getAllTrainingList(): Single<List<TrainingEntity>>
     fun getUsedTrainingList(): Single<List<TrainingEntity>>

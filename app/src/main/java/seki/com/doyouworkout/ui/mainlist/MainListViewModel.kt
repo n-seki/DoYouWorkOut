@@ -36,8 +36,7 @@ class MainListViewModel @Inject constructor(
     }
 
     fun checkInitApp(onSuccess: (Boolean) -> Unit) {
-        val dispose = trainingUseCase.isCompleteInitApp().subscribe(onSuccess)
-        disposables.add(dispose)
+        onSuccess(trainingUseCase.isCompleteInitApp())
     }
 
     private fun containsTodayWorkout(workoutList: List<OneDayWorkout>): LiveData<Boolean> {
