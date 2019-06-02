@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.view.isVisible
-import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main_list.*
 import seki.com.doyouworkout.R
@@ -19,7 +18,8 @@ class MainListActivity : DaggerAppCompatActivity() {
 
     @Inject lateinit var viewModelFactory: WorkoutViewModelFactory
     val viewModel: MainListViewModel by lazy {
-        ViewModelProviders.of(this, viewModelFactory).get(MainListViewModel::class.java) }
+        ViewModelProviders.of(this, viewModelFactory).get(MainListViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +28,10 @@ class MainListActivity : DaggerAppCompatActivity() {
 
         fab.setOnClickListener { showEditWorkoutScreen() }
 
-        viewModel.checkInitApp { showSettingScreenIfNotInit(it) }
+        viewModel.appInitialized.observe(this, Observer { showSettingScreenIfNotInit(it) })
         viewModel.hasTodayWorkout.observe(this, Observer { changeFabVisibility(it) })
+
+        viewModel.checkInitApp()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -47,7 +49,8 @@ class MainListActivity : DaggerAppCompatActivity() {
         }
     }
 
-    private fun showSettingScreenIfNotInit(settingComplete: Boolean) {
+    private fun showSettingScreenIfNotInit(settingComplete: Boolean?) {
+        settingComplete ?: return
         if (!settingComplete) {
             showSettingScreen(false)
         }
