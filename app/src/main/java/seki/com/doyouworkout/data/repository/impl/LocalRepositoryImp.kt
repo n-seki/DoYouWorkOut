@@ -72,7 +72,7 @@ class LocalRepositoryImp @Inject constructor(
 
     override fun putDefaultTraining(): Completable {
         return Completable.fromAction {
-            if (isInitApp()) {
+            if (!isInitApp()) {
                 trainingDao.insert(defaultTraining)
                 completeInitApp()
             }
