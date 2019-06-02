@@ -72,29 +72,20 @@ class LocalRepositoryImp @Inject constructor(
 
     override fun putDefaultTraining(): Completable {
         return Completable.fromAction {
-            if (getAppInitStatus() == 0) {
+            if (!isInitApp()) {
                 trainingDao.insert(defaultTraining)
-                putAppInitStatus()
+                completeInitApp()
             }
         }
     }
 
-    override fun isInitApp(): Single<Boolean> {
-        return Single.create<Boolean> { emitter ->
-            if (sharedPref.getInt(KEY_INIT_APP, 0) == 1) {
-                emitter.onSuccess(true)
-            } else {
-                emitter.onSuccess(false)
-            }
-        }
+    override fun isInitApp(): Boolean {
+        return sharedPref.getBoolean(KEY_INIT_APP, false)
     }
 
-    private fun getAppInitStatus(): Int =
-            sharedPref.getInt(KEY_INIT_APP, 0)
-
-    private fun putAppInitStatus() {
+    private fun completeInitApp() {
         sharedPref.edit {
-            putInt(KEY_INIT_APP, 1)
+            putBoolean(KEY_INIT_APP, true)
         }
     }
 }

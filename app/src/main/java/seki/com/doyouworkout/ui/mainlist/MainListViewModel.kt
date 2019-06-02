@@ -26,6 +26,9 @@ class MainListViewModel @Inject constructor(
         containsTodayWorkout(list)
     }
 
+    private val _appInitialized = MutableLiveData<Boolean>()
+    val appInitialized: LiveData<Boolean> = _appInitialized
+
     fun fetchList(startExclusive: Date? = null) {
         val list = getOneDayWorkoutListUseCase.execute(startExclusive)
                 .subscribeOn(schedulersProvider.io())
@@ -35,9 +38,8 @@ class MainListViewModel @Inject constructor(
         _workoutList.addSource(list) { _workoutList.postValue(it) }
     }
 
-    fun checkInitApp(onSuccess: (Boolean) -> Unit) {
-        val dispose = trainingUseCase.isCompleteInitApp().subscribe(onSuccess)
-        disposables.add(dispose)
+    fun checkInitApp() {
+        _appInitialized.value = trainingUseCase.isCompleteInitApp()
     }
 
     private fun containsTodayWorkout(workoutList: List<OneDayWorkout>): LiveData<Boolean> {

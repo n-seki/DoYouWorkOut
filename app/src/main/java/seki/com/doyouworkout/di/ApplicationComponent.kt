@@ -3,7 +3,7 @@ package seki.com.doyouworkout.di
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
-import seki.com.doyouworkout.App
+import seki.com.doyouworkout.BaseApp
 import seki.com.doyouworkout.usecase.UseCaseModule
 import javax.inject.Singleton
 
@@ -15,4 +15,4 @@ import javax.inject.Singleton
     UseCaseModule::class,
     WorkoutViewModelModule::class
 ])
-interface ApplicationComponent: AndroidInjector<App>
+interface ApplicationComponent: AndroidInjector<BaseApp>

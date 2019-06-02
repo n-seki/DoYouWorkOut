@@ -16,7 +16,7 @@ class RepositoryImp @Inject constructor(
         private val cache: Cache
 ) : Repository {
 
-    override fun isInitApp(): Single<Boolean> {
+    override fun isInitApp(): Boolean {
         return localRepository.isInitApp()
     }
 
